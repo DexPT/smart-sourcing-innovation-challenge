@@ -12,7 +12,7 @@ const variantClasses = {
   default: 'bg-primary/10 text-primary',
   success: 'bg-secondary-container text-secondary',
   error: 'bg-error-container text-error',
-  warning: 'bg-warning-container text-warning',
+  warning: 'bg-warning-container text-on-surface',
   info: 'bg-primary/10 text-primary-tint',
   neutral: 'bg-surface-container text-on-surface-variant',
 }
@@ -21,9 +21,9 @@ export function Badge({ children, className, variant = 'default', size = 'md', d
   return (
     <span
       className={cn(
-        'badge',
+        'badge rounded-full leading-none',
         variantClasses[variant],
-        size === 'sm' && 'text-[0.7rem] px-1.5 py-0.5',
+        size === 'sm' && 'text-label-sm px-1.5 py-1',
         className
       )}
     >
@@ -47,7 +47,7 @@ export function Badge({ children, className, variant = 'default', size = 'md', d
 // Convenience wrappers
 export function StatusBadge({ status, className }: { status: { label: string; bg: string; text: string }; className?: string }) {
   return (
-    <span className={cn('badge', status.bg, status.text, className)}>
+    <span className={cn('badge rounded-full leading-none', status.bg, status.text, className)}>
       {status.label}
     </span>
   )

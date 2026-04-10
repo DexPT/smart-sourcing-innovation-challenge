@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils'
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react'
+import { cloneElement, isValidElement } from 'react'
 
 interface StatCardProps {
   label: string
@@ -19,6 +20,18 @@ export function StatCard({ label, value, unit, change, trend, icon, className, a
     secondary: 'text-secondary bg-secondary/8',
     warning: 'text-warning bg-warning/8',
     error: 'text-error bg-error/8',
+  }
+
+  const renderIcon = () => {
+    if (!icon) return null
+
+    if (isValidElement<{ className?: string }>(icon)) {
+      return cloneElement(icon, {
+        className: cn(icon.props.className, 'w-5 h-5 text-current'),
+      })
+    }
+
+    return icon
   }
 
   return (
@@ -60,9 +73,9 @@ export function StatCard({ label, value, unit, change, trend, icon, className, a
           )}
         </div>
         {icon && (
-          <div className={cn('flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center', gradient ? 'bg-on-primary/15' : accentColors[accent])}>
-            <span className={cn('w-5 h-5', gradient ? 'text-on-primary' : '')}>
-              {icon}
+          <div className={cn('flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center', gradient ? 'bg-on-primary/15 text-on-primary' : accentColors[accent])}>
+            <span className="flex items-center justify-center">
+              {renderIcon()}
             </span>
           </div>
         )}

@@ -1,6 +1,6 @@
 'use client'
 import { AppShell } from '@/components/layout/AppShell'
-import { Card, CardHeader, CardTitle, CardSection } from '@/components/ui/Card'
+import { Card, CardTitle } from '@/components/ui/Card'
 import { StatusBadge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Progress } from '@/components/ui/Progress'
@@ -8,10 +8,7 @@ import { pilots } from '@/data/pilots'
 import { vendors } from '@/data/vendors'
 import { useAppStore } from '@/store/appStore'
 import { getPilotStatusConfig, formatAED, formatDate } from '@/lib/utils'
-import {
-  FlaskConical, CheckCircle2, Clock, AlertTriangle, ChevronRight,
-  Target, Users, Calendar, TrendingUp
-} from 'lucide-react'
+import { CheckCircle2, Clock, AlertTriangle, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
 
@@ -27,7 +24,6 @@ export default function PilotsPage() {
     active: pilots.filter(p => p.status === 'active').length,
     completed: pilots.filter(p => p.status === 'completed').length,
     totalBudget: pilots.reduce((s, p) => s + p.budget, 0),
-    avgProgress: Math.round(pilots.reduce((s, p) => s + p.progress, 0) / pilots.length),
   }
 
   const milestoneStatusColors: Record<string, string> = {
@@ -40,7 +36,6 @@ export default function PilotsPage() {
   return (
     <AppShell>
       <div className="space-y-6">
-        {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Card><p className="text-label-sm text-on-surface-variant">Total Pilots</p><p className="font-display font-bold text-display-sm text-on-surface mt-1">{stats.total}</p></Card>
           <Card className="border-l-4 border-l-secondary"><p className="text-label-sm text-secondary">Active</p><p className="font-display font-bold text-display-sm text-secondary mt-1">{stats.active}</p></Card>
@@ -49,7 +44,6 @@ export default function PilotsPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Pilot List */}
           <div className="space-y-3">
             <h2 className="text-title-md text-on-surface font-semibold">Pilot Programs</h2>
             {pilots.map(pilot => {
@@ -77,7 +71,6 @@ export default function PilotsPage() {
             })}
           </div>
 
-          {/* Pilot Detail */}
           <div className="lg:col-span-2 space-y-4">
             {selectedPilot && (
               <>
@@ -97,7 +90,6 @@ export default function PilotsPage() {
                   )}
                 </div>
 
-                {/* Hero Progress */}
                 <Card gradient>
                   <div className="grid grid-cols-3 gap-4 mb-4">
                     <div>
@@ -116,7 +108,6 @@ export default function PilotsPage() {
                   <Progress value={selectedPilot.spentBudget} max={selectedPilot.budget} label="Budget Utilization" showLabel barClassName="bg-on-primary/80" />
                 </Card>
 
-                {/* KPIs */}
                 <Card>
                   <CardTitle subtitle="Key performance indicators" className="mb-3">KPI Tracker</CardTitle>
                   <div className="space-y-3">
@@ -134,12 +125,7 @@ export default function PilotsPage() {
                             </span>
                           </div>
                         </div>
-                        <Progress
-                          value={Math.min(kpi.current, kpi.target)}
-                          max={kpi.target}
-                          size="sm"
-                          barClassName={kpi.achieved ? 'bg-secondary' : 'bg-warning'}
-                        />
+                        <Progress value={Math.min(kpi.current, kpi.target)} max={kpi.target} size="sm" barClassName={kpi.achieved ? 'bg-secondary' : 'bg-warning'} />
                       </div>
                     ))}
                   </div>
@@ -155,7 +141,6 @@ export default function PilotsPage() {
                   </div>
                 </Card>
 
-                {/* Milestones */}
                 <Card>
                   <CardTitle subtitle="Delivery timeline" className="mb-3">Milestones</CardTitle>
                   <div className="space-y-0">
@@ -187,7 +172,6 @@ export default function PilotsPage() {
                   </div>
                 </Card>
 
-                {/* Final Score (completed pilots) */}
                 {selectedPilot.finalScore && (
                   <Card className="bg-secondary-container">
                     <div className="flex items-center gap-4">

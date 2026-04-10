@@ -32,7 +32,7 @@ const ACTION_LABELS: Record<string, { bg: string; text: string }> = {
   PILOT_COMPLETED: { bg: 'bg-secondary-container', text: 'text-secondary' },
   COMPLIANCE_PASSED: { bg: 'bg-secondary-container', text: 'text-secondary' },
   COMPLIANCE_REVIEW_STARTED: { bg: 'bg-primary/10', text: 'text-primary' },
-  MOVED_TO_PROCUREMENT: { bg: 'bg-warning-container', text: 'text-warning' },
+  MOVED_TO_PROCUREMENT: { bg: 'bg-warning-container', text: 'text-on-surface' },
   MOVED_TO_COMPLIANCE: { bg: 'bg-primary/10', text: 'text-primary-tint' },
   VENDOR_SUSPENDED: { bg: 'bg-error-container', text: 'text-error' },
   VENDOR_REGISTERED: { bg: 'bg-primary/10', text: 'text-primary' },
@@ -74,10 +74,10 @@ export default function AuditPage() {
             <input
               value={search} onChange={e => setSearch(e.target.value)}
               placeholder="Search actions, entities, actors..."
-              className="w-full pl-9 pr-4 py-2 bg-surface-container-lowest rounded-lg text-body-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="w-full min-h-10 pl-9 pr-4 py-2.5 bg-surface-container-lowest rounded-lg text-body-sm text-on-surface border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/20"
             />
           </div>
-          <select value={entityFilter} onChange={e => setEntityFilter(e.target.value)} className="px-3 py-2 bg-surface-container-lowest rounded-lg text-body-sm focus:outline-none">
+          <select value={entityFilter} onChange={e => setEntityFilter(e.target.value)} className="min-h-10 px-3 py-2.5 bg-surface-container-lowest rounded-lg text-body-sm text-on-surface border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/20">
             <option value="">All Entity Types</option>
             <option value="submission">Submission</option>
             <option value="vendor">Vendor</option>
@@ -85,7 +85,7 @@ export default function AuditPage() {
             <option value="procurement">Procurement</option>
             <option value="compliance">Compliance</option>
           </select>
-          <select value={roleFilter} onChange={e => setRoleFilter(e.target.value)} className="px-3 py-2 bg-surface-container-lowest rounded-lg text-body-sm focus:outline-none">
+          <select value={roleFilter} onChange={e => setRoleFilter(e.target.value)} className="min-h-10 px-3 py-2.5 bg-surface-container-lowest rounded-lg text-body-sm text-on-surface border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/20">
             <option value="">All Roles</option>
             <option value="admin">Admin</option>
             <option value="evaluator">Evaluator</option>

@@ -3,19 +3,17 @@ import { AppShell } from '@/components/layout/AppShell'
 import { Card, CardHeader, CardTitle } from '@/components/ui/Card'
 import { StatCard } from '@/components/ui/StatCard'
 import { StatusBadge } from '@/components/ui/Badge'
-import { Progress } from '@/components/ui/Progress'
 import { Button } from '@/components/ui/Button'
 import { useAppStore } from '@/store/appStore'
 import { useRole } from '@/hooks/useRole'
-import { formatAED, formatRelativeTime, getSubmissionStatusConfig, getCategoryLabel, truncate } from '@/lib/utils'
+import { formatAED, formatRelativeTime, getSubmissionStatusConfig, getCategoryLabel } from '@/lib/utils'
 import {
-  FileText, Brain, ShieldCheck, Building2, FlaskConical,
-  TrendingUp, AlertTriangle, CheckCircle2, Clock, ArrowRight,
-  BarChart3, Zap
+  FileText, Brain, FlaskConical,
+  TrendingUp, AlertTriangle, CheckCircle2, Clock, ArrowRight, Zap
 } from 'lucide-react'
 import Link from 'next/link'
 import {
-  AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip,
+  AreaChart, Area, XAxis, YAxis, Tooltip,
   ResponsiveContainer, PieChart, Pie, Cell
 } from 'recharts'
 import { ClientOnly } from '@/components/ui/ClientOnly'
@@ -42,7 +40,7 @@ const categoryData = [
 
 export default function DashboardPage() {
   const submissions = useAppStore((s) => s.submissions)
-  const { currentRole, can } = useRole()
+  const { can } = useRole()
 
   const stats = {
     total: submissions.length,
@@ -58,51 +56,17 @@ export default function DashboardPage() {
     .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
     .slice(0, 5)
 
-  // Role-specific dashboard content
   return (
     <AppShell>
       <div className="space-y-6">
-        {/* Hero KPIs */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard
-            label="Total Submissions"
-            value={stats.total}
-            change={23}
-            trend="up"
-            icon={<FileText />}
-            accent="primary"
-          />
-          <StatCard
-            label="Pipeline Value"
-            value={formatAED(stats.totalValue)}
-            change={18}
-            trend="up"
-            icon={<TrendingUp />}
-            accent="secondary"
-            gradient
-          />
-          <StatCard
-            label="Avg AI Score"
-            value={stats.avgScore}
-            unit="/100"
-            change={5}
-            trend="up"
-            icon={<Brain />}
-            accent="primary"
-          />
-          <StatCard
-            label="Active Pilots"
-            value={stats.inPilot}
-            change={0}
-            trend="flat"
-            icon={<FlaskConical />}
-            accent="secondary"
-          />
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+          <StatCard label="Total Submissions" value={stats.total} change={23} trend="up" icon={<FileText />} accent="primary" />
+          <StatCard label="Pipeline Value" value={formatAED(stats.totalValue)} change={18} trend="up" icon={<TrendingUp />} accent="secondary" gradient />
+          <StatCard label="Avg AI Score" value={stats.avgScore} unit="/100" change={5} trend="up" icon={<Brain />} accent="primary" />
+          <StatCard label="Active Pilots" value={stats.inPilot} change={0} trend="flat" icon={<FlaskConical />} accent="secondary" />
         </div>
 
-        {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Submission Trend Chart */}
           <div className="lg:col-span-2">
             <Card>
               <CardHeader
@@ -114,9 +78,7 @@ export default function DashboardPage() {
                   </Link>
                 }
               >
-                <CardTitle subtitle="Monthly submission and approval trends">
-                  Submission Pipeline
-                </CardTitle>
+                <CardTitle subtitle="Monthly submission and approval trends">Submission Pipeline</CardTitle>
               </CardHeader>
               <ClientOnly fallback={<div className="h-[200px] bg-surface-container rounded animate-pulse" />}>
                 <ResponsiveContainer width="100%" height={200}>
@@ -145,7 +107,6 @@ export default function DashboardPage() {
             </Card>
           </div>
 
-          {/* Category Distribution */}
           <Card>
             <CardHeader>
               <CardTitle subtitle="By innovation category">Category Breakdown</CardTitle>
@@ -160,7 +121,7 @@ export default function DashboardPage() {
                   </Pie>
                 </PieChart>
               </ClientOnly>
-              <div className="space-y-1.5 mt-2 w-full">
+              <div className="space-y-1.5 mt-3 w-full">
                 {categoryData.map((cat, i) => (
                   <div key={i} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -175,9 +136,7 @@ export default function DashboardPage() {
           </Card>
         </div>
 
-        {/* Pipeline Status + Recent Activity */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Pipeline Status */}
           <Card>
             <CardHeader>
               <CardTitle subtitle="Current pipeline distribution">Status Overview</CardTitle>
@@ -200,7 +159,6 @@ export default function DashboardPage() {
               ))}
             </div>
 
-            {/* Action items */}
             {can.runAIEvaluation && (
               <div className="mt-4 pt-3 border-t border-outline-variant/10">
                 <p className="text-label-sm text-on-surface-variant uppercase tracking-wider mb-2">Action Required</p>
@@ -218,7 +176,6 @@ export default function DashboardPage() {
             )}
           </Card>
 
-          {/* Recent Submissions */}
           <div className="lg:col-span-2">
             <Card>
               <CardHeader
@@ -242,7 +199,7 @@ export default function DashboardPage() {
                           <p className="text-title-sm text-on-surface truncate">{sub.title}</p>
                           <p className="text-label-sm text-on-surface-variant">{sub.company} · {getCategoryLabel(sub.category)}</p>
                         </div>
-                        <div className="flex items-center gap-3 flex-shrink-0">
+                        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
                           {sub.aiScore && (
                             <span className="text-label-sm font-semibold text-on-surface-variant hidden sm:block">
                               {sub.aiScore.overall}/100
@@ -260,10 +217,9 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Quick Actions */}
         {can.createSubmission && (
           <Card className="bg-power-gradient text-on-primary">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <h2 className="font-display text-headline-sm text-on-primary">Ready to submit your innovation?</h2>
                 <p className="text-body-sm text-on-primary/70 mt-1">Submit your solution for AI-powered evaluation by Dubai Chambers.</p>
@@ -277,7 +233,6 @@ export default function DashboardPage() {
           </Card>
         )}
 
-        {/* Compliance Alerts */}
         {can.runComplianceCheck && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card className="border-l-4 border-l-error">
@@ -285,7 +240,7 @@ export default function DashboardPage() {
                 <AlertTriangle className="w-5 h-5 text-error flex-shrink-0" />
                 <div>
                   <p className="text-title-sm text-on-surface">1 Compliance Review</p>
-                  <p className="text-label-sm text-on-surface-variant">In progress — NexusAI</p>
+                  <p className="text-label-sm text-on-surface-variant">In progress - NexusAI</p>
                 </div>
               </div>
             </Card>
@@ -303,7 +258,7 @@ export default function DashboardPage() {
                 <Zap className="w-5 h-5 text-warning flex-shrink-0" />
                 <div>
                   <p className="text-title-sm text-on-surface">1 Suspended Vendor</p>
-                  <p className="text-label-sm text-on-surface-variant">InnovateTech — under review</p>
+                  <p className="text-label-sm text-on-surface-variant">InnovateTech - under review</p>
                 </div>
               </div>
             </Card>

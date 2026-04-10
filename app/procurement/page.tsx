@@ -1,18 +1,17 @@
 'use client'
 import { AppShell } from '@/components/layout/AppShell'
-import { Card, CardHeader, CardTitle } from '@/components/ui/Card'
+import { Card, CardTitle } from '@/components/ui/Card'
 import { StatusBadge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { useAppStore } from '@/store/appStore'
 import { procurementDecisions } from '@/data/procurement'
-import { formatAED, formatDate, getSubmissionStatusConfig } from '@/lib/utils'
-import { HandshakeIcon, CheckCircle2, Clock, FileText, Building2, Calendar, DollarSign } from 'lucide-react'
+import { formatAED, formatDate } from '@/lib/utils'
+import { CheckCircle2, Clock, FileText, Building2, Calendar } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
-import type { ProcurementDecision } from '@/types'
 
 const PROC_STATUS_CONFIG: Record<string, { label: string; bg: string; text: string }> = {
-  pending_approval: { label: 'Pending Approval', bg: 'bg-warning-container', text: 'text-warning' },
+  pending_approval: { label: 'Pending Approval', bg: 'bg-warning-container', text: 'text-on-surface' },
   approved: { label: 'Approved', bg: 'bg-secondary-container', text: 'text-secondary' },
   contracted: { label: 'Contracted', bg: 'bg-primary/10', text: 'text-primary' },
   active: { label: 'Active', bg: 'bg-secondary-container', text: 'text-secondary' },
@@ -28,9 +27,7 @@ export default function ProcurementPage() {
 
   const selectedDecision = decisions.find(d => d.id === selected) ?? decisions[0]
   const relatedSub = submissions.find(s => s.id === selectedDecision?.submissionId)
-
   const totalValue = decisions.reduce((s, d) => s + d.contractValue, 0)
-  const approvedValue = decisions.filter(d => d.status === 'approved').reduce((s, d) => s + d.contractValue, 0)
 
   const handleApprove = (id: string) => {
     setDecisions(prev => prev.map(d => d.id === id ? { ...d, status: 'approved' as const, approvedAt: new Date().toISOString() } : d))
@@ -44,15 +41,14 @@ export default function ProcurementPage() {
   return (
     <AppShell>
       <div className="space-y-6">
-        {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Card>
             <p className="text-label-sm text-on-surface-variant">Total Decisions</p>
             <p className="font-display font-bold text-display-sm text-on-surface mt-1">{decisions.length}</p>
           </Card>
           <Card className="border-l-4 border-l-warning">
-            <p className="text-label-sm text-warning">Pending Approval</p>
-            <p className="font-display font-bold text-display-sm text-warning mt-1">{decisions.filter(d => d.status === 'pending_approval').length}</p>
+            <p className="text-label-sm text-on-surface">Pending Approval</p>
+            <p className="font-display font-bold text-display-sm text-on-surface mt-1">{decisions.filter(d => d.status === 'pending_approval').length}</p>
           </Card>
           <Card className="border-l-4 border-l-secondary">
             <p className="text-label-sm text-secondary">Approved</p>
@@ -65,7 +61,6 @@ export default function ProcurementPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Decision List */}
           <div className="space-y-3">
             <h2 className="text-title-md text-on-surface font-semibold">Procurement Decisions</h2>
             {decisions.map(dec => {
@@ -90,7 +85,6 @@ export default function ProcurementPage() {
             })}
           </div>
 
-          {/* Decision Detail */}
           <div className="lg:col-span-2 space-y-4">
             {selectedDecision && (
               <>
@@ -110,7 +104,6 @@ export default function ProcurementPage() {
                   )}
                 </div>
 
-                {/* Contract Value Hero */}
                 <Card gradient>
                   <div className="grid grid-cols-3 gap-4">
                     <div>
@@ -128,7 +121,6 @@ export default function ProcurementPage() {
                   </div>
                 </Card>
 
-                {/* Details */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Card>
                     <CardTitle className="mb-3">Contract Details</CardTitle>
@@ -156,13 +148,12 @@ export default function ProcurementPage() {
                     {selectedDecision.pilotId && (
                       <div className="mt-3 p-2 bg-secondary-container/50 rounded-lg">
                         <p className="text-label-sm text-secondary font-medium">Originated from Pilot Program</p>
-                        <Link href="/pilots" className="text-label-sm text-primary hover:underline">View Pilot Details →</Link>
+                        <Link href="/pilots" className="text-label-sm text-primary hover:underline">View Pilot Details -&gt;</Link>
                       </div>
                     )}
                   </Card>
                 </div>
 
-                {/* Actions */}
                 {selectedDecision.status === 'pending_approval' && (
                   <Card className="border-2 border-warning/30 bg-warning-container/20">
                     <div className="flex items-center justify-between gap-4">
@@ -171,10 +162,7 @@ export default function ProcurementPage() {
                         <p className="text-body-sm text-on-surface-variant mt-1">This contract requires decision maker approval before proceeding.</p>
                       </div>
                       <div className="flex gap-2 flex-shrink-0">
-                        <Button
-                          icon={<CheckCircle2 />}
-                          onClick={() => handleApprove(selectedDecision.id)}
-                        >
+                        <Button icon={<CheckCircle2 />} onClick={() => handleApprove(selectedDecision.id)}>
                           Approve Contract
                         </Button>
                         <Button variant="danger">Decline</Button>

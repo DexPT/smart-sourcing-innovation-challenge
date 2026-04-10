@@ -39,9 +39,9 @@ interface CardHeaderProps {
 
 export function CardHeader({ children, className, actions }: CardHeaderProps) {
   return (
-    <div className={cn('flex items-start justify-between mb-4', className)}>
-      <div className="flex-1">{children}</div>
-      {actions && <div className="flex-shrink-0 ml-4">{actions}</div>}
+    <div className={cn('flex items-start justify-between gap-4 mb-4', className)}>
+      <div className="flex-1 min-w-0">{children}</div>
+      {actions && <div className="flex-shrink-0 self-start">{actions}</div>}
     </div>
   )
 }

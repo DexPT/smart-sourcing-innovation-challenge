@@ -6,10 +6,10 @@ import { Button } from '@/components/ui/Button'
 import { useAppStore } from '@/store/appStore'
 import { useRole } from '@/hooks/useRole'
 import {
-  formatAED, formatDate, formatRelativeTime,
-  getSubmissionStatusConfig, getCategoryLabel, getFundingLabel, truncate
+  formatAED, formatRelativeTime,
+  getSubmissionStatusConfig, getCategoryLabel, truncate
 } from '@/lib/utils'
-import { Search, Filter, Plus, ArrowUpDown, Bot, ChevronRight, ExternalLink } from 'lucide-react'
+import { Search, Plus, Bot, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
 import type { SubmissionStatus, SubmissionCategory } from '@/types'
@@ -24,7 +24,6 @@ export default function SubmissionsPage() {
   const [selectedStatus, setSelectedStatus] = useState<string>('')
   const [selectedCategory, setSelectedCategory] = useState<string>('')
 
-  // For startup role, only show their own submissions (simulate with specific ones)
   const visibleSubmissions = currentRole === 'startup'
     ? submissions.filter(s => ['sub-006', 'sub-001'].includes(s.id))
     : submissions
@@ -39,9 +38,7 @@ export default function SubmissionsPage() {
   return (
     <AppShell>
       <div className="space-y-4">
-        {/* Actions bar */}
         <div className="flex items-center gap-3 flex-wrap">
-          {/* Search */}
           <div className="relative flex-1 min-w-48">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant" />
             <input
@@ -49,15 +46,14 @@ export default function SubmissionsPage() {
               placeholder="Search by title or company..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 bg-surface-container-lowest rounded-lg text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+              className="w-full min-h-10 pl-9 pr-4 py-2.5 bg-surface-container-lowest rounded-lg text-body-md text-on-surface placeholder:text-on-surface-variant/50 border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/20 transition-all"
             />
           </div>
 
-          {/* Status filter */}
           <select
             value={selectedStatus}
             onChange={e => setSelectedStatus(e.target.value)}
-            className="px-3 py-2 bg-surface-container-lowest rounded-lg text-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20"
+            className="min-h-10 px-3 py-2.5 bg-surface-container-lowest rounded-lg text-body-md text-on-surface border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/20"
           >
             <option value="">All Statuses</option>
             {STATUS_OPTIONS.map(s => (
@@ -65,11 +61,10 @@ export default function SubmissionsPage() {
             ))}
           </select>
 
-          {/* Category filter */}
           <select
             value={selectedCategory}
             onChange={e => setSelectedCategory(e.target.value)}
-            className="px-3 py-2 bg-surface-container-lowest rounded-lg text-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20"
+            className="min-h-10 px-3 py-2.5 bg-surface-container-lowest rounded-lg text-body-md text-on-surface border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/20"
           >
             <option value="">All Categories</option>
             {CATEGORY_OPTIONS.map(c => (
@@ -84,12 +79,10 @@ export default function SubmissionsPage() {
           )}
         </div>
 
-        {/* Count */}
         <p className="text-label-md text-on-surface-variant">
           Showing <span className="font-semibold text-on-surface">{filtered.length}</span> submissions
         </p>
 
-        {/* Table */}
         <Card padding="none">
           <div className="overflow-x-auto">
             <table className="w-full">

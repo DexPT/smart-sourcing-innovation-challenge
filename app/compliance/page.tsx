@@ -1,15 +1,14 @@
 'use client'
 import { AppShell } from '@/components/layout/AppShell'
-import { Card, CardHeader, CardTitle } from '@/components/ui/Card'
+import { Card, CardTitle } from '@/components/ui/Card'
 import { StatusBadge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { useAppStore } from '@/store/appStore'
 import { complianceResults } from '@/data/compliance'
-import { getComplianceStatusConfig, getSubmissionStatusConfig, formatDate, formatRelativeTime } from '@/lib/utils'
-import { ShieldCheck, AlertTriangle, CheckCircle2, Clock, XCircle, ChevronRight, Filter } from 'lucide-react'
+import { getComplianceStatusConfig } from '@/lib/utils'
+import { AlertTriangle, CheckCircle2, Clock, XCircle, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
-import type { ComplianceResult } from '@/types'
 
 const CHECK_STATUS_ICONS: Record<string, React.ElementType> = {
   pass: CheckCircle2, fail: XCircle, warning: AlertTriangle, pending: Clock
@@ -25,12 +24,10 @@ export default function CompliancePage() {
   const selected = complianceResults.find(c => c.id === selectedId) ?? complianceResults[0]
   const relatedSub = submissions.find(s => s.id === selected?.submissionId)
 
-  // Stats
   const stats = {
     total: complianceResults.length,
     passed: complianceResults.filter(c => c.status === 'passed').length,
     inProgress: complianceResults.filter(c => c.status === 'in_progress').length,
-    failed: complianceResults.filter(c => c.status === 'failed').length,
     allChecks: complianceResults.flatMap(c => c.checks).length,
     passedChecks: complianceResults.flatMap(c => c.checks).filter(ch => ch.status === 'pass').length,
   }
@@ -38,7 +35,6 @@ export default function CompliancePage() {
   return (
     <AppShell>
       <div className="space-y-6">
-        {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Card>
             <p className="text-label-sm text-on-surface-variant uppercase tracking-wider">Reviews</p>
@@ -49,8 +45,8 @@ export default function CompliancePage() {
             <p className="font-display font-bold text-display-sm text-secondary mt-1">{stats.passed}</p>
           </Card>
           <Card className="border-l-4 border-l-warning">
-            <p className="text-label-sm text-warning uppercase tracking-wider">In Progress</p>
-            <p className="font-display font-bold text-display-sm text-warning mt-1">{stats.inProgress}</p>
+            <p className="text-label-sm text-on-surface uppercase tracking-wider">In Progress</p>
+            <p className="font-display font-bold text-display-sm text-on-surface mt-1">{stats.inProgress}</p>
           </Card>
           <Card>
             <p className="text-label-sm text-on-surface-variant uppercase tracking-wider">Check Pass Rate</p>
@@ -61,7 +57,6 @@ export default function CompliancePage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Review List */}
           <div className="space-y-3">
             <h2 className="text-title-md text-on-surface font-semibold">Compliance Reviews</h2>
             {complianceResults.map(comp => {
@@ -92,12 +87,11 @@ export default function CompliancePage() {
               )
             })}
 
-            {/* Pending submissions */}
             {submissions.filter(s => s.status === 'compliance_check' && !complianceResults.find(c => c.submissionId === s.id)).map(sub => (
               <div key={sub.id} className="p-3 rounded-lg bg-warning-container/30 border border-warning/20">
                 <div className="flex items-center gap-2 mb-1">
                   <Clock className="w-4 h-4 text-warning" />
-                  <span className="badge bg-warning-container text-warning">Pending Review</span>
+                  <span className="badge bg-warning-container text-on-surface">Pending Review</span>
                 </div>
                 <p className="text-title-sm text-on-surface">{sub.title}</p>
                 <p className="text-label-sm text-on-surface-variant">{sub.company}</p>
@@ -105,7 +99,6 @@ export default function CompliancePage() {
             ))}
           </div>
 
-          {/* Detail Panel */}
           <div className="lg:col-span-2 space-y-4">
             {selected && relatedSub && (
               <>
@@ -119,7 +112,6 @@ export default function CompliancePage() {
                   </Link>
                 </div>
 
-                {/* Summary */}
                 <div className="grid grid-cols-3 gap-3">
                   <Card>
                     <p className="text-label-sm text-on-surface-variant">Status</p>
@@ -139,7 +131,6 @@ export default function CompliancePage() {
                   </Card>
                 </div>
 
-                {/* Checks */}
                 <Card padding="none">
                   <div className="p-4 border-b border-outline-variant/10">
                     <CardTitle subtitle="Individual compliance checks">Regulatory Checks</CardTitle>
@@ -155,7 +146,7 @@ export default function CompliancePage() {
                             <div className="flex-1">
                               <div className="flex items-center gap-2 flex-wrap mb-0.5">
                                 <p className="text-title-sm text-on-surface">{check.name}</p>
-                                <span className={`badge text-label-sm ${check.severity === 'critical' ? 'bg-error-container text-error' : check.severity === 'high' ? 'bg-error-container/50 text-error' : check.severity === 'medium' ? 'bg-warning-container text-warning' : 'bg-secondary-container text-secondary'}`}>
+                                <span className={`badge text-label-sm ${check.severity === 'critical' ? 'bg-error-container text-error' : check.severity === 'high' ? 'bg-error-container/50 text-error' : check.severity === 'medium' ? 'bg-warning-container text-on-surface' : 'bg-secondary-container text-secondary'}`}>
                                   {check.severity}
                                 </span>
                                 <span className="badge bg-surface-container text-on-surface-variant text-label-sm">{check.category.replace('_', ' ')}</span>
@@ -163,7 +154,7 @@ export default function CompliancePage() {
                               <p className="text-body-sm text-on-surface-variant">{check.description}</p>
                               <p className="text-body-sm text-on-surface mt-1">{check.details}</p>
                               {check.regulation && (
-                                <p className="text-label-sm text-on-surface-variant/60 mt-1">📋 {check.regulation}</p>
+                                <p className="text-label-sm text-on-surface-variant/60 mt-1">Regulation: {check.regulation}</p>
                               )}
                             </div>
                           </div>
@@ -173,12 +164,11 @@ export default function CompliancePage() {
                   </div>
                 </Card>
 
-                {/* Conditions & Notes */}
                 {(selected.conditions?.length || selected.notes) && (
                   <Card>
                     {selected.conditions && selected.conditions.length > 0 && (
                       <div className="mb-4">
-                        <p className="text-label-sm text-warning uppercase tracking-wider mb-2">Approval Conditions</p>
+                        <p className="text-label-sm text-on-surface uppercase tracking-wider mb-2">Approval Conditions</p>
                         <ul className="space-y-1.5">
                           {selected.conditions.map((c, i) => (
                             <li key={i} className="flex items-start gap-2 p-2 bg-warning-container/30 rounded-md">

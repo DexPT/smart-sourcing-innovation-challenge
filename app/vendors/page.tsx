@@ -1,13 +1,11 @@
 'use client'
 import { AppShell } from '@/components/layout/AppShell'
-import { Card, CardHeader, CardTitle } from '@/components/ui/Card'
+import { Card, CardTitle } from '@/components/ui/Card'
 import { StatusBadge } from '@/components/ui/Badge'
-import { Button } from '@/components/ui/Button'
 import { Progress } from '@/components/ui/Progress'
 import { vendors } from '@/data/vendors'
 import { getVendorStatusConfig, getVendorTierConfig, formatAED } from '@/lib/utils'
-import { Building2, Search, Globe, Star, ChevronRight, Award, TrendingUp } from 'lucide-react'
-import Link from 'next/link'
+import { Building2, Search, Star, Award } from 'lucide-react'
 import { useState } from 'react'
 
 export default function VendorsPage() {
@@ -35,7 +33,6 @@ export default function VendorsPage() {
   return (
     <AppShell>
       <div className="space-y-6">
-        {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Card><p className="text-label-sm text-on-surface-variant">Total Vendors</p><p className="font-display font-bold text-display-sm text-on-surface mt-1">{stats.total}</p></Card>
           <Card><p className="text-label-sm text-secondary uppercase">Active</p><p className="font-display font-bold text-display-sm text-secondary mt-1">{stats.active}</p></Card>
@@ -44,12 +41,12 @@ export default function VendorsPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Vendor List */}
           <div className="space-y-3">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant" />
               <input
-                value={search} onChange={e => setSearch(e.target.value)}
+                value={search}
+                onChange={e => setSearch(e.target.value)}
                 placeholder="Search vendors..."
                 className="w-full pl-9 pr-4 py-2 bg-surface-container-lowest rounded-lg text-body-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
@@ -97,7 +94,6 @@ export default function VendorsPage() {
             </div>
           </div>
 
-          {/* Vendor Detail */}
           <div className="lg:col-span-2 space-y-4">
             {selectedVendor && (
               <>
