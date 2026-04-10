@@ -38,8 +38,8 @@ export default function SubmissionsPage() {
   return (
     <AppShell>
       <div className="space-y-4">
-        <div className="flex items-center gap-3 flex-wrap">
-          <div className="relative flex-1 min-w-48">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-3">
+          <div className="relative flex-1 min-w-0">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant" />
             <input
               type="text"
@@ -50,33 +50,35 @@ export default function SubmissionsPage() {
             />
           </div>
 
-          <select
-            value={selectedStatus}
-            onChange={e => setSelectedStatus(e.target.value)}
-            className="min-h-10 px-3 py-2.5 bg-surface-container-lowest rounded-lg text-body-md text-on-surface border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/20"
-          >
-            <option value="">All Statuses</option>
-            {STATUS_OPTIONS.map(s => (
-              <option key={s} value={s}>{getSubmissionStatusConfig(s).label}</option>
-            ))}
-          </select>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex gap-3">
+            <select
+              value={selectedStatus}
+              onChange={e => setSelectedStatus(e.target.value)}
+              className="min-h-10 px-3 py-2.5 bg-surface-container-lowest rounded-lg text-body-md text-on-surface border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/20"
+            >
+              <option value="">All Statuses</option>
+              {STATUS_OPTIONS.map(s => (
+                <option key={s} value={s}>{getSubmissionStatusConfig(s).label}</option>
+              ))}
+            </select>
 
-          <select
-            value={selectedCategory}
-            onChange={e => setSelectedCategory(e.target.value)}
-            className="min-h-10 px-3 py-2.5 bg-surface-container-lowest rounded-lg text-body-md text-on-surface border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/20"
-          >
-            <option value="">All Categories</option>
-            {CATEGORY_OPTIONS.map(c => (
-              <option key={c} value={c}>{getCategoryLabel(c)}</option>
-            ))}
-          </select>
+            <select
+              value={selectedCategory}
+              onChange={e => setSelectedCategory(e.target.value)}
+              className="min-h-10 px-3 py-2.5 bg-surface-container-lowest rounded-lg text-body-md text-on-surface border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/20"
+            >
+              <option value="">All Categories</option>
+              {CATEGORY_OPTIONS.map(c => (
+                <option key={c} value={c}>{getCategoryLabel(c)}</option>
+              ))}
+            </select>
 
-          {can.createSubmission && (
-            <Link href="/submissions/new">
-              <Button icon={<Plus />}>New Submission</Button>
-            </Link>
-          )}
+            {can.createSubmission && (
+              <Link href="/submissions/new" className="block">
+                <Button icon={<Plus />} className="w-full lg:w-auto">New Submission</Button>
+              </Link>
+            )}
+          </div>
         </div>
 
         <p className="text-label-md text-on-surface-variant">
@@ -85,7 +87,7 @@ export default function SubmissionsPage() {
 
         <Card padding="none">
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full min-w-[720px]">
               <thead>
                 <tr className="bg-surface-container-low">
                   <th className="text-left text-label-sm text-on-surface-variant font-medium px-4 py-3 uppercase tracking-wider">Submission</th>

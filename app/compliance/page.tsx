@@ -35,7 +35,7 @@ export default function CompliancePage() {
   return (
     <AppShell>
       <div className="space-y-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           <Card>
             <p className="text-label-sm text-on-surface-variant uppercase tracking-wider">Reviews</p>
             <p className="font-display font-bold text-display-sm text-on-surface mt-1">{stats.total}</p>
@@ -102,8 +102,8 @@ export default function CompliancePage() {
           <div className="lg:col-span-2 space-y-4">
             {selected && relatedSub && (
               <>
-                <div className="flex items-start justify-between gap-4">
-                  <div>
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                  <div className="min-w-0">
                     <h2 className="font-display text-headline-md text-on-surface">{relatedSub.title}</h2>
                     <p className="text-body-md text-on-surface-variant">{relatedSub.company} · Officer: {selected.officerName}</p>
                   </div>
@@ -112,7 +112,7 @@ export default function CompliancePage() {
                   </Link>
                 </div>
 
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <Card>
                     <p className="text-label-sm text-on-surface-variant">Status</p>
                     <StatusBadge status={getComplianceStatusConfig(selected.status)} className="mt-1" />
@@ -143,7 +143,7 @@ export default function CompliancePage() {
                         <div key={check.id} className="p-4">
                           <div className="flex items-start gap-3">
                             <Icon className={`w-5 h-5 ${color} flex-shrink-0 mt-0.5`} />
-                            <div className="flex-1">
+                            <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 flex-wrap mb-0.5">
                                 <p className="text-title-sm text-on-surface">{check.name}</p>
                                 <span className={`badge text-label-sm ${check.severity === 'critical' ? 'bg-error-container text-error' : check.severity === 'high' ? 'bg-error-container/50 text-error' : check.severity === 'medium' ? 'bg-warning-container text-on-surface' : 'bg-secondary-container text-secondary'}`}>

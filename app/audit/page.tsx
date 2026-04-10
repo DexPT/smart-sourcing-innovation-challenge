@@ -1,12 +1,12 @@
 'use client'
 import { AppShell } from '@/components/layout/AppShell'
-import { Card, CardHeader, CardTitle } from '@/components/ui/Card'
+import { Card } from '@/components/ui/Card'
 import { auditLogs } from '@/data/audit'
 import { formatDate, formatRelativeTime } from '@/lib/utils'
-import { ClipboardList, Search, Filter, Download, Bot, User, ShieldCheck, Building2, FlaskConical, HandshakeIcon } from 'lucide-react'
+import { ClipboardList, Search, Download, Bot, User, ShieldCheck, Building2, FlaskConical, HandshakeIcon } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { useState } from 'react'
-import type { AuditLog, UserRole } from '@/types'
+import type { UserRole } from '@/types'
 
 const ENTITY_ICONS: Record<string, React.ElementType> = {
   submission: ClipboardList,
@@ -59,17 +59,15 @@ export default function AuditPage() {
   return (
     <AppShell>
       <div className="space-y-4">
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           <Card><p className="text-label-sm text-on-surface-variant">Total Events</p><p className="font-display font-bold text-display-sm text-on-surface mt-1">{auditLogs.length}</p></Card>
           <Card><p className="text-label-sm text-on-surface-variant">Entity Types</p><p className="font-display font-bold text-display-sm text-on-surface mt-1">6</p></Card>
           <Card><p className="text-label-sm text-on-surface-variant">Unique Actors</p><p className="font-display font-bold text-display-sm text-on-surface mt-1">{new Set(auditLogs.map(a => a.actorId)).size}</p></Card>
           <Card><p className="text-label-sm text-on-surface-variant">System Events</p><p className="font-display font-bold text-display-sm text-on-surface mt-1">{auditLogs.filter(a => a.actorId === 'system').length}</p></Card>
         </div>
 
-        {/* Filters */}
-        <div className="flex items-center gap-3 flex-wrap">
-          <div className="relative flex-1 min-w-48">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-3">
+          <div className="relative flex-1 min-w-0">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant" />
             <input
               value={search} onChange={e => setSearch(e.target.value)}
@@ -77,32 +75,33 @@ export default function AuditPage() {
               className="w-full min-h-10 pl-9 pr-4 py-2.5 bg-surface-container-lowest rounded-lg text-body-sm text-on-surface border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/20"
             />
           </div>
-          <select value={entityFilter} onChange={e => setEntityFilter(e.target.value)} className="min-h-10 px-3 py-2.5 bg-surface-container-lowest rounded-lg text-body-sm text-on-surface border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/20">
-            <option value="">All Entity Types</option>
-            <option value="submission">Submission</option>
-            <option value="vendor">Vendor</option>
-            <option value="pilot">Pilot</option>
-            <option value="procurement">Procurement</option>
-            <option value="compliance">Compliance</option>
-          </select>
-          <select value={roleFilter} onChange={e => setRoleFilter(e.target.value)} className="min-h-10 px-3 py-2.5 bg-surface-container-lowest rounded-lg text-body-sm text-on-surface border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/20">
-            <option value="">All Roles</option>
-            <option value="admin">Admin</option>
-            <option value="evaluator">Evaluator</option>
-            <option value="compliance">Compliance</option>
-            <option value="startup">Startup</option>
-          </select>
-          <Button variant="secondary" size="sm" icon={<Download />}>Export</Button>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex gap-3">
+            <select value={entityFilter} onChange={e => setEntityFilter(e.target.value)} className="min-h-10 px-3 py-2.5 bg-surface-container-lowest rounded-lg text-body-sm text-on-surface border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/20">
+              <option value="">All Entity Types</option>
+              <option value="submission">Submission</option>
+              <option value="vendor">Vendor</option>
+              <option value="pilot">Pilot</option>
+              <option value="procurement">Procurement</option>
+              <option value="compliance">Compliance</option>
+            </select>
+            <select value={roleFilter} onChange={e => setRoleFilter(e.target.value)} className="min-h-10 px-3 py-2.5 bg-surface-container-lowest rounded-lg text-body-sm text-on-surface border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/20">
+              <option value="">All Roles</option>
+              <option value="admin">Admin</option>
+              <option value="evaluator">Evaluator</option>
+              <option value="compliance">Compliance</option>
+              <option value="startup">Startup</option>
+            </select>
+            <Button variant="secondary" size="sm" icon={<Download />} className="w-full lg:w-auto">Export</Button>
+          </div>
         </div>
 
         <p className="text-label-md text-on-surface-variant">
           Showing <span className="font-semibold text-on-surface">{filtered.length}</span> events
         </p>
 
-        {/* Audit Log Table */}
         <Card padding="none">
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full min-w-[860px]">
               <thead>
                 <tr className="bg-surface-container-low">
                   <th className="text-left text-label-sm text-on-surface-variant font-medium px-4 py-3 uppercase tracking-wider">Timestamp</th>

@@ -41,7 +41,7 @@ export default function ProcurementPage() {
   return (
     <AppShell>
       <div className="space-y-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           <Card>
             <p className="text-label-sm text-on-surface-variant">Total Decisions</p>
             <p className="font-display font-bold text-display-sm text-on-surface mt-1">{decisions.length}</p>
@@ -76,7 +76,7 @@ export default function ProcurementPage() {
                   </div>
                   <p className="text-title-sm text-on-surface">{dec.title}</p>
                   <p className="text-label-sm text-on-surface-variant mt-0.5">{dec.vendorName}</p>
-                  <div className="flex justify-between mt-2">
+                  <div className="flex justify-between mt-2 gap-3">
                     <span className="text-label-md font-semibold text-on-surface">{formatAED(dec.contractValue)}</span>
                     <span className="text-label-sm text-on-surface-variant">{dec.contractDuration}m contract</span>
                   </div>
@@ -88,9 +88,9 @@ export default function ProcurementPage() {
           <div className="lg:col-span-2 space-y-4">
             {selectedDecision && (
               <>
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <div className="flex items-center gap-2 mb-0.5">
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                       <StatusBadge status={PROC_STATUS_CONFIG[selectedDecision.status] ?? PROC_STATUS_CONFIG.pending_approval} />
                       <span className="badge bg-surface-container text-on-surface-variant capitalize">{selectedDecision.procurementType.replace('_', ' ')}</span>
                     </div>
@@ -105,7 +105,7 @@ export default function ProcurementPage() {
                 </div>
 
                 <Card gradient>
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
                       <p className="text-label-sm text-on-primary/70 uppercase tracking-wider">Contract Value</p>
                       <p className="font-display font-bold text-display-md text-on-primary mt-1">{formatAED(selectedDecision.contractValue)}</p>
@@ -156,12 +156,12 @@ export default function ProcurementPage() {
 
                 {selectedDecision.status === 'pending_approval' && (
                   <Card className="border-2 border-warning/30 bg-warning-container/20">
-                    <div className="flex items-center justify-between gap-4">
+                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                       <div>
                         <p className="text-title-md text-on-surface font-semibold">Awaiting Procurement Approval</p>
                         <p className="text-body-sm text-on-surface-variant mt-1">This contract requires decision maker approval before proceeding.</p>
                       </div>
-                      <div className="flex gap-2 flex-shrink-0">
+                      <div className="flex flex-col sm:flex-row gap-2 flex-shrink-0">
                         <Button icon={<CheckCircle2 />} onClick={() => handleApprove(selectedDecision.id)}>
                           Approve Contract
                         </Button>
