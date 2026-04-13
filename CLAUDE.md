@@ -60,8 +60,12 @@ Items are ordered by demo impact. Do not mark an item done here until it is full
 ### ~~P1 — Role-differentiated dashboards~~ ✓ DONE
 Four fully distinct dashboards implemented in `app/dashboard/page.tsx` as `AdminDashboard`, `EvaluatorDashboard`, `ComplianceDashboard`, `StartupDashboard` components, rendered conditionally on `currentRole`. Startup demo submissions hardcoded to IDs `['sub-006', 'sub-008']`.
 
-### P2 — Landing / demo entry page ✗ CANCELLED
-Not relevant for this project. `app/page.tsx` redirects directly to `/dashboard`.
+### ~~P2 — Landing / demo entry page~~ ✓ DONE
+`app/page.tsx` is now a full-screen login experience (two phases, client-side):
+- **Phase 1 — User selection:** 2×2 card grid showing the 4 demo personas (Ahmed Al-Maktoum / admin, Omar Khalid / evaluator, Sara Al-Ansari / compliance, Nadia Hassan / startup). Each card shows initials avatar, name, role, email, and description.
+- **Phase 2 — Dummy 2FA:** 6 individual digit inputs with auto-advance, paste support, and backspace navigation. A "Demo code" hint pill shows the hardcoded OTP. Wrong code triggers a shake animation + error message. Correct code → 0.9s success state → `setRole()` + `router.push('/dashboard')`.
+- OTP codes: admin `847291`, evaluator `362819`, compliance `519047`, startup `204736`.
+- Left panel: Dubai Chambers branding with platform name, tagline, and 3 feature bullets on `bg-power-gradient`. Right panel: auth flow.
 
 ### ~~P3 — Evaluator actions on AI Evaluation Hub~~ ✓ DONE
 `EvaluatorActions` component added inline in `app/ai-evaluation/page.tsx`. Three actions: **Shortlist** (moves to `compliance_check`, aligned with AI), **Request More Info** (inline textarea, appends `comment` timeline event, status unchanged), **Override** (choose approve/reject + required justification ≥20 chars, appends `decision` event marked as override). Panel remounts on each selection via `actionKey`. Post-action shows a "Decision recorded" confirmation.
