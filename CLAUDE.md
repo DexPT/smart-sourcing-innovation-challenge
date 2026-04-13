@@ -72,8 +72,8 @@ Not relevant for this project. `app/page.tsx` redirects directly to `/dashboard`
 ### P5 — Procurement final-decision actions
 `app/procurement/page.tsx` needs admin actions: **Approve for procurement**, **Return for revision**, **Reject** — with the full summary panel (AI score, compliance result, pilot outcome, vendor readiness) visible before deciding.
 
-### P6 — Pilot status-change actions
-`app/pilots/page.tsx` is read-only. Evaluator/admin must be able to transition pilot status: `planned → active → completed / cancelled`, and mark a completed pilot as recommended for procurement.
+### ~~P6 — Pilot status-change actions~~ ✓ DONE
+`pilots` moved from static `data/pilots.ts` into Zustand store with `updatePilot` action. `PilotActions` component added to `app/pilots/page.tsx`. Status transitions: `planned→active` (Launch), `active→paused` (Pause), `paused→active` (Resume), `active/paused→completed` (opens completion panel with score slider 0-100, recommendation picker, notes textarea), `active/paused→cancelled`. Completed pilots with `proceed` recommendation show "Send to Procurement" button that moves submission to `procurement` status. All actions append timeline events to the related submission. Dashboard updated to read pilots from store.
 
 ### P7 — Richer Insights page
 `app/insights/page.tsx` needs: sector innovation heatmap (bar or treemap), AI override trend chart, time-to-evaluation metric, approval rate funnel, pilot conversion rate. Charts should use Recharts with the design system colors.

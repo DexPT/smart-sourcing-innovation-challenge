@@ -1,8 +1,9 @@
 'use client'
 import { create } from 'zustand'
-import type { UserRole, Submission, FilterState, ComplianceResult } from '@/types'
+import type { UserRole, Submission, FilterState, ComplianceResult, Pilot } from '@/types'
 import { submissions as initialSubmissions } from '@/data/submissions'
 import { complianceResults as initialComplianceResults } from '@/data/compliance'
+import { pilots as initialPilots } from '@/data/pilots'
 import { generateAIScore } from '@/lib/aiEngine'
 
 interface AppState {
@@ -18,6 +19,10 @@ interface AppState {
   // Compliance results
   complianceResults: ComplianceResult[]
   updateComplianceResult: (id: string, updates: Partial<ComplianceResult>) => void
+
+  // Pilots
+  pilots: Pilot[]
+  updatePilot: (id: string, updates: Partial<Pilot>) => void
 
   // AI evaluation
   runningAIEvaluation: string | null
@@ -69,6 +74,15 @@ export const useAppStore = create<AppState>((set, get) => ({
     set((state) => ({
       complianceResults: state.complianceResults.map((c) =>
         c.id === id ? { ...c, ...updates } : c
+      ),
+    })),
+
+  pilots: initialPilots,
+
+  updatePilot: (id, updates) =>
+    set((state) => ({
+      pilots: state.pilots.map((p) =>
+        p.id === id ? { ...p, ...updates, updatedAt: new Date().toISOString() } : p
       ),
     })),
 

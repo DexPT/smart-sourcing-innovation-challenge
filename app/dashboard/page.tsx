@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/Button'
 import { Progress } from '@/components/ui/Progress'
 import { useAppStore } from '@/store/appStore'
 import { useRole } from '@/hooks/useRole'
-import { pilots } from '@/data/pilots'
 import { vendors } from '@/data/vendors'
 import {
   formatAED, formatRelativeTime, formatDate,
@@ -54,6 +53,7 @@ const overrideTrendData = [
 function AdminDashboard() {
   const submissions = useAppStore(s => s.submissions)
   const complianceResults = useAppStore(s => s.complianceResults)
+  const pilots = useAppStore(s => s.pilots)
 
   const total = submissions.length
   const approved = submissions.filter(s => ['approved', 'pilot', 'procurement'].includes(s.status)).length
