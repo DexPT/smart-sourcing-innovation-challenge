@@ -1,10 +1,11 @@
 'use client'
+import { useMemo } from 'react'
 import { AppShell } from '@/components/layout/AppShell'
 import { Card, CardHeader, CardTitle } from '@/components/ui/Card'
 import { StatCard } from '@/components/ui/StatCard'
 import { useAppStore } from '@/store/appStore'
 import { formatAED } from '@/lib/utils'
-import { BarChart3, TrendingUp, Target, Zap, Download } from 'lucide-react'
+import { BarChart3, TrendingUp, Target, Zap, Download, Clock, Rocket } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import {
   AreaChart,
@@ -14,8 +15,6 @@ import {
   PieChart,
   Pie,
   Cell,
-  LineChart,
-  Line,
   XAxis,
   YAxis,
   Tooltip,
@@ -24,6 +23,35 @@ import {
   CartesianGrid,
 } from 'recharts'
 import { ClientOnly } from '@/components/ui/ClientOnly'
+
+// ─── constants ───────────────────────────────────────────────
+const CATEGORY_LABELS: Record<string, string> = {
+  ai_ml: 'AI & ML',
+  fintech: 'FinTech',
+  healthtech: 'HealthTech',
+  logistics: 'Logistics',
+  sustainability: 'Sustainability',
+  edtech: 'EdTech',
+  cybersecurity: 'Cybersecurity',
+  smart_city: 'Smart City',
+  iot: 'IoT',
+}
+
+const FUNNEL_STAGES = [
+  'submitted', 'ai_review', 'evaluation', 'compliance_check', 'approved', 'pilot', 'procurement',
+] as const
+
+const FUNNEL_LABELS: Record<string, string> = {
+  submitted: 'Submitted',
+  ai_review: 'AI Review',
+  evaluation: 'Evaluation',
+  compliance_check: 'Compliance',
+  approved: 'Approved',
+  pilot: 'Pilot',
+  procurement: 'Procurement',
+}
+
+const FUNNEL_COLORS = ['#c3c6d6', '#0c56d0', '#003d9b', '#434655', '#1a6b6b', '#00897b', '#004d40']
 
 const monthlyData = [
   { month: 'Oct 25', submissions: 4, evaluations: 3, pilots: 1, value: 8200000 },
@@ -35,53 +63,129 @@ const monthlyData = [
   { month: 'Apr 26', submissions: 8, evaluations: 5, pilots: 2, value: 18200000 },
 ]
 
-const categoryPerformance = [
-  { category: 'AI & ML', avgScore: 86, count: 2, approved: 2 },
-  { category: 'Cybersecurity', avgScore: 88, count: 1, approved: 1 },
-  { category: 'Logistics', avgScore: 92, count: 1, approved: 1 },
-  { category: 'FinTech', avgScore: 90, count: 1, approved: 1 },
-  { category: 'Sustainability', avgScore: 76, count: 1, approved: 0 },
-  { category: 'EdTech', avgScore: 0, count: 1, approved: 0 },
-  { category: 'HealthTech', avgScore: 48, count: 1, approved: 0 },
-]
-
-const funnelData = [
-  { stage: 'Submitted', count: 8, color: '#c3c6d6' },
-  { stage: 'AI Review', count: 6, color: '#0c56d0' },
-  { stage: 'Evaluated', count: 5, color: '#003d9b' },
-  { stage: 'Compliance', count: 4, color: '#3c4455' },
-  { stage: 'Approved', count: 3, color: '#006a6a' },
-  { stage: 'Pilot', count: 2, color: '#00897b' },
-  { stage: 'Procurement', count: 1, color: '#004d40' },
-]
-
-const complianceData = [
-  { name: 'Passed', value: 3, color: '#006a6a' },
-  { name: 'In Progress', value: 1, color: '#b45309' },
-  { name: 'Failed', value: 0, color: '#ba1a1a' },
-  { name: 'Conditional', value: 0, color: '#434654' },
-]
-
-const conversionData = [
-  { month: 'Jan', rate: 62 },
-  { month: 'Feb', rate: 58 },
-  { month: 'Mar', rate: 71 },
-  { month: 'Apr', rate: 65 },
-]
+// ─── custom tooltip ──────────────────────────────────────────
+const ChartTooltip = {
+  contentStyle: {
+    background: '#fff',
+    border: '1px solid rgba(195,198,214,0.2)',
+    borderRadius: '8px',
+    fontSize: '12px',
+  },
+}
 
 export default function InsightsPage() {
   const submissions = useAppStore(s => s.submissions)
-  const totalValue = submissions
-    .filter(s => !['rejected', 'archived'].includes(s.status))
-    .reduce((sum, sub) => sum + sub.estimatedValue, 0)
-  const avgScore = Math.round(
-    submissions.filter(s => s.aiScore).reduce((sum, sub) => sum + (sub.aiScore?.overall ?? 0), 0) /
-      Math.max(1, submissions.filter(s => s.aiScore).length)
+  const pilots = useAppStore(s => s.pilots)
+
+  // ── derived stats ──
+  const totalValue = useMemo(
+    () => submissions
+      .filter(s => !['rejected', 'archived'].includes(s.status))
+      .reduce((sum, s) => sum + s.estimatedValue, 0),
+    [submissions]
   )
+
+  const avgScore = useMemo(() => {
+    const scored = submissions.filter(s => s.aiScore)
+    if (scored.length === 0) return 0
+    return Math.round(scored.reduce((sum, s) => sum + (s.aiScore?.overall ?? 0), 0) / scored.length)
+  }, [submissions])
+
+  const avgTimeToEvalDays = useMemo(() => {
+    const evaluated = submissions.filter(s => s.aiScore?.generatedAt && s.submittedAt)
+    if (evaluated.length === 0) return null
+    const total = evaluated.reduce((sum, s) => {
+      const diff = new Date(s.aiScore!.generatedAt!).getTime() - new Date(s.submittedAt).getTime()
+      return sum + diff / (1000 * 60 * 60 * 24)
+    }, 0)
+    return Math.round(total / evaluated.length)
+  }, [submissions])
+
+  // ── sector heatmap ──
+  const sectorData = useMemo(() => {
+    const map = new Map<string, { count: number; totalScore: number; scored: number }>()
+    submissions.forEach(s => {
+      const label = CATEGORY_LABELS[s.category] ?? s.category
+      const existing = map.get(label) ?? { count: 0, totalScore: 0, scored: 0 }
+      map.set(label, {
+        count: existing.count + 1,
+        totalScore: existing.totalScore + (s.aiScore?.overall ?? 0),
+        scored: existing.scored + (s.aiScore ? 1 : 0),
+      })
+    })
+    return Array.from(map.entries())
+      .map(([category, { count, totalScore, scored }]) => ({
+        category,
+        count,
+        avgScore: scored > 0 ? Math.round(totalScore / scored) : 0,
+      }))
+      .sort((a, b) => b.count - a.count)
+  }, [submissions])
+
+  // ── approval funnel ──
+  const funnelData = useMemo(() => {
+    const BEYOND: Record<string, string[]> = {
+      submitted:        ['submitted', 'ai_review', 'evaluation', 'compliance_check', 'approved', 'pilot', 'procurement'],
+      ai_review:        ['ai_review', 'evaluation', 'compliance_check', 'approved', 'pilot', 'procurement'],
+      evaluation:       ['evaluation', 'compliance_check', 'approved', 'pilot', 'procurement'],
+      compliance_check: ['compliance_check', 'approved', 'pilot', 'procurement'],
+      approved:         ['approved', 'pilot', 'procurement'],
+      pilot:            ['pilot', 'procurement'],
+      procurement:      ['procurement'],
+    }
+    return FUNNEL_STAGES.map((stage, idx) => ({
+      stage: FUNNEL_LABELS[stage],
+      count: submissions.filter(s => BEYOND[stage].includes(s.status)).length,
+      color: FUNNEL_COLORS[idx],
+    }))
+  }, [submissions])
+
+  // ── AI decision breakdown ──
+  const aiDecisionData = useMemo(() => {
+    let overrides = 0, aligned = 0, pending = 0
+    submissions.forEach(s => {
+      if (!s.aiScore) return
+      const hasDecision = s.timeline?.some(t => t.type === 'decision')
+      const hasOverride = s.timeline?.some(
+        t => t.type === 'decision' && t.title.toLowerCase().includes('override')
+      )
+      if (!hasDecision) pending++
+      else if (hasOverride) overrides++
+      else aligned++
+    })
+    return [
+      { name: 'AI-Aligned', value: aligned, color: '#006a6a' },
+      { name: 'Overridden', value: overrides, color: '#b45309' },
+      { name: 'Pending Decision', value: pending, color: '#c3c6d6' },
+    ]
+  }, [submissions])
+
+  const totalAiDecisions = aiDecisionData.reduce((s, d) => s + d.value, 0)
+  const overrideRate = totalAiDecisions > 0
+    ? Math.round((aiDecisionData.find(d => d.name === 'Overridden')?.value ?? 0) / totalAiDecisions * 100)
+    : 0
+
+  // ── pilot conversion ──
+  const pilotStats = useMemo(() => {
+    const completed = pilots.filter(p => p.status === 'completed')
+    const proceed = completed.filter(p => p.recommendation === 'proceed')
+    const modify = completed.filter(p => p.recommendation === 'modify')
+    const terminate = completed.filter(p => p.recommendation === 'terminate')
+    const rate = completed.length > 0 ? Math.round((proceed.length / completed.length) * 100) : 0
+    return { completed: completed.length, proceed: proceed.length, modify: modify.length, terminate: terminate.length, rate }
+  }, [pilots])
+
+  const pilotDonutData = [
+    { name: 'Proceed', value: pilotStats.proceed, color: '#006a6a' },
+    { name: 'Modify', value: pilotStats.modify, color: '#b45309' },
+    { name: 'Terminate', value: pilotStats.terminate, color: '#ba1a1a' },
+    { name: 'Active / Planned', value: Math.max(0, pilots.length - pilotStats.completed), color: '#c3c6d6' },
+  ].filter(d => d.value > 0)
 
   return (
     <AppShell>
       <div className="space-y-6">
+        {/* ── header ── */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-body-md text-on-surface-variant">April 2026 · Year to Date</p>
           <Button variant="secondary" size="sm" icon={<Download />} className="w-full sm:w-auto">
@@ -89,13 +193,40 @@ export default function InsightsPage() {
           </Button>
         </div>
 
+        {/* ── stat cards ── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-          <StatCard label="Total Pipeline Value" value={formatAED(totalValue)} change={38} trend="up" icon={<TrendingUp />} accent="primary" gradient />
-          <StatCard label="Submissions YTD" value={submissions.length} change={23} trend="up" icon={<BarChart3 />} accent="secondary" />
-          <StatCard label="Avg AI Score" value={avgScore} unit="/100" change={5} trend="up" icon={<Zap />} accent="primary" />
-          <StatCard label="Approval Rate" value="55" unit="%" change={8} trend="up" icon={<Target />} accent="secondary" />
+          <StatCard
+            label="Total Pipeline Value"
+            value={formatAED(totalValue)}
+            change={38} trend="up"
+            icon={<TrendingUp />}
+            accent="primary" gradient
+          />
+          <StatCard
+            label="Submissions YTD"
+            value={submissions.length}
+            change={23} trend="up"
+            icon={<BarChart3 />}
+            accent="secondary"
+          />
+          <StatCard
+            label="Avg AI Score"
+            value={avgScore}
+            unit="/100"
+            change={5} trend="up"
+            icon={<Zap />}
+            accent="primary"
+          />
+          <StatCard
+            label="Avg Time to AI Eval"
+            value={avgTimeToEvalDays ?? '—'}
+            unit={avgTimeToEvalDays != null ? ' days' : ''}
+            icon={<Clock />}
+            accent="secondary"
+          />
         </div>
 
+        {/* ── row 1: activity + sector heatmap ── */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
@@ -117,7 +248,7 @@ export default function InsightsPage() {
                   <CartesianGrid stroke="rgba(195,198,214,0.15)" vertical={false} />
                   <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#434654' }} axisLine={false} tickLine={false} />
                   <YAxis tick={{ fontSize: 10, fill: '#434654' }} axisLine={false} tickLine={false} />
-                  <Tooltip contentStyle={{ background: '#fff', border: '1px solid rgba(195,198,214,0.2)', borderRadius: '8px', fontSize: '12px' }} />
+                  <Tooltip {...ChartTooltip} />
                   <Legend wrapperStyle={{ fontSize: '12px' }} />
                   <Area type="monotone" dataKey="submissions" name="Submissions" stroke="#003d9b" fill="url(#areaSubmit)" strokeWidth={2} />
                   <Area type="monotone" dataKey="evaluations" name="Evaluated" stroke="#006a6a" fill="url(#areaEval)" strokeWidth={2} />
@@ -128,29 +259,35 @@ export default function InsightsPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle subtitle="Total deal value in pipeline">Pipeline Value (AED)</CardTitle>
+              <CardTitle subtitle="Submission count and average AI score per sector">Sector Innovation Heatmap</CardTitle>
             </CardHeader>
             <ClientOnly fallback={<div className="h-[220px] animate-pulse rounded bg-surface-container" />}>
               <ResponsiveContainer width="100%" height={220}>
-                <BarChart data={monthlyData} margin={{ top: 0, right: 0, bottom: 0, left: -10 }}>
-                  <CartesianGrid stroke="rgba(195,198,214,0.15)" vertical={false} />
-                  <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#434654' }} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fontSize: 10, fill: '#434654' }} axisLine={false} tickLine={false} tickFormatter={v => `${(v / 1000000).toFixed(0)}M`} />
+                <BarChart data={sectorData} layout="vertical" margin={{ top: 0, right: 8, bottom: 0, left: 60 }}>
+                  <CartesianGrid stroke="rgba(195,198,214,0.15)" horizontal={false} />
+                  <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 10, fill: '#434654' }} axisLine={false} tickLine={false} />
+                  <YAxis dataKey="category" type="category" tick={{ fontSize: 10, fill: '#434654' }} axisLine={false} tickLine={false} width={65} />
                   <Tooltip
-                    contentStyle={{ background: '#fff', border: '1px solid rgba(195,198,214,0.2)', borderRadius: '8px', fontSize: '12px' }}
-                    formatter={(v: number) => [`AED ${(v / 1000000).toFixed(1)}M`, 'Value']}
+                    {...ChartTooltip}
+                    formatter={(value: number, name: string) =>
+                      name === 'Avg AI Score' ? [`${value}/100`, name] : [value, name]
+                    }
                   />
-                  <Bar dataKey="value" name="Pipeline Value" fill="#003d9b" radius={[4, 4, 0, 0]} />
+                  <Legend wrapperStyle={{ fontSize: '12px' }} />
+                  <Bar dataKey="count" name="Submissions" fill="#003d9b" radius={[0, 3, 3, 0]} barSize={8} />
+                  <Bar dataKey="avgScore" name="Avg AI Score" fill="#006a6a" radius={[0, 3, 3, 0]} barSize={8} />
                 </BarChart>
               </ResponsiveContainer>
             </ClientOnly>
           </Card>
         </div>
 
+        {/* ── row 2: funnel + AI decisions + pilot conversion ── */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Approval Funnel */}
           <Card>
             <CardHeader>
-              <CardTitle subtitle="Stage conversion">Pipeline Funnel</CardTitle>
+              <CardTitle subtitle="Cumulative count at each pipeline stage">Approval Rate Funnel</CardTitle>
             </CardHeader>
             <div className="space-y-2">
               {funnelData.map((stage, idx) => (
@@ -161,10 +298,13 @@ export default function InsightsPage() {
                   </div>
                   <div className="h-5 overflow-hidden rounded bg-surface-container">
                     <div
-                      className="flex h-full items-center justify-end rounded pr-2 text-right transition-all duration-700"
-                      style={{ width: `${(stage.count / funnelData[0].count) * 100}%`, background: stage.color }}
+                      className="flex h-full items-center justify-end rounded pr-2 transition-all duration-700"
+                      style={{
+                        width: funnelData[0].count > 0 ? `${(stage.count / funnelData[0].count) * 100}%` : '0%',
+                        background: stage.color,
+                      }}
                     >
-                      {stage.count > 0 && idx > 0 && (
+                      {stage.count > 0 && idx > 0 && funnelData[idx - 1].count > 0 && (
                         <span className="text-[10px] font-bold text-white">
                           {Math.round((stage.count / funnelData[idx - 1].count) * 100)}%
                         </span>
@@ -176,75 +316,110 @@ export default function InsightsPage() {
             </div>
           </Card>
 
+          {/* AI Decision Breakdown */}
           <Card>
             <CardHeader>
-              <CardTitle subtitle="Average AI score by domain">Category Performance</CardTitle>
+              <CardTitle subtitle="Evaluator alignment with AI recommendations">AI Decision Alignment</CardTitle>
             </CardHeader>
-            <ClientOnly fallback={<div className="h-[200px] animate-pulse rounded bg-surface-container" />}>
-              <ResponsiveContainer width="100%" height={200}>
-                <BarChart data={categoryPerformance.filter(c => c.avgScore > 0)} layout="vertical" margin={{ top: 0, right: 0, bottom: 0, left: 50 }}>
-                  <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 10, fill: '#434654' }} axisLine={false} tickLine={false} />
-                  <YAxis dataKey="category" type="category" tick={{ fontSize: 10, fill: '#434654' }} axisLine={false} tickLine={false} width={55} />
-                  <Tooltip contentStyle={{ background: '#fff', border: '1px solid rgba(195,198,214,0.2)', borderRadius: '8px', fontSize: '12px' }} />
-                  <Bar dataKey="avgScore" name="Avg Score" radius={[0, 4, 4, 0]}>
-                    {categoryPerformance.filter(c => c.avgScore > 0).map((_, i) => (
-                      <Cell key={i} fill={i === 0 ? '#003d9b' : i === 1 ? '#006a6a' : '#0c56d0'} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </ClientOnly>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle subtitle="Compliance review outcomes">Compliance Health</CardTitle>
-            </CardHeader>
-            <div className="mb-4 flex justify-center">
+            <div className="flex justify-center">
               <ClientOnly fallback={<div className="h-[140px] w-[140px] animate-pulse rounded-full bg-surface-container" />}>
                 <PieChart width={140} height={140}>
-                  <Pie id="insights-compliance-health" data={complianceData.filter(d => d.value > 0)} cx={65} cy={65} innerRadius={45} outerRadius={65} dataKey="value" strokeWidth={0}>
-                    {complianceData.map((entry, idx) => (
+                  <Pie
+                    data={aiDecisionData.filter(d => d.value > 0)}
+                    cx={65} cy={65}
+                    innerRadius={45} outerRadius={65}
+                    dataKey="value"
+                    strokeWidth={0}
+                  >
+                    {aiDecisionData.filter(d => d.value > 0).map((entry, idx) => (
                       <Cell key={idx} fill={entry.color} />
                     ))}
                   </Pie>
                 </PieChart>
               </ClientOnly>
             </div>
-            <div className="space-y-2">
-              {complianceData.map(d => (
+            <div className="space-y-2 mt-2">
+              {aiDecisionData.map(d => (
                 <div key={d.name} className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="h-2.5 w-2.5 rounded-full" style={{ background: d.color }} />
+                    <div className="h-2.5 w-2.5 rounded-full flex-shrink-0" style={{ background: d.color }} />
                     <span className="text-label-sm text-on-surface-variant">{d.name}</span>
                   </div>
                   <span className="text-label-md font-semibold text-on-surface">{d.value}</span>
                 </div>
               ))}
             </div>
-            <div className="mt-4 border-t border-outline-variant/10 pt-3 text-center">
-              <p className="text-label-sm text-on-surface-variant">DESC Alignment Rate</p>
-              <p className="font-display text-display-sm font-bold text-secondary">100%</p>
+            <div className="mt-4 rounded-lg bg-surface-container-lowest p-3 text-center">
+              <p className="text-label-sm text-on-surface-variant">Override Rate</p>
+              <p className="font-display text-display-sm font-bold text-warning">{overrideRate}%</p>
+            </div>
+          </Card>
+
+          {/* Pilot Conversion */}
+          <Card>
+            <CardHeader>
+              <CardTitle subtitle="Pilot outcomes and procurement conversion rate">Pilot Conversion</CardTitle>
+            </CardHeader>
+            <div className="flex justify-center">
+              <ClientOnly fallback={<div className="h-[140px] w-[140px] animate-pulse rounded-full bg-surface-container" />}>
+                <PieChart width={140} height={140}>
+                  <Pie
+                    data={pilotDonutData}
+                    cx={65} cy={65}
+                    innerRadius={45} outerRadius={65}
+                    dataKey="value"
+                    strokeWidth={0}
+                  >
+                    {pilotDonutData.map((entry, idx) => (
+                      <Cell key={idx} fill={entry.color} />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ClientOnly>
+            </div>
+            <div className="space-y-2 mt-2">
+              {[
+                { label: 'Total Pilots', value: pilots.length },
+                { label: 'Completed', value: pilotStats.completed },
+                { label: 'Proceed', value: pilotStats.proceed },
+                { label: 'Modify / Terminate', value: pilotStats.modify + pilotStats.terminate },
+              ].map(row => (
+                <div key={row.label} className="flex items-center justify-between">
+                  <span className="text-label-sm text-on-surface-variant">{row.label}</span>
+                  <span className="text-label-md font-semibold text-on-surface">{row.value}</span>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 rounded-lg bg-surface-container-lowest p-3 text-center">
+              <p className="text-label-sm text-on-surface-variant">Proceed Rate</p>
+              <p className="font-display text-display-sm font-bold text-secondary">
+                {pilotStats.completed > 0 ? `${pilotStats.rate}%` : '—'}
+              </p>
             </div>
           </Card>
         </div>
 
+        {/* ── row 3: pipeline value ── */}
         <Card>
           <CardHeader>
-            <CardTitle subtitle="Percentage of submissions advancing through pipeline">Monthly Conversion Rate</CardTitle>
+            <CardTitle subtitle="Monthly deal value flowing through the pipeline">Pipeline Value (AED)</CardTitle>
           </CardHeader>
-          <ClientOnly fallback={<div className="h-[150px] animate-pulse rounded bg-surface-container" />}>
-            <ResponsiveContainer width="100%" height={150}>
-              <LineChart data={conversionData} margin={{ top: 0, right: 30, bottom: 0, left: -10 }}>
+          <ClientOnly fallback={<div className="h-[160px] animate-pulse rounded bg-surface-container" />}>
+            <ResponsiveContainer width="100%" height={160}>
+              <BarChart data={monthlyData} margin={{ top: 0, right: 0, bottom: 0, left: -10 }}>
                 <CartesianGrid stroke="rgba(195,198,214,0.15)" vertical={false} />
-                <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#434654' }} axisLine={false} tickLine={false} />
-                <YAxis domain={[40, 80]} tick={{ fontSize: 11, fill: '#434654' }} axisLine={false} tickLine={false} tickFormatter={v => `${v}%`} />
-                <Tooltip
-                  contentStyle={{ background: '#fff', border: '1px solid rgba(195,198,214,0.2)', borderRadius: '8px', fontSize: '12px' }}
-                  formatter={(v: number) => [`${v}%`, 'Conversion Rate']}
+                <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#434654' }} axisLine={false} tickLine={false} />
+                <YAxis
+                  tick={{ fontSize: 10, fill: '#434654' }}
+                  axisLine={false} tickLine={false}
+                  tickFormatter={v => `${(v / 1000000).toFixed(0)}M`}
                 />
-                <Line type="monotone" dataKey="rate" stroke="#006a6a" strokeWidth={2.5} dot={{ fill: '#006a6a', r: 4 }} name="Conversion Rate" />
-              </LineChart>
+                <Tooltip
+                  {...ChartTooltip}
+                  formatter={(v: number) => [`AED ${(v / 1000000).toFixed(1)}M`, 'Value']}
+                />
+                <Bar dataKey="value" name="Pipeline Value" fill="#003d9b" radius={[4, 4, 0, 0]} />
+              </BarChart>
             </ResponsiveContainer>
           </ClientOnly>
         </Card>

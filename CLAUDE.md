@@ -75,8 +75,8 @@ Not relevant for this project. `app/page.tsx` redirects directly to `/dashboard`
 ### ~~P6 — Pilot status-change actions~~ ✓ DONE
 `pilots` moved from static `data/pilots.ts` into Zustand store with `updatePilot` action. `PilotActions` component added to `app/pilots/page.tsx`. Status transitions: `planned→active` (Launch), `active→paused` (Pause), `paused→active` (Resume), `active/paused→completed` (opens completion panel with score slider 0-100, recommendation picker, notes textarea), `active/paused→cancelled`. Completed pilots with `proceed` recommendation show "Send to Procurement" button that moves submission to `procurement` status. All actions append timeline events to the related submission. Dashboard updated to read pilots from store.
 
-### P7 — Richer Insights page
-`app/insights/page.tsx` needs: sector innovation heatmap (bar or treemap), AI override trend chart, time-to-evaluation metric, approval rate funnel, pilot conversion rate. Charts should use Recharts with the design system colors.
+### ~~P7 — Richer Insights page~~ ✓ DONE
+All metrics derived live from Zustand store via `useMemo`. Added: **Sector Innovation Heatmap** (grouped bar — submission count + avg AI score per category), **Approval Rate Funnel** (cumulative counts at each pipeline stage, step-to-step conversion %), **AI Decision Alignment** (donut — AI-aligned vs overridden vs pending, override rate %), **Pilot Conversion** (donut + proceed/modify/terminate breakdown + proceed rate %). Avg Time to AI Eval stat card computed from `aiScore.generatedAt` vs `submittedAt`. Kept Submission Activity area chart and Pipeline Value bar chart.
 
 ### P8 — Richer Audit Log page
 `app/audit/page.tsx` needs: searchable table with actor, role, entity, action, timestamp columns; AI-generated events visually distinguished from human decisions; filter by actor role and entity type.
