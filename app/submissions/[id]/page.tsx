@@ -9,7 +9,6 @@ import { AIScorePanel, AIThinkingState } from '@/components/ui/AIScorePanel'
 import { Progress } from '@/components/ui/Progress'
 import { useAppStore } from '@/store/appStore'
 import { useRole } from '@/hooks/useRole'
-import { getComplianceBySubmissionId } from '@/data/compliance'
 import {
   formatAED, formatDate, getCategoryLabel, getFundingLabel,
   getSubmissionStatusConfig, getComplianceStatusConfig, truncate
@@ -65,7 +64,8 @@ export default function SubmissionDetailPage() {
   const [activeTab, setActiveTab] = useState<'overview' | 'ai' | 'compliance' | 'timeline'>('overview')
 
   const submission = submissions.find(s => s.id === id)
-  const compliance = submission ? getComplianceBySubmissionId(submission.id) : null
+  const complianceResults = useAppStore(s => s.complianceResults)
+  const compliance = submission ? complianceResults.find(c => c.submissionId === submission.id) : null
 
   if (!submission) {
     return (

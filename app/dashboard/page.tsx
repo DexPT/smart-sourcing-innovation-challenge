@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/Button'
 import { Progress } from '@/components/ui/Progress'
 import { useAppStore } from '@/store/appStore'
 import { useRole } from '@/hooks/useRole'
-import { complianceResults } from '@/data/compliance'
 import { pilots } from '@/data/pilots'
 import { vendors } from '@/data/vendors'
 import {
@@ -54,6 +53,7 @@ const overrideTrendData = [
 // ─── ADMIN DASHBOARD ────────────────────────────────────────────────────────
 function AdminDashboard() {
   const submissions = useAppStore(s => s.submissions)
+  const complianceResults = useAppStore(s => s.complianceResults)
 
   const total = submissions.length
   const approved = submissions.filter(s => ['approved', 'pilot', 'procurement'].includes(s.status)).length
@@ -424,6 +424,7 @@ function EvaluatorDashboard() {
 // ─── COMPLIANCE DASHBOARD ────────────────────────────────────────────────────
 function ComplianceDashboard() {
   const submissions = useAppStore(s => s.submissions)
+  const complianceResults = useAppStore(s => s.complianceResults)
 
   const pendingValidation = submissions.filter(s => s.status === 'compliance_check')
   const blockedItems = complianceResults.filter(c => c.status === 'failed')

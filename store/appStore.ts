@@ -1,7 +1,8 @@
 'use client'
 import { create } from 'zustand'
-import type { UserRole, Submission, FilterState } from '@/types'
+import type { UserRole, Submission, FilterState, ComplianceResult } from '@/types'
 import { submissions as initialSubmissions } from '@/data/submissions'
+import { complianceResults as initialComplianceResults } from '@/data/compliance'
 import { generateAIScore } from '@/lib/aiEngine'
 
 interface AppState {
@@ -13,6 +14,10 @@ interface AppState {
   submissions: Submission[]
   updateSubmission: (id: string, updates: Partial<Submission>) => void
   addSubmission: (sub: Submission) => void
+
+  // Compliance results
+  complianceResults: ComplianceResult[]
+  updateComplianceResult: (id: string, updates: Partial<ComplianceResult>) => void
 
   // AI evaluation
   runningAIEvaluation: string | null
@@ -56,6 +61,15 @@ export const useAppStore = create<AppState>((set, get) => ({
   addSubmission: (sub) =>
     set((state) => ({
       submissions: [sub, ...state.submissions],
+    })),
+
+  complianceResults: initialComplianceResults,
+
+  updateComplianceResult: (id, updates) =>
+    set((state) => ({
+      complianceResults: state.complianceResults.map((c) =>
+        c.id === id ? { ...c, ...updates } : c
+      ),
     })),
 
   runningAIEvaluation: null,

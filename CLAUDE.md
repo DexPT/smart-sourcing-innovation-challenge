@@ -60,14 +60,14 @@ Items are ordered by demo impact. Do not mark an item done here until it is full
 ### ~~P1 — Role-differentiated dashboards~~ ✓ DONE
 Four fully distinct dashboards implemented in `app/dashboard/page.tsx` as `AdminDashboard`, `EvaluatorDashboard`, `ComplianceDashboard`, `StartupDashboard` components, rendered conditionally on `currentRole`. Startup demo submissions hardcoded to IDs `['sub-006', 'sub-008']`.
 
-### P2 — Landing / demo entry page
-No `/` or `/demo` route exists as a front door. Need a polished landing page that explains the platform and lets a reviewer choose a role before entering. `app/page.tsx` currently redirects straight to `/dashboard`.
+### P2 — Landing / demo entry page ✗ CANCELLED
+Not relevant for this project. `app/page.tsx` redirects directly to `/dashboard`.
 
-### P3 — Evaluator actions on AI Evaluation Hub
-`app/ai-evaluation/page.tsx` lets evaluators trigger scoring but is missing: **Shortlist**, **Request More Info**, **Override AI recommendation with justification** (text input modal). Each action must update submission status and append a timeline event.
+### ~~P3 — Evaluator actions on AI Evaluation Hub~~ ✓ DONE
+`EvaluatorActions` component added inline in `app/ai-evaluation/page.tsx`. Three actions: **Shortlist** (moves to `compliance_check`, aligned with AI), **Request More Info** (inline textarea, appends `comment` timeline event, status unchanged), **Override** (choose approve/reject + required justification ≥20 chars, appends `decision` event marked as override). Panel remounts on each selection via `actionKey`. Post-action shows a "Decision recorded" confirmation.
 
-### P4 — Compliance officer actions
-`app/compliance/page.tsx` is read-only. Compliance officer must be able to: **Approve**, **Conditional Approval** (with editable conditions list), **Block** — each updating the submission status, compliance result, and timeline.
+### ~~P4 — Compliance officer actions~~ ✓ DONE
+`complianceResults` moved from static `data/compliance.ts` into Zustand store (`useAppStore`) with `updateComplianceResult` action. `ComplianceActions` component added to `app/compliance/page.tsx` with three actions: **Approve** (direct, no input → `passed` + submission `approved`), **Conditional Approval** (multiline textarea, one condition per line → `conditional` + submission `approved`), **Block** (textarea ≥20 chars → `failed` + submission back to `evaluation`). All actions append a `compliance` timeline event. Dashboard and `submissions/[id]` updated to read compliance from store.
 
 ### P5 — Procurement final-decision actions
 `app/procurement/page.tsx` needs admin actions: **Approve for procurement**, **Return for revision**, **Reject** — with the full summary panel (AI score, compliance result, pilot outcome, vendor readiness) visible before deciding.
