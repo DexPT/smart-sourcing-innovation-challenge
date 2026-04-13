@@ -119,6 +119,15 @@ These items were identified after a full re-read of the original brief. They are
 - Both actions append a timeline event and re-render reactively from the store.
 - `finalist` and `demo_day` added to `SubmissionStatus` in `types/index.ts`, status configs in `lib/utils.ts`, and `STATUS_OPTIONS` in `app/submissions/page.tsx`.
 
+### ~~P14 — Lead source tracking~~ ✓ DONE
+`SubmissionSource` type added to `types/index.ts` (`direct | referral | event | partner | government | accelerator`). `source` (required) and `sourceDetail` (optional string) added to `Submission` type.
+- All 8 seed submissions in `data/submissions.ts` have source + detail assigned (Hub71, GITEX, ADIPEC, DESC Innovation Programme, in5 Dubai, DIFC FinTech Hive, direct).
+- `getSourceConfig()` and `getSourceLabel()` helpers added to `lib/utils.ts`.
+- `app/submissions/page.tsx`: "All Sources" filter dropdown added; Source column added to table (visible at `xl`).
+- `app/submissions/[id]/page.tsx`: "Lead Source" row added to Submission Details sidebar card, with badge + sourceDetail.
+- `app/insights/page.tsx`: **Lead Source Breakdown** panel added — horizontal grouped bar chart (count + avg AI score per channel) + pipeline value bar list per source.
+- `app/submissions/new/page.tsx`: new submissions default to `source: 'direct'`.
+
 ### ~~P13 — DESC-approved vendor filter & badge~~ ✓ DONE
 `descCertified: boolean` added to `Vendor` type and all 8 seed records in `data/vendors.ts` (true for SecureNet Arabia only — the one with "DESC Certified" in certs).
 - `app/vendors/page.tsx`: "DESC Approved Only" toggle button above the list; when active filters to `descCertified === true`. Each list card shows a green "DESC" badge or grey "DESC Pending" badge. Detail panel header shows the same badge at a larger size.

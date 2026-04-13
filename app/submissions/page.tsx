@@ -7,15 +7,16 @@ import { useAppStore } from '@/store/appStore'
 import { useRole } from '@/hooks/useRole'
 import {
   formatAED, formatRelativeTime,
-  getSubmissionStatusConfig, getCategoryLabel, truncate
+  getSubmissionStatusConfig, getCategoryLabel, getSourceConfig, truncate
 } from '@/lib/utils'
 import { Search, Plus, Bot, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
-import type { SubmissionStatus, SubmissionCategory } from '@/types'
+import type { SubmissionStatus, SubmissionCategory, SubmissionSource } from '@/types'
 
 const STATUS_OPTIONS: SubmissionStatus[] = ['draft', 'submitted', 'ai_review', 'evaluation', 'compliance_check', 'approved', 'finalist', 'demo_day', 'pilot', 'procurement', 'rejected']
 const CATEGORY_OPTIONS: SubmissionCategory[] = ['ai_ml', 'fintech', 'healthtech', 'logistics', 'sustainability', 'edtech', 'cybersecurity', 'smart_city', 'iot']
+const SOURCE_OPTIONS: SubmissionSource[] = ['direct', 'referral', 'event', 'partner', 'government', 'accelerator']
 
 export default function SubmissionsPage() {
   const submissions = useAppStore((s) => s.submissions)
@@ -23,6 +24,7 @@ export default function SubmissionsPage() {
   const [search, setSearch] = useState('')
   const [selectedStatus, setSelectedStatus] = useState<string>('')
   const [selectedCategory, setSelectedCategory] = useState<string>('')
+  const [selectedSource, setSelectedSource] = useState<string>('')
 
   const visibleSubmissions = currentRole === 'startup'
     ? submissions.filter(s => ['sub-006', 'sub-001'].includes(s.id))
@@ -32,7 +34,8 @@ export default function SubmissionsPage() {
     const matchSearch = !search || sub.title.toLowerCase().includes(search.toLowerCase()) || sub.company.toLowerCase().includes(search.toLowerCase())
     const matchStatus = !selectedStatus || sub.status === selectedStatus
     const matchCategory = !selectedCategory || sub.category === selectedCategory
-    return matchSearch && matchStatus && matchCategory
+    const matchSource = !selectedSource || sub.source === selectedSource
+    return matchSearch && matchStatus && matchCategory && matchSource
   }).sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
 
   return (
@@ -73,6 +76,17 @@ export default function SubmissionsPage() {
               ))}
             </select>
 
+            <select
+              value={selectedSource}
+              onChange={e => setSelectedSource(e.target.value)}
+              className="min-h-10 px-3 py-2.5 bg-surface-container-lowest rounded-lg text-body-md text-on-surface border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/20"
+            >
+              <option value="">All Sources</option>
+              {SOURCE_OPTIONS.map(s => (
+                <option key={s} value={s}>{getSourceConfig(s).label}</option>
+              ))}
+            </select>
+
             {can.createSubmission && (
               <Link href="/submissions/new" className="block">
                 <Button icon={<Plus />} className="w-full lg:w-auto">New Submission</Button>
@@ -93,6 +107,7 @@ export default function SubmissionsPage() {
                   <th className="text-left text-label-sm text-on-surface-variant font-medium px-4 py-3 uppercase tracking-wider">Submission</th>
                   <th className="text-left text-label-sm text-on-surface-variant font-medium px-4 py-3 uppercase tracking-wider hidden md:table-cell">Category</th>
                   <th className="text-left text-label-sm text-on-surface-variant font-medium px-4 py-3 uppercase tracking-wider hidden lg:table-cell">Value</th>
+                  <th className="text-left text-label-sm text-on-surface-variant font-medium px-4 py-3 uppercase tracking-wider hidden xl:table-cell">Source</th>
                   <th className="text-left text-label-sm text-on-surface-variant font-medium px-4 py-3 uppercase tracking-wider">Status</th>
                   <th className="text-left text-label-sm text-on-surface-variant font-medium px-4 py-3 uppercase tracking-wider hidden lg:table-cell">AI Score</th>
                   <th className="text-left text-label-sm text-on-surface-variant font-medium px-4 py-3 uppercase tracking-wider hidden xl:table-cell">Updated</th>
@@ -121,6 +136,19 @@ export default function SubmissionsPage() {
                       <td className="px-4 py-3 hidden lg:table-cell">
                         <span className="text-body-sm font-medium text-on-surface">{formatAED(sub.estimatedValue)}</span>
                       </td>
+                      <td className="px-4 py-3 hidden xl:table-cell">
+                        {(() => {
+                          const sc = getSourceConfig(sub.source)
+                          return (
+                            <div>
+                              <span className={`badge text-label-sm ${sc.bg} ${sc.text}`}>{sc.label}</span>
+                              {sub.sourceDetail && (
+                                <p className="text-label-sm text-on-surface-variant/60 mt-0.5">{sub.sourceDetail}</p>
+                              )}
+                            </div>
+                          )
+                        })()}
+                      </td>
                       <td className="px-4 py-3">
                         <StatusBadge status={statusConfig} />
                       </td>
@@ -148,7 +176,7 @@ export default function SubmissionsPage() {
                 })}
                 {filtered.length === 0 && (
                   <tr>
-                    <td colSpan={7} className="px-4 py-12 text-center text-on-surface-variant text-body-md">
+                    <td colSpan={8} className="px-4 py-12 text-center text-on-surface-variant text-body-md">
                       No submissions found matching your filters.
                     </td>
                   </tr>

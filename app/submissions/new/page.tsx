@@ -59,6 +59,7 @@ export default function NewSubmissionPage() {
       estimatedValue: form.estimatedValue,
       countryOfOrigin: form.countryOfOrigin,
       tags: form.tags.split(',').map(t => t.trim()).filter(Boolean),
+      source: 'direct',
       attachments: [],
       timeline: [{
         id: `tl-${Date.now()}`,

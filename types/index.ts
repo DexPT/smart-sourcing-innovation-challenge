@@ -40,6 +40,14 @@ export type SubmissionCategory =
   | 'ai_ml'
   | 'iot'
 
+export type SubmissionSource =
+  | 'direct'
+  | 'referral'
+  | 'event'
+  | 'partner'
+  | 'government'
+  | 'accelerator'
+
 export interface Submission {
   id: string
   title: string
@@ -59,6 +67,8 @@ export interface Submission {
   estimatedValue: number // AED
   countryOfOrigin: string
   tags: string[]
+  source: SubmissionSource
+  sourceDetail?: string
   aiScore?: AIScore
   complianceResult?: ComplianceResult
   pilotId?: string

@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
-import type { SubmissionStatus, ComplianceStatus, PilotStatus, VendorStatus, VendorTier } from '@/types'
+import type { SubmissionStatus, SubmissionSource, ComplianceStatus, PilotStatus, VendorStatus, VendorTier } from '@/types'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -149,6 +149,22 @@ export function getFundingLabel(stage: string): string {
   }
 
   return labels[stage] ?? stage
+}
+
+export function getSourceConfig(source: SubmissionSource) {
+  const configs: Record<SubmissionSource, { label: string; bg: string; text: string }> = {
+    direct:      { label: 'Direct Application',   bg: 'bg-surface-container',      text: 'text-on-surface-variant' },
+    referral:    { label: 'Referral',              bg: 'bg-primary/10',             text: 'text-primary' },
+    event:       { label: 'Event / Conference',    bg: 'bg-tertiary/10',            text: 'text-tertiary' },
+    partner:     { label: 'Ecosystem Partner',     bg: 'bg-secondary-container',    text: 'text-secondary' },
+    government:  { label: 'Government Referral',   bg: 'bg-primary/10',             text: 'text-primary' },
+    accelerator: { label: 'Accelerator Programme', bg: 'bg-warning-container',      text: 'text-on-surface' },
+  }
+  return configs[source] ?? configs.direct
+}
+
+export function getSourceLabel(source: SubmissionSource): string {
+  return getSourceConfig(source).label
 }
 
 export function clamp(value: number, min = 0, max = 100): number {

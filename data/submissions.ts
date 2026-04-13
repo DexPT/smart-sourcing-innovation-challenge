@@ -20,6 +20,8 @@ export const submissions: Submission[] = [
     estimatedValue: 12500000,
     countryOfOrigin: 'UAE',
     tags: ['AI', 'Trade Intelligence', 'ML', 'Real-time Analytics'],
+    source: 'partner',
+    sourceDetail: 'Hub71',
     attachments: [
       { id: 'att-001', name: 'Technical Architecture.pdf', type: 'pdf', size: '4.2 MB', uploadedAt: '2026-03-12T09:05:00Z', uploadedBy: 'Aisha Al-Mansoori' },
       { id: 'att-002', name: 'Product Demo Deck.pptx', type: 'pptx', size: '12.8 MB', uploadedAt: '2026-03-12T09:05:00Z', uploadedBy: 'Aisha Al-Mansoori' },
@@ -66,6 +68,8 @@ export const submissions: Submission[] = [
     estimatedValue: 8200000,
     countryOfOrigin: 'Germany',
     tags: ['Blockchain', 'ESG', 'Carbon Tracking', 'Sustainability'],
+    source: 'event',
+    sourceDetail: 'GITEX Sustainability Forum 2025',
     attachments: [
       { id: 'att-003', name: 'GreenChain Whitepaper.pdf', type: 'pdf', size: '2.9 MB', uploadedAt: '2026-03-18T14:05:00Z', uploadedBy: 'Marcus Weber' },
     ],
@@ -110,6 +114,7 @@ export const submissions: Submission[] = [
     estimatedValue: 35000000,
     countryOfOrigin: 'UAE',
     tags: ['IoT', 'Logistics', 'Autonomous Systems', 'Port Management'],
+    source: 'direct',
     attachments: [
       { id: 'att-004', name: 'PortTech_Pilot_Plan.pdf', type: 'pdf', size: '5.1 MB', uploadedAt: '2026-02-10T11:35:00Z', uploadedBy: 'Fatima Al-Rashidi' },
       { id: 'att-005', name: 'Case_Studies_Jebel_Ali.pdf', type: 'pdf', size: '3.4 MB', uploadedAt: '2026-02-10T11:35:00Z', uploadedBy: 'Fatima Al-Rashidi' },
@@ -158,6 +163,8 @@ export const submissions: Submission[] = [
     estimatedValue: 4500000,
     countryOfOrigin: 'India',
     tags: ['Healthcare', 'Federated Learning', 'Data Exchange', 'Privacy'],
+    source: 'referral',
+    sourceDetail: 'DIFC FinTech Hive',
     attachments: [
       { id: 'att-006', name: 'MediLink_Proposal.pdf', type: 'pdf', size: '1.8 MB', uploadedAt: '2026-03-05T15:05:00Z', uploadedBy: 'Dr. Priya Sharma' },
     ],
@@ -203,6 +210,8 @@ export const submissions: Submission[] = [
     estimatedValue: 18000000,
     countryOfOrigin: 'UAE',
     tags: ['Cybersecurity', 'Zero Trust', 'DESC', 'NESA', 'Government'],
+    source: 'government',
+    sourceDetail: 'DESC Innovation Programme',
     attachments: [
       { id: 'att-007', name: 'CyberShield_Security_Audit.pdf', type: 'pdf', size: '8.2 MB', uploadedAt: '2026-03-20T10:05:00Z', uploadedBy: 'Khalid Al-Sayed' },
     ],
@@ -248,6 +257,8 @@ export const submissions: Submission[] = [
     estimatedValue: 3200000,
     countryOfOrigin: 'UAE',
     tags: ['EdTech', 'SME', 'Workforce Development', 'AI Learning'],
+    source: 'accelerator',
+    sourceDetail: 'in5 Dubai',
     attachments: [
       { id: 'att-008', name: 'EduScale_Product_Overview.pdf', type: 'pdf', size: '3.1 MB', uploadedAt: '2026-04-08T12:05:00Z', uploadedBy: 'Nour Hassan' },
     ],
@@ -274,6 +285,8 @@ export const submissions: Submission[] = [
     estimatedValue: 22000000,
     countryOfOrigin: 'UAE',
     tags: ['FinTech', 'KYC', 'AML', 'Compliance', 'Financial'],
+    source: 'partner',
+    sourceDetail: 'DIFC FinTech Hive',
     attachments: [
       { id: 'att-009', name: 'FinVerify_Compliance_Cert.pdf', type: 'pdf', size: '6.5 MB', uploadedAt: '2026-01-15T08:05:00Z', uploadedBy: 'James Okafor' },
     ],
@@ -322,6 +335,8 @@ export const submissions: Submission[] = [
     estimatedValue: 9500000,
     countryOfOrigin: 'UAE',
     tags: ['Smart City', 'Energy Management', 'IoT', 'Sustainability'],
+    source: 'event',
+    sourceDetail: 'ADIPEC 2025',
     attachments: [
       { id: 'att-010', name: 'SmartGrid_Technical_Specs.pdf', type: 'pdf', size: '4.8 MB', uploadedAt: '2026-04-09T09:05:00Z', uploadedBy: 'Elena Petrova' },
     ],

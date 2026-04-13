@@ -4,8 +4,9 @@ import { AppShell } from '@/components/layout/AppShell'
 import { Card, CardHeader, CardTitle } from '@/components/ui/Card'
 import { StatCard } from '@/components/ui/StatCard'
 import { useAppStore } from '@/store/appStore'
-import { formatAED } from '@/lib/utils'
-import { BarChart3, TrendingUp, Target, Zap, Download, Clock, Rocket } from 'lucide-react'
+import { formatAED, getSourceConfig } from '@/lib/utils'
+import type { SubmissionSource } from '@/types'
+import { BarChart3, TrendingUp, Zap, Download, Clock, Radio } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import {
   AreaChart,
@@ -174,6 +175,29 @@ export default function InsightsPage() {
     const rate = completed.length > 0 ? Math.round((proceed.length / completed.length) * 100) : 0
     return { completed: completed.length, proceed: proceed.length, modify: modify.length, terminate: terminate.length, rate }
   }, [pilots])
+
+  // ── lead source breakdown ──
+  const sourceData = useMemo(() => {
+    const map = new Map<SubmissionSource, { count: number; totalScore: number; scored: number; totalValue: number }>()
+    submissions.forEach(s => {
+      const existing = map.get(s.source) ?? { count: 0, totalScore: 0, scored: 0, totalValue: 0 }
+      map.set(s.source, {
+        count: existing.count + 1,
+        totalScore: existing.totalScore + (s.aiScore?.overall ?? 0),
+        scored: existing.scored + (s.aiScore ? 1 : 0),
+        totalValue: existing.totalValue + s.estimatedValue,
+      })
+    })
+    return Array.from(map.entries())
+      .map(([source, { count, totalScore, scored, totalValue }]) => ({
+        source,
+        label: getSourceConfig(source).label,
+        count,
+        avgScore: scored > 0 ? Math.round(totalScore / scored) : 0,
+        totalValue,
+      }))
+      .sort((a, b) => b.count - a.count)
+  }, [submissions])
 
   const pilotDonutData = [
     { name: 'Proceed', value: pilotStats.proceed, color: '#006a6a' },
@@ -399,7 +423,59 @@ export default function InsightsPage() {
           </Card>
         </div>
 
-        {/* ── row 3: pipeline value ── */}
+        {/* ── row 3: lead source breakdown ── */}
+        <Card>
+          <CardHeader>
+            <CardTitle subtitle="Submission volume and average AI score by inbound channel">Lead Source Breakdown</CardTitle>
+          </CardHeader>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <ClientOnly fallback={<div className="h-[200px] animate-pulse rounded bg-surface-container" />}>
+              <ResponsiveContainer width="100%" height={200}>
+                <BarChart data={sourceData} layout="vertical" margin={{ top: 0, right: 8, bottom: 0, left: 110 }}>
+                  <CartesianGrid stroke="rgba(195,198,214,0.15)" horizontal={false} />
+                  <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 10, fill: '#434654' }} axisLine={false} tickLine={false} />
+                  <YAxis dataKey="label" type="category" tick={{ fontSize: 10, fill: '#434654' }} axisLine={false} tickLine={false} width={115} />
+                  <Tooltip
+                    {...ChartTooltip}
+                    formatter={(value: number, name: string) =>
+                      name === 'Avg AI Score' ? [`${value}/100`, name] : [value, name]
+                    }
+                  />
+                  <Legend wrapperStyle={{ fontSize: '12px' }} />
+                  <Bar dataKey="count" name="Submissions" fill="#003d9b" radius={[0, 3, 3, 0]} barSize={8} />
+                  <Bar dataKey="avgScore" name="Avg AI Score" fill="#006a6a" radius={[0, 3, 3, 0]} barSize={8} />
+                </BarChart>
+              </ResponsiveContainer>
+            </ClientOnly>
+
+            <div className="space-y-2">
+              <p className="text-label-sm uppercase tracking-wider text-on-surface-variant mb-3">Pipeline value by source</p>
+              {sourceData.map(s => (
+                <div key={s.source} className="flex items-center gap-3">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-label-sm text-on-surface truncate">{s.label}</span>
+                      <span className="text-label-sm font-semibold text-on-surface ml-2 flex-shrink-0">{formatAED(s.totalValue)}</span>
+                    </div>
+                    <div className="h-1.5 rounded-full bg-surface-container overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-primary transition-all duration-700"
+                        style={{
+                          width: sourceData[0]?.totalValue > 0
+                            ? `${(s.totalValue / sourceData.reduce((m, x) => Math.max(m, x.totalValue), 0)) * 100}%`
+                            : '0%',
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <span className="text-label-sm text-on-surface-variant flex-shrink-0 w-6 text-right">{s.count}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Card>
+
+        {/* ── row 4: pipeline value ── */}
         <Card>
           <CardHeader>
             <CardTitle subtitle="Monthly deal value flowing through the pipeline">Pipeline Value (AED)</CardTitle>

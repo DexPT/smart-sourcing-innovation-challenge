@@ -11,7 +11,7 @@ import { useAppStore } from '@/store/appStore'
 import { useRole } from '@/hooks/useRole'
 import {
   formatAED, formatDate, getCategoryLabel, getFundingLabel,
-  getSubmissionStatusConfig, getComplianceStatusConfig, truncate
+  getSubmissionStatusConfig, getComplianceStatusConfig, getSourceConfig, truncate
 } from '@/lib/utils'
 import {
   ArrowLeft, Bot, ShieldCheck, CheckCircle2, XCircle,
@@ -280,6 +280,23 @@ export default function SubmissionDetailPage() {
                       <span className="text-label-md font-medium text-on-surface">{value}</span>
                     </div>
                   ))}
+                  {/* Source row */}
+                  <div className="flex justify-between items-start py-1 border-b border-outline-variant/10">
+                    <span className="text-label-sm text-on-surface-variant mt-0.5">Lead Source</span>
+                    <div className="text-right">
+                      {(() => {
+                        const sc = getSourceConfig(submission.source)
+                        return (
+                          <>
+                            <span className={`badge text-label-sm ${sc.bg} ${sc.text}`}>{sc.label}</span>
+                            {submission.sourceDetail && (
+                              <p className="text-label-sm text-on-surface-variant/60 mt-0.5">{submission.sourceDetail}</p>
+                            )}
+                          </>
+                        )
+                      })()}
+                    </div>
+                  </div>
                 </div>
               </Card>
 
