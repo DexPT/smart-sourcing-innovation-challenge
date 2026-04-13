@@ -258,6 +258,15 @@ export interface AuditLog {
   ipAddress?: string
 }
 
+export interface Notification {
+  id: string
+  title: string
+  body: string
+  href: string
+  timestamp: string
+  read: boolean
+}
+
 // ============================================================
 // SHARED
 // ============================================================

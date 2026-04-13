@@ -2,18 +2,37 @@
 import { AppShell } from '@/components/layout/AppShell'
 import { Card, CardTitle } from '@/components/ui/Card'
 import { useRole } from '@/hooks/useRole'
-import { Bell, Moon, Globe, Shield, Key, Users, Building2, Plug } from 'lucide-react'
+import { Bell, Moon, Globe, Shield, Plug } from 'lucide-react'
 import { useState } from 'react'
 
 function Toggle({ defaultOn = false }: { defaultOn?: boolean }) {
   const [on, setOn] = useState(defaultOn)
+
   return (
-    <button
-      onClick={() => setOn(v => !v)}
-      className={`relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none ${on ? 'bg-primary' : 'bg-surface-container'}`}
-    >
-      <span className={`pointer-events-none inline-block h-4 w-4 rounded-full bg-white shadow-sm transition-transform duration-200 ${on ? 'translate-x-4' : 'translate-x-0'}`} />
-    </button>
+    <div className="inline-flex rounded-xl bg-surface-container p-1">
+      <button
+        type="button"
+        onClick={() => setOn(false)}
+        className={`min-w-[56px] rounded-lg px-3 py-1.5 text-label-sm font-medium transition-colors ${
+          on
+            ? 'text-on-surface-variant'
+            : 'bg-surface-container-lowest text-on-surface shadow-ambient-sm'
+        }`}
+      >
+        Off
+      </button>
+      <button
+        type="button"
+        onClick={() => setOn(true)}
+        className={`min-w-[56px] rounded-lg px-3 py-1.5 text-label-sm font-medium transition-colors ${
+          on
+            ? 'bg-surface-container-lowest text-primary shadow-ambient-sm'
+            : 'text-on-surface-variant'
+        }`}
+      >
+        On
+      </button>
+    </div>
   )
 }
 

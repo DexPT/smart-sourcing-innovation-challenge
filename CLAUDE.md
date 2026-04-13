@@ -157,21 +157,20 @@ New route `app/demo-day/page.tsx` added, visible to `admin` and `evaluator` in t
 - **Empty state**: shown when no `demo_day` submissions exist, with link to Dashboard.
 - `winner?: boolean` added to `Submission` type in `types/index.ts`.
 
-### P17 — In-app notifications panel
-**Why:** Every status change (AI evaluation complete, compliance approved, procurement approved, etc.) happens silently. A real platform would surface these changes. A notification bell adds significant perceived dynamism to the demo.
-**What to build:**
-- In `store/appStore.ts`: add a `notifications: Notification[]` array and `addNotification(n)` / `markAllRead()` actions. `Notification` type: `{ id, title, body, href, timestamp, read: boolean }`.
-- Trigger `addNotification` inside existing store actions: `startAIEvaluation` (on complete), `updateComplianceResult`, `updatePilot`, `updateProcurementDecision`, `updateSubmission` (on status change to `approved`, `rejected`, `finalist`, `demo_day`).
-- In `components/layout/TopBar.tsx`: replace the static bell icon with a `NotificationBell` component — shows unread count badge, opens a dropdown panel on click, lists recent notifications with title + relative time + link, "Mark all read" button. Click-outside closes.
+### ~~P17 — In-app notifications panel~~ ✓ DONE
+Real notifications are now wired end-to-end.
+- `Notification` type added in `types/index.ts`.
+- `store/appStore.ts` now owns `notifications`, `addNotification()`, and `markAllRead()`.
+- Notifications are triggered from `startAIEvaluation`, `updateComplianceResult`, `updatePilot`, `updateProcurementDecision`, and `updateSubmission` when submissions move to `approved`, `rejected`, `finalist`, or `demo_day`.
+- `components/layout/NotificationBell.tsx` added and mounted in `TopBar.tsx` in place of the static bell. It shows unread count, a dropdown list with relative timestamps and links, and a "Mark all read" action.
 
-### P18 — Richer Startup dashboard
-**Why:** The Startup role (Nadia Hassan) has the weakest dashboard of the four roles — it shows little more than submission status. For a demo where a startup founder is in the room, this is a missed opportunity.
-**What to build:**
-- In `StartupDashboard` inside `app/dashboard/page.tsx`:
-  - **Application tracker**: step-by-step progress stepper for each submission (matching the `WorkflowProgress` component in submission detail), showing current stage and estimated next step.
-  - **AI Feedback card**: if `aiScore` exists, show the score, recommendation, top strength, and top weakness — the startup's "report card".
-  - **Pending actions**: if any submission has a `comment` timeline event with "Request More Info" in the title, show a highlighted "Action Required" card prompting them to respond.
-  - **Timeline feed**: last 5 timeline events across their submissions, in chronological order.
+### ~~P18 — Richer Startup dashboard~~ ✓ DONE
+`StartupDashboard` in `app/dashboard/page.tsx` is now fully data-driven from the submissions store.
+- **Application tracker:** each startup submission card now includes a workflow stepper aligned with the submission detail progress component plus an "Estimated Next Step" panel derived from current status.
+- **AI Feedback card:** when `aiScore` exists, the card shows score context, recommendation, confidence, top strength, and top weakness.
+- **Pending actions:** the right rail now detects unresolved evaluator "Request More Info" timeline comments and surfaces them as action-required cards linking to the submission detail route.
+- **Timeline feed:** a new "Recent Activity" panel aggregates the latest 5 timeline events across the startup user's submissions in reverse chronological order.
+- Removed static placeholder startup cards in favour of live submission-driven summaries and status messaging.
 
 ### P19 — "Request More Info" response loop
 **Why:** When an evaluator requests more information, the submission enters a limbo state. The startup has no in-platform mechanism to respond, and the evaluator has no way to see if/when the startup replied. The loop is open-ended.
@@ -186,3 +185,6 @@ New route `app/demo-day/page.tsx` added, visible to `admin` and `evaluator` in t
 - In `app/pilots/[id]/page.tsx`: for pilots with status `active` or `paused`, add an **"Update KPI Progress"** inline panel per KPI row — a small number input for `current` value with a "Save" button.
 - On save: call `updatePilot(id, { kpis: [...updatedKpis] })` and append a `comment` timeline event on the related submission: "KPI Updated: [metric] — [old] → [new] [unit]".
 - The `achieved` flag should auto-update when `current >= target`.
+
+
+

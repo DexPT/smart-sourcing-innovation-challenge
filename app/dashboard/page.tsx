@@ -25,7 +25,7 @@ import {
 } from 'recharts'
 import { ClientOnly } from '@/components/ui/ClientOnly'
 
-// ─── Shared chart palette ───────────────────────────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Shared chart palette Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 const CATEGORY_COLORS: Record<string, string> = {
   ai_ml: '#003d9b', logistics: '#006a6a', sustainability: '#3c4455',
   fintech: '#0052cc', cybersecurity: '#0c56d0', edtech: '#747688',
@@ -50,7 +50,7 @@ const overrideTrendData = [
   { month: 'Apr', aligned: 5, overridden: 1 },
 ]
 
-// ─── FINALISTS PANEL ────────────────────────────────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ FINALISTS PANEL Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 const MAX_FINALISTS = 5
 
 function FinalistsPanel() {
@@ -105,7 +105,7 @@ function FinalistsPanel() {
           <Button variant="ghost" size="sm" icon={<ArrowRight />} iconPosition="right">View All</Button>
         </Link>
       }>
-        <CardTitle subtitle="Dubai Chambers Innovation Challenge — Demo Day selection">
+        <CardTitle subtitle="Dubai Chambers Innovation Challenge Ã¢â‚¬â€ Demo Day selection">
           <span className="flex items-center gap-2">
             <Trophy className="h-4 w-4 text-primary" />
             Challenge Finalists
@@ -146,7 +146,7 @@ function FinalistsPanel() {
               <div className="mb-1 flex items-center gap-1.5">
                 <Star className={`h-3.5 w-3.5 flex-shrink-0 ${sub.status === 'demo_day' ? 'text-on-primary' : 'text-primary'}`} />
                 <span className={`text-label-sm font-semibold ${sub.status === 'demo_day' ? 'text-on-primary' : 'text-primary'}`}>
-                  {sub.status === 'demo_day' ? 'Demo Day ★' : 'Finalist'}
+                  {sub.status === 'demo_day' ? 'Demo Day Ã¢Ëœâ€¦' : 'Finalist'}
                 </span>
               </div>
               <p className={`text-label-md font-semibold truncate ${sub.status === 'demo_day' ? 'text-on-primary' : 'text-on-surface'}`}>
@@ -217,7 +217,7 @@ function FinalistsPanel() {
   )
 }
 
-// ─── ADMIN DASHBOARD ────────────────────────────────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ ADMIN DASHBOARD Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 function AdminDashboard() {
   const submissions = useAppStore(s => s.submissions)
   const complianceResults = useAppStore(s => s.complianceResults)
@@ -415,7 +415,7 @@ function AdminDashboard() {
   )
 }
 
-// ─── EVALUATOR DASHBOARD ─────────────────────────────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ EVALUATOR DASHBOARD Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 function EvaluatorDashboard() {
   const submissions = useAppStore(s => s.submissions)
   const runningAIEvaluation = useAppStore(s => s.runningAIEvaluation)
@@ -592,7 +592,7 @@ function EvaluatorDashboard() {
   )
 }
 
-// ─── COMPLIANCE DASHBOARD ────────────────────────────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ COMPLIANCE DASHBOARD Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 function ComplianceDashboard() {
   const submissions = useAppStore(s => s.submissions)
   const complianceResults = useAppStore(s => s.complianceResults)
@@ -644,7 +644,7 @@ function ComplianceDashboard() {
           {pendingValidation.length === 0 ? (
             <Card className="text-center py-8">
               <CheckCircle2 className="w-10 h-10 text-secondary mx-auto mb-2" />
-              <p className="text-body-md text-on-surface-variant">All clear — no pending validations</p>
+              <p className="text-body-md text-on-surface-variant">All clear Ã¢â‚¬â€ no pending validations</p>
             </Card>
           ) : (
             pendingValidation.map(sub => {
@@ -742,7 +742,7 @@ function ComplianceDashboard() {
                     <AlertTriangle className="w-4 h-4 text-error flex-shrink-0" />
                     <div className="flex-1 min-w-0">
                       <p className="text-label-md font-medium text-on-surface">{vendor.name}</p>
-                      <p className="text-label-sm text-on-surface-variant capitalize">{vendor.status} — requires review</p>
+                      <p className="text-label-sm text-on-surface-variant capitalize">{vendor.status} Ã¢â‚¬â€ requires review</p>
                     </div>
                     <span className="badge bg-error-container text-error capitalize">{vendor.status}</span>
                   </div>
@@ -773,7 +773,7 @@ function ComplianceDashboard() {
                       <p className="text-title-sm text-on-surface">{sub?.title ?? comp.submissionId}</p>
                       {comp.conditions?.map((cond, i) => (
                         <p key={i} className="text-body-sm text-on-surface-variant mt-1 flex gap-1.5">
-                          <span className="text-warning mt-0.5">·</span>{cond}
+                          <span className="text-warning mt-0.5">Ã‚Â·</span>{cond}
                         </p>
                       ))}
                     </div>
@@ -788,199 +788,335 @@ function ComplianceDashboard() {
   )
 }
 
-// ─── STARTUP DASHBOARD ────────────────────────────────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ STARTUP DASHBOARD Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 // In demo mode, the startup user "owns" these two submissions
 const MY_SUBMISSION_IDS = ['sub-006', 'sub-008']
+const STARTUP_WORKFLOW_STEPS = ['submitted', 'ai_review', 'evaluation', 'compliance_check', 'approved', 'pilot', 'procurement']
+const STARTUP_WORKFLOW_LABELS = ['Submitted', 'AI Review', 'Evaluation', 'Compliance', 'Approved', 'Pilot', 'Procurement']
+
+function StartupWorkflow({ currentStatus }: { currentStatus: string }) {
+  const activeIdx = STARTUP_WORKFLOW_STEPS.indexOf(currentStatus)
+
+  return (
+    <div className="flex items-center gap-0">
+      {STARTUP_WORKFLOW_STEPS.map((step, idx) => {
+        const isComplete = activeIdx > idx
+        const isActive = activeIdx === idx
+        const isPast = idx < activeIdx
+
+        return (
+          <div key={step} className="flex flex-1 items-center">
+            <div className={`flex flex-col items-center ${idx < STARTUP_WORKFLOW_STEPS.length - 1 ? 'flex-1' : ''}`}>
+              <div className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-label-sm font-bold ${
+                isComplete || isActive
+                  ? isActive
+                    ? 'bg-primary text-on-primary'
+                    : 'bg-secondary text-on-secondary'
+                  : 'bg-surface-container text-on-surface-variant'
+              }`}>
+                {isComplete ? <CheckCircle2 className="h-3.5 w-3.5" /> : idx + 1}
+              </div>
+              <span className={`mt-1 hidden text-center text-[10px] leading-tight sm:block ${
+                isActive
+                  ? 'font-semibold text-primary'
+                  : isComplete
+                    ? 'text-secondary'
+                    : 'text-on-surface-variant/50'
+              }`}>
+                {STARTUP_WORKFLOW_LABELS[idx]}
+              </span>
+            </div>
+            {idx < STARTUP_WORKFLOW_STEPS.length - 1 && (
+              <div className={`mx-0.5 mb-3 h-0.5 flex-1 sm:mb-5 ${isPast || isActive ? 'bg-secondary' : 'bg-surface-container'}`} />
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
 
 function StartupDashboard() {
   const submissions = useAppStore(s => s.submissions)
+  const { profile } = useRole()
 
   const mySubmissions = submissions.filter(s => MY_SUBMISSION_IDS.includes(s.id))
   const total = mySubmissions.length
   const pending = mySubmissions.filter(s => ['submitted', 'ai_review'].includes(s.status)).length
   const inReview = mySubmissions.filter(s => ['evaluation', 'compliance_check'].includes(s.status)).length
-  const approved = mySubmissions.filter(s => ['approved', 'pilot', 'procurement'].includes(s.status)).length
+  const advanced = mySubmissions.filter(s => ['approved', 'pilot', 'procurement', 'finalist', 'demo_day'].includes(s.status)).length
 
-  const WORKFLOW_STEPS: Record<string, number> = {
-    draft: 0, submitted: 1, ai_review: 2, evaluation: 3,
-    compliance_check: 4, approved: 5, pilot: 6, procurement: 7,
+  const pendingInfoRequests = mySubmissions
+    .map((submission) => {
+      const latestRequest = [...submission.timeline]
+        .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+        .find((event) => event.type === 'comment' && event.title.toLowerCase().includes('request more info'))
+
+      if (!latestRequest) return null
+
+      const hasStartupReply = submission.timeline.some((event) =>
+        event.type === 'comment' &&
+        event.actorRole === 'startup' &&
+        new Date(event.timestamp).getTime() > new Date(latestRequest.timestamp).getTime()
+      )
+
+      return hasStartupReply ? null : { submission, request: latestRequest }
+    })
+    .filter(Boolean) as { submission: typeof mySubmissions[number]; request: typeof mySubmissions[number]['timeline'][number] }[]
+
+  const recentTimeline = mySubmissions
+    .flatMap((submission) =>
+      submission.timeline.map((event) => ({
+        ...event,
+        submissionId: submission.id,
+        submissionTitle: submission.title,
+      }))
+    )
+    .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+    .slice(0, 5)
+
+  const getNextStep = (status: string) => {
+    const nextSteps: Record<string, string> = {
+      draft: 'Finish the draft and submit it for review.',
+      submitted: 'AI evaluation will begin once the queue advances.',
+      ai_review: 'The platform is generating your initial AI scorecard.',
+      evaluation: 'An evaluator is reviewing the AI recommendation and your materials.',
+      compliance_check: 'DESC-aligned compliance checks are in progress.',
+      approved: 'Your submission is approved and awaiting pilot planning or finalist selection.',
+      finalist: 'Your startup has been shortlisted and is awaiting Demo Day confirmation.',
+      demo_day: 'Prepare for the live Demo Day presentation and final judging.',
+      pilot: 'Your team is executing the pilot and tracking delivery KPIs.',
+      procurement: 'Commercial terms are under procurement review.',
+      rejected: 'Review evaluator feedback and prepare the next revision.',
+      archived: 'This submission is archived.',
+    }
+
+    return nextSteps[status] ?? 'Your submission is progressing through the platform.'
   }
-  const WORKFLOW_LABELS = ['Draft', 'Submitted', 'AI Review', 'Evaluation', 'Compliance', 'Approved', 'Pilot', 'Procurement']
 
   return (
     <div className="space-y-6">
-      {/* Welcome banner */}
       <Card className="bg-power-gradient text-on-primary">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
-            <h2 className="font-display text-headline-sm text-on-primary">Welcome back, Nour</h2>
-            <p className="text-body-sm text-on-primary/70 mt-1">
-              You have {pending} submission{pending !== 1 ? 's' : ''} awaiting AI review.
+            <h2 className="font-display text-headline-sm text-on-primary">Welcome back, {profile.name.split(' ')[0]}</h2>
+            <p className="mt-1 text-body-sm text-on-primary/70">
+              {pendingInfoRequests.length > 0
+                ? `You have ${pendingInfoRequests.length} action item${pendingInfoRequests.length !== 1 ? 's' : ''} waiting for a response.`
+                : `You have ${pending} submission${pending !== 1 ? 's' : ''} in the early review pipeline.`}
             </p>
           </div>
           <Link href="/submissions/new">
-            <Button variant="secondary" className="border-on-primary/30 text-on-primary hover:bg-on-primary/10 flex-shrink-0">
+            <Button variant="secondary" className="flex-shrink-0 border-on-primary/30 text-on-primary hover:bg-on-primary/10">
               + New Submission
             </Button>
           </Link>
         </div>
       </Card>
 
-      {/* Status cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <StatCard label="My Submissions" value={total} change={0} trend="flat" icon={<FileText />} accent="primary" />
-        <StatCard label="Pending Review" value={pending} change={0} trend="flat" icon={<Clock />} accent="primary" />
-        <StatCard label="In Progress" value={inReview + approved} change={0} trend="up" icon={<TrendingUp />} accent="secondary" gradient />
+        <StatCard label="Pending Review" value={pending + inReview} change={0} trend="up" icon={<Clock />} accent="primary" />
+        <StatCard label="Advanced Stage" value={advanced} change={0} trend="up" icon={<TrendingUp />} accent="secondary" gradient />
       </div>
 
-      {/* Submissions with progress tracker */}
-      <div className="space-y-4">
-        <h2 className="text-title-md font-semibold text-on-surface">My Submissions</h2>
-        {mySubmissions.length === 0 ? (
-          <Card className="text-center py-12">
-            <FileText className="w-12 h-12 text-on-surface-variant/30 mx-auto mb-3" />
-            <p className="text-body-md text-on-surface-variant">You haven't submitted anything yet.</p>
-            <Link href="/submissions/new" className="mt-4 inline-block">
-              <Button>Submit Your Innovation</Button>
-            </Link>
-          </Card>
-        ) : (
-          mySubmissions.map(sub => {
-            const statusCfg = getSubmissionStatusConfig(sub.status)
-            const currentStep = WORKFLOW_STEPS[sub.status] ?? 0
-            const hasAI = !!sub.aiScore
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <div className="space-y-4 xl:col-span-2">
+          <h2 className="text-title-md font-semibold text-on-surface">My Submissions</h2>
+          {mySubmissions.length === 0 ? (
+            <Card className="py-12 text-center">
+              <FileText className="mx-auto mb-3 h-12 w-12 text-on-surface-variant/30" />
+              <p className="text-body-md text-on-surface-variant">You haven't submitted anything yet.</p>
+              <Link href="/submissions/new" className="mt-4 inline-block">
+                <Button>Submit Your Innovation</Button>
+              </Link>
+            </Card>
+          ) : (
+            mySubmissions.map((sub) => {
+              const statusCfg = getSubmissionStatusConfig(sub.status)
+              const recommendationTone =
+                sub.aiScore?.recommendation === 'approve'
+                  ? 'bg-secondary-container/50'
+                  : sub.aiScore?.recommendation === 'review'
+                    ? 'bg-warning-container/50'
+                    : 'bg-error-container/40'
 
-            return (
-              <Link key={sub.id} href={`/submissions/${sub.id}`}>
-                <Card className="hover:shadow-ambient-md transition-all duration-200 cursor-pointer group">
-                  <div className="flex items-start gap-4">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap mb-1">
-                        <StatusBadge status={statusCfg} />
-                        <span className="text-label-sm text-on-surface-variant">{getCategoryLabel(sub.category)}</span>
-                        <span className="text-label-sm text-on-surface-variant">TRL {sub.trl}</span>
+              return (
+                <Link key={sub.id} href={`/submissions/${sub.id}`}>
+                  <Card className="group cursor-pointer transition-all duration-200 hover:shadow-ambient-md">
+                    <div className="flex items-start gap-4">
+                      <div className="min-w-0 flex-1">
+                        <div className="mb-1 flex flex-wrap items-center gap-2">
+                          <StatusBadge status={statusCfg} />
+                          <span className="text-label-sm text-on-surface-variant">{getCategoryLabel(sub.category)}</span>
+                          <span className="text-label-sm text-on-surface-variant">TRL {sub.trl}</span>
+                        </div>
+                        <h3 className="font-display text-headline-sm text-on-surface transition-colors group-hover:text-primary">
+                          {sub.title}
+                        </h3>
+                        <p className="mt-1 line-clamp-2 text-body-sm text-on-surface-variant">{sub.description}</p>
                       </div>
-                      <h3 className="font-display text-headline-sm text-on-surface group-hover:text-primary transition-colors">
-                        {sub.title}
-                      </h3>
-                      <p className="text-body-sm text-on-surface-variant mt-1 line-clamp-2">{sub.description}</p>
+                      {sub.aiScore && (
+                        <div className={`flex h-14 w-14 flex-shrink-0 flex-col items-center justify-center rounded-xl ${getScoreBg(sub.aiScore.overall)}`}>
+                          <span className={`font-display text-title-lg font-bold ${getScoreColor(sub.aiScore.overall)}`}>
+                            {sub.aiScore.overall}
+                          </span>
+                          <span className="text-label-sm text-on-surface-variant">AI</span>
+                        </div>
+                      )}
                     </div>
-                    {hasAI && sub.aiScore && (
-                      <div className={`flex-shrink-0 w-14 h-14 rounded-xl flex flex-col items-center justify-center ${getScoreBg(sub.aiScore.overall)}`}>
-                        <span className={`font-display text-title-lg font-bold ${getScoreColor(sub.aiScore.overall)}`}>
-                          {sub.aiScore.overall}
-                        </span>
-                        <span className="text-label-sm text-on-surface-variant">AI</span>
+
+                    {!['rejected', 'archived', 'draft'].includes(sub.status) && (
+                      <div className="mt-4 border-t border-outline-variant/10 pt-4">
+                        <StartupWorkflow currentStatus={sub.status} />
+                        <div className="mt-3 rounded-lg bg-surface-container-low p-3">
+                          <p className="text-label-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+                            Estimated Next Step
+                          </p>
+                          <p className="mt-1 text-body-sm text-on-surface">{getNextStep(sub.status)}</p>
+                        </div>
                       </div>
                     )}
-                  </div>
 
-                  {/* Workflow progress */}
-                  <div className="mt-4 pt-4 border-t border-outline-variant/10">
-                    <div className="flex items-center gap-0">
-                      {WORKFLOW_LABELS.slice(1).map((label, idx) => {
-                        const stepNum = idx + 1
-                        const isComplete = currentStep > stepNum
-                        const isActive = currentStep === stepNum
-                        const isLast = idx === WORKFLOW_LABELS.length - 2
-                        return (
-                          <div key={label} className={`flex items-center ${!isLast ? 'flex-1' : ''}`}>
-                            <div className="flex flex-col items-center">
-                              <div className={`w-5 h-5 rounded-full flex items-center justify-center text-label-sm font-bold flex-shrink-0 ${isComplete ? 'bg-secondary text-on-secondary' : isActive ? 'bg-primary text-on-primary' : 'bg-surface-container text-on-surface-variant'}`}>
-                                {isComplete ? <CheckCircle2 className="w-3 h-3" /> : <span className="text-[9px]">{stepNum}</span>}
-                              </div>
-                              <span className={`text-[10px] mt-0.5 hidden sm:block text-center leading-tight ${isActive ? 'text-primary font-semibold' : isComplete ? 'text-secondary' : 'text-on-surface-variant/50'}`}>
-                                {label}
-                              </span>
-                            </div>
-                            {!isLast && (
-                              <div className={`h-0.5 flex-1 mx-0.5 mb-3 sm:mb-5 ${isComplete ? 'bg-secondary' : 'bg-surface-container'}`} />
-                            )}
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </div>
-
-                  {/* AI feedback summary */}
-                  {hasAI && sub.aiScore && (
-                    <div className={`mt-3 p-2.5 rounded-lg ${sub.aiScore.recommendation === 'approve' ? 'bg-secondary-container/50' : sub.aiScore.recommendation === 'review' ? 'bg-warning-container/50' : 'bg-error-container/50'}`}>
-                      <div className="flex items-center gap-2">
-                        <Brain className="w-3.5 h-3.5 text-on-surface-variant flex-shrink-0" />
-                        <p className="text-label-sm text-on-surface">
-                          <span className="font-semibold">AI Score {sub.aiScore.overall}/100 · </span>
-                          {sub.aiScore.recommendation === 'approve' ? 'Recommended for approval' : sub.aiScore.recommendation === 'review' ? 'Under additional review' : 'Not recommended at this stage'}
-                          {' '}· {Math.round(sub.aiScore.confidence * 100)}% confidence
+                    {sub.aiScore && (
+                      <div className={`mt-3 rounded-lg p-3 ${recommendationTone}`}>
+                        <div className="mb-2 flex items-center gap-2">
+                          <Brain className="h-4 w-4 flex-shrink-0 text-on-surface-variant" />
+                          <p className="text-label-md font-semibold text-on-surface">AI Feedback</p>
+                        </div>
+                        <p className="text-body-sm text-on-surface">
+                          <span className="font-semibold">Recommendation:</span>{' '}
+                          {sub.aiScore.recommendation === 'approve'
+                            ? 'Recommended for approval'
+                            : sub.aiScore.recommendation === 'review'
+                              ? 'Further review recommended'
+                              : 'Not recommended at this stage'}
+                          {' '}at {Math.round(sub.aiScore.confidence * 100)}% confidence.
                         </p>
+                        <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                          <div className="rounded-md bg-surface-container-lowest/80 p-2.5">
+                            <p className="text-label-sm font-semibold text-secondary">Top strength</p>
+                            <p className="mt-1 text-body-sm text-on-surface-variant">
+                              {sub.aiScore.strengths[0] ?? 'AI evaluation is still building the strength profile.'}
+                            </p>
+                          </div>
+                          <div className="rounded-md bg-surface-container-lowest/80 p-2.5">
+                            <p className="text-label-sm font-semibold text-warning">Top weakness</p>
+                            <p className="mt-1 text-body-sm text-on-surface-variant">
+                              {sub.aiScore.weaknesses[0] ?? 'No critical weakness highlighted yet.'}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {sub.feedback && (
+                      <div className="mt-3 rounded-lg bg-error-container/40 p-2.5">
+                        <p className="mb-1 text-label-sm font-semibold text-error">Feedback from Evaluator</p>
+                        <p className="line-clamp-2 text-body-sm text-on-surface-variant">{sub.feedback}</p>
+                      </div>
+                    )}
+
+                    <div className="mt-3 flex items-center justify-between">
+                      <p className="text-label-sm text-on-surface-variant">
+                        Submitted {formatDate(sub.submittedAt)} · Updated {formatRelativeTime(sub.updatedAt)}
+                      </p>
+                      <div className="flex items-center gap-1 text-primary">
+                        <span className="text-label-sm font-medium">View details</span>
+                        <ArrowRight className="h-3.5 w-3.5" />
                       </div>
                     </div>
-                  )}
+                  </Card>
+                </Link>
+              )
+            })
+          )}
+        </div>
 
-                  {/* Rejection feedback */}
-                  {sub.feedback && (
-                    <div className="mt-3 p-2.5 rounded-lg bg-error-container/40">
-                      <p className="text-label-sm font-semibold text-error mb-1">Feedback from Evaluator</p>
-                      <p className="text-body-sm text-on-surface-variant line-clamp-2">{sub.feedback}</p>
-                    </div>
-                  )}
+        <div className="space-y-4">
+          <Card className={pendingInfoRequests.length > 0 ? 'border-l-4 border-l-warning bg-warning-container/20' : ''}>
+            <div className="mb-3 flex items-center gap-3">
+              <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${pendingInfoRequests.length > 0 ? 'bg-warning-container' : 'bg-primary/10'}`}>
+                <Zap className={`h-4 w-4 ${pendingInfoRequests.length > 0 ? 'text-warning' : 'text-primary'}`} />
+              </div>
+              <p className="text-title-sm text-on-surface">Pending Actions</p>
+            </div>
 
-                  <div className="flex items-center justify-between mt-3">
-                    <p className="text-label-sm text-on-surface-variant">
-                      Submitted {formatDate(sub.submittedAt)} · Updated {formatRelativeTime(sub.updatedAt)}
-                    </p>
-                    <div className="flex items-center gap-1 text-primary">
-                      <span className="text-label-sm font-medium">View details</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
+            {pendingInfoRequests.length > 0 ? (
+              <div className="space-y-3">
+                {pendingInfoRequests.map(({ submission, request }) => (
+                  <div key={request.id} className="rounded-lg bg-surface-container-lowest p-3">
+                    <p className="text-label-md font-semibold text-on-surface">Action Required</p>
+                    <p className="mt-1 text-body-sm text-on-surface">{submission.title}</p>
+                    <p className="mt-1 text-body-sm text-on-surface-variant">{request.description}</p>
+                    <Link href={`/submissions/${submission.id}`} className="mt-3 inline-flex items-center gap-1 text-label-sm font-medium text-primary hover:underline">
+                      Respond from submission page
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {mySubmissions.map((submission) => (
+                  <div key={submission.id} className="flex items-start gap-2 rounded-md bg-surface-container-low p-2.5">
+                    {submission.status === 'submitted' ? (
+                      <Clock className="mt-0.5 h-4 w-4 flex-shrink-0 text-warning" />
+                    ) : submission.status === 'ai_review' ? (
+                      <Brain className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
+                    ) : (
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-secondary" />
+                    )}
+                    <div>
+                      <p className="text-label-sm text-on-surface">{submission.title}</p>
+                      <p className="text-label-sm text-on-surface-variant">{getNextStep(submission.status)}</p>
                     </div>
                   </div>
-                </Card>
-              </Link>
-            )
-          })
-        )}
-      </div>
+                ))}
+              </div>
+            )}
+          </Card>
 
-      {/* Tips / pending actions */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Card>
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-              <Zap className="w-4 h-4 text-primary" />
+          <Card>
+            <div className="mb-3 flex items-center gap-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary/10">
+                <BarChart3 className="h-4 w-4 text-secondary" />
+              </div>
+              <p className="text-title-sm text-on-surface">Recent Activity</p>
             </div>
-            <p className="text-title-sm text-on-surface">Pending Actions</p>
-          </div>
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 p-2 bg-warning-container/40 rounded-md">
-              <Clock className="w-3.5 h-3.5 text-warning flex-shrink-0" />
-              <p className="text-label-sm text-on-surface">EduScale awaiting AI evaluation</p>
-            </div>
-            <div className="flex items-center gap-2 p-2 bg-primary/5 rounded-md">
-              <Brain className="w-3.5 h-3.5 text-primary flex-shrink-0" />
-              <p className="text-label-sm text-on-surface">SmartGrid currently in AI review</p>
-            </div>
-          </div>
-        </Card>
 
-        <Card>
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-8 h-8 rounded-lg bg-secondary/10 flex items-center justify-center">
-              <BarChart3 className="w-4 h-4 text-secondary" />
-            </div>
-            <p className="text-title-sm text-on-surface">What happens next?</p>
-          </div>
-          <div className="space-y-2 text-body-sm text-on-surface-variant">
-            <p>1. AI engine scores your submission across 6 dimensions.</p>
-            <p>2. An evaluator reviews the AI recommendation.</p>
-            <p>3. If shortlisted, compliance validation begins.</p>
-            <p>4. Approved submissions move to pilot and procurement.</p>
-          </div>
-        </Card>
+            {recentTimeline.length > 0 ? (
+              <div className="space-y-3">
+                {recentTimeline.map((event) => (
+                  <Link
+                    key={event.id}
+                    href={`/submissions/${event.submissionId}`}
+                    className="block rounded-lg bg-surface-container-low p-3 transition-colors hover:bg-surface-container"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="text-label-md font-semibold text-on-surface">{event.title}</p>
+                        <p className="truncate text-label-sm text-on-surface-variant">{event.submissionTitle}</p>
+                      </div>
+                      <span className="flex-shrink-0 text-label-sm text-on-surface-variant">
+                        {formatRelativeTime(event.timestamp)}
+                      </span>
+                    </div>
+                    <p className="mt-1 text-body-sm text-on-surface-variant">{event.description}</p>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <p className="text-body-sm text-on-surface-variant">Recent milestones across your submissions will appear here.</p>
+            )}
+          </Card>
+        </div>
       </div>
     </div>
   )
 }
 
-// ─── ROOT PAGE ────────────────────────────────────────────────────────────────
+// ROOT PAGE
 export default function DashboardPage() {
   const { currentRole } = useRole()
 

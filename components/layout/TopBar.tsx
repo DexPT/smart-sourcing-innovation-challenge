@@ -1,12 +1,13 @@
 'use client'
 import { useAppStore } from '@/store/appStore'
 import { useRole } from '@/hooks/useRole'
-import { Search, Bell, Menu, ClipboardList, Building2, X } from 'lucide-react'
+import { Search, Menu, ClipboardList, Building2, X } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { useRef, useState, useEffect, useMemo } from 'react'
 import { vendors } from '@/data/vendors'
 import Link from 'next/link'
+import { NotificationBell } from '@/components/layout/NotificationBell'
 
 const pageTitles: Record<string, { title: string; subtitle: string }> = {
   '/dashboard':    { title: 'Dashboard',            subtitle: 'Overview of the innovation pipeline' },
@@ -26,7 +27,6 @@ export function TopBar() {
   const router            = useRouter()
   const globalSearchQuery = useAppStore((s) => s.globalSearchQuery)
   const setGlobalSearch   = useAppStore((s) => s.setGlobalSearch)
-  const activeNotifications = useAppStore((s) => s.activeNotifications)
   const sidebarOpen       = useAppStore((s) => s.sidebarOpen)
   const toggleSidebar     = useAppStore((s) => s.toggleSidebar)
   const submissions       = useAppStore((s) => s.submissions)
@@ -193,16 +193,16 @@ export function TopBar() {
         )}
       </div>
 
-      <button className="relative w-8 h-8 rounded-lg hover:bg-surface-container flex items-center justify-center transition-colors duration-150">
-        <Bell className="w-4 h-4 text-on-surface-variant" />
-        {activeNotifications > 0 && (
-          <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-error" />
-        )}
-      </button>
+      <NotificationBell />
 
-      <Link href="/settings" className={cn('w-7 h-7 rounded-full flex items-center justify-center text-on-primary text-label-sm font-semibold cursor-pointer', profile.color)}>
-        {profile.initials}
-      </Link>
+      <div className="flex items-center gap-2 px-1 py-1">
+        <Link href="/settings" className="flex min-w-0 items-center gap-2">
+          <div className={cn('flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full', profile.color)}>
+            <span className="text-label-sm font-bold text-on-primary">{profile.initials}</span>
+          </div>
+          <p className="hidden max-w-40 truncate text-label-md font-semibold text-on-surface md:block">{profile.name}</p>
+        </Link>
+      </div>
     </header>
   )
 }
