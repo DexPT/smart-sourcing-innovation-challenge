@@ -16,6 +16,7 @@ import {
   FileText, Brain, FlaskConical, TrendingUp, AlertTriangle,
   CheckCircle2, Clock, ArrowRight, ShieldCheck, Building2,
   Zap, BarChart3, Users, Target, CircleDot, Bot, Play,
+  Trophy, Star,
 } from 'lucide-react'
 import Link from 'next/link'
 import {
@@ -48,6 +49,173 @@ const overrideTrendData = [
   { month: 'Mar', aligned: 10, overridden: 2 },
   { month: 'Apr', aligned: 5, overridden: 1 },
 ]
+
+// ─── FINALISTS PANEL ────────────────────────────────────────────────────────
+const MAX_FINALISTS = 5
+
+function FinalistsPanel() {
+  const submissions   = useAppStore(s => s.submissions)
+  const updateSubmission = useAppStore(s => s.updateSubmission)
+
+  const finalists = submissions.filter(s => ['finalist', 'demo_day'].includes(s.status))
+  const eligible  = submissions.filter(s => s.status === 'approved')
+  const remaining = MAX_FINALISTS - finalists.length
+  const isFull    = remaining <= 0
+
+  const markFinalist = (id: string) => {
+    updateSubmission(id, {
+      status: 'finalist',
+      timeline: [
+        ...(submissions.find(s => s.id === id)?.timeline ?? []),
+        {
+          id: `tl-${Date.now()}`,
+          timestamp: new Date().toISOString(),
+          title: 'Selected as Finalist',
+          description: `Submission shortlisted as a Challenge Finalist for Demo Day. (${finalists.length + 1}/${MAX_FINALISTS} slots filled)`,
+          actorName: 'Ahmed Al-Maktoum',
+          actorRole: 'admin' as const,
+          type: 'decision' as const,
+        },
+      ],
+    })
+  }
+
+  const confirmDemoDay = (id: string) => {
+    updateSubmission(id, {
+      status: 'demo_day',
+      timeline: [
+        ...(submissions.find(s => s.id === id)?.timeline ?? []),
+        {
+          id: `tl-${Date.now()}`,
+          timestamp: new Date().toISOString(),
+          title: 'Confirmed for Demo Day',
+          description: 'Startup confirmed as a Demo Day presenter. Presentation slot allocated.',
+          actorName: 'Ahmed Al-Maktoum',
+          actorRole: 'admin' as const,
+          type: 'decision' as const,
+        },
+      ],
+    })
+  }
+
+  return (
+    <Card>
+      <CardHeader actions={
+        <Link href="/submissions?status=finalist">
+          <Button variant="ghost" size="sm" icon={<ArrowRight />} iconPosition="right">View All</Button>
+        </Link>
+      }>
+        <CardTitle subtitle="Dubai Chambers Innovation Challenge — Demo Day selection">
+          <span className="flex items-center gap-2">
+            <Trophy className="h-4 w-4 text-primary" />
+            Challenge Finalists
+          </span>
+        </CardTitle>
+      </CardHeader>
+
+      {/* Slot counter */}
+      <div className="mb-4 flex items-center gap-3">
+        <div className="flex gap-1.5">
+          {Array.from({ length: MAX_FINALISTS }).map((_, i) => (
+            <div
+              key={i}
+              className={`h-2 w-8 rounded-full transition-all ${
+                i < finalists.length
+                  ? finalists[i]?.status === 'demo_day' ? 'bg-power-gradient' : 'bg-primary'
+                  : 'bg-surface-container'
+              }`}
+            />
+          ))}
+        </div>
+        <p className="text-label-sm text-on-surface-variant">
+          <span className="font-semibold text-on-surface">{finalists.length}</span> / {MAX_FINALISTS} finalists selected
+        </p>
+        {isFull && (
+          <span className="badge bg-secondary-container text-secondary text-label-sm">Slots full</span>
+        )}
+      </div>
+
+      {/* Current finalists */}
+      {finalists.length > 0 && (
+        <div className="mb-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
+          {finalists.map(sub => (
+            <div
+              key={sub.id}
+              className={`rounded-lg p-3 ${sub.status === 'demo_day' ? 'bg-power-gradient' : 'bg-primary/8'}`}
+            >
+              <div className="mb-1 flex items-center gap-1.5">
+                <Star className={`h-3.5 w-3.5 flex-shrink-0 ${sub.status === 'demo_day' ? 'text-on-primary' : 'text-primary'}`} />
+                <span className={`text-label-sm font-semibold ${sub.status === 'demo_day' ? 'text-on-primary' : 'text-primary'}`}>
+                  {sub.status === 'demo_day' ? 'Demo Day ★' : 'Finalist'}
+                </span>
+              </div>
+              <p className={`text-label-md font-semibold truncate ${sub.status === 'demo_day' ? 'text-on-primary' : 'text-on-surface'}`}>
+                {sub.title}
+              </p>
+              <p className={`text-label-sm truncate ${sub.status === 'demo_day' ? 'text-on-primary/70' : 'text-on-surface-variant'}`}>
+                {sub.company}
+              </p>
+              {sub.aiScore && (
+                <p className={`mt-1 text-label-sm font-medium ${sub.status === 'demo_day' ? 'text-on-primary/80' : 'text-primary'}`}>
+                  AI Score: {sub.aiScore.overall}/100
+                </p>
+              )}
+              {sub.status === 'finalist' && (
+                <button
+                  onClick={() => confirmDemoDay(sub.id)}
+                  className="mt-2 w-full rounded-md bg-primary/10 px-2 py-1 text-label-sm font-medium text-primary hover:bg-primary/20 transition-colors text-center"
+                >
+                  Confirm for Demo Day
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Eligible to shortlist */}
+      {eligible.length > 0 && !isFull && (
+        <div>
+          <p className="mb-2 text-label-sm font-semibold uppercase tracking-wider text-on-surface-variant">
+            Eligible for Finalist Selection ({eligible.length} approved)
+          </p>
+          <div className="space-y-2">
+            {eligible.slice(0, 4).map(sub => (
+              <div key={sub.id} className="flex items-center gap-3 rounded-lg bg-surface-container-lowest p-2.5">
+                <div className="min-w-0 flex-1">
+                  <p className="text-label-md font-medium text-on-surface truncate">{sub.title}</p>
+                  <p className="text-label-sm text-on-surface-variant">{sub.company}</p>
+                </div>
+                {sub.aiScore && (
+                  <span className="flex-shrink-0 text-label-sm font-bold text-secondary">
+                    {sub.aiScore.overall}/100
+                  </span>
+                )}
+                <button
+                  onClick={() => markFinalist(sub.id)}
+                  className="flex-shrink-0 rounded-md bg-primary/10 px-3 py-1.5 text-label-sm font-semibold text-primary hover:bg-primary/20 transition-colors"
+                >
+                  Select
+                </button>
+              </div>
+            ))}
+            {eligible.length > 4 && (
+              <p className="text-label-sm text-on-surface-variant/60 pl-1">
+                +{eligible.length - 4} more approved submissions
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {finalists.length === 0 && eligible.length === 0 && (
+        <p className="text-body-sm text-on-surface-variant py-2">
+          No approved submissions available for finalist selection yet.
+        </p>
+      )}
+    </Card>
+  )
+}
 
 // ─── ADMIN DASHBOARD ────────────────────────────────────────────────────────
 function AdminDashboard() {
@@ -108,6 +276,9 @@ function AdminDashboard() {
           </Card>
         ))}
       </div>
+
+      {/* Finalists panel */}
+      <FinalistsPanel />
 
       {/* Charts row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

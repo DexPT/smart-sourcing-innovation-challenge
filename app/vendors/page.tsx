@@ -5,7 +5,7 @@ import { StatusBadge } from '@/components/ui/Badge'
 import { Progress } from '@/components/ui/Progress'
 import { vendors } from '@/data/vendors'
 import { getVendorStatusConfig, getVendorTierConfig, formatAED } from '@/lib/utils'
-import { Building2, Search, Star, Award, ExternalLink } from 'lucide-react'
+import { Building2, Search, Star, Award, ExternalLink, ShieldCheck } from 'lucide-react'
 import { useState } from 'react'
 import Link from 'next/link'
 
@@ -13,6 +13,7 @@ export default function VendorsPage() {
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
   const [tierFilter, setTierFilter] = useState('')
+  const [descOnly, setDescOnly] = useState(false)
   const [selected, setSelected] = useState(vendors[0].id)
 
   const filtered = vendors.filter(v => {
@@ -22,7 +23,8 @@ export default function VendorsPage() {
       v.industry.toLowerCase().includes(search.toLowerCase())
     const matchStatus = !statusFilter || v.status === statusFilter
     const matchTier = !tierFilter || v.tier === tierFilter
-    return matchSearch && matchStatus && matchTier
+    const matchDesc = !descOnly || v.descCertified
+    return matchSearch && matchStatus && matchTier && matchDesc
   })
 
   const selectedVendor = vendors.find(v => v.id === selected) ?? vendors[0]
@@ -91,6 +93,23 @@ export default function VendorsPage() {
               </select>
             </div>
 
+            <button
+              onClick={() => setDescOnly(v => !v)}
+              className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-label-sm font-medium transition-all border ${
+                descOnly
+                  ? 'bg-secondary-container text-secondary border-secondary/30'
+                  : 'bg-surface-container-lowest text-on-surface-variant border-outline-variant/20 hover:bg-surface-container'
+              }`}
+            >
+              <ShieldCheck className={`w-4 h-4 flex-shrink-0 ${descOnly ? 'text-secondary' : 'text-on-surface-variant'}`} />
+              DESC Approved Only
+              {descOnly && (
+                <span className="ml-auto text-label-xs bg-secondary text-on-secondary rounded-full px-1.5 py-0.5">
+                  {filtered.length}
+                </span>
+              )}
+            </button>
+
             <div className="space-y-2">
               {filtered.map(vendor => {
                 const statusConfig = getVendorStatusConfig(vendor.status)
@@ -115,6 +134,13 @@ export default function VendorsPage() {
                     </p>
                     <div className="mt-1.5 flex flex-wrap items-center gap-2">
                       <span className={`badge text-label-sm ${tierConfig.bg} ${tierConfig.text}`}>{tierConfig.label}</span>
+                      {vendor.descCertified ? (
+                        <span className="badge bg-secondary-container text-secondary text-label-xs">
+                          <ShieldCheck className="h-3 w-3" /> DESC
+                        </span>
+                      ) : (
+                        <span className="badge bg-surface-container text-on-surface-variant text-label-xs">DESC Pending</span>
+                      )}
                       <div className="ml-auto flex items-center gap-1">
                         <Star className="h-3 w-3 fill-warning text-warning" />
                         <span className="text-label-sm text-on-surface">{vendor.averageScore}</span>
@@ -150,6 +176,15 @@ export default function VendorsPage() {
                     >
                       {getVendorTierConfig(selectedVendor.tier).label} Vendor
                     </div>
+                    {selectedVendor.descCertified ? (
+                      <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-label-sm font-semibold bg-secondary-container text-secondary">
+                        <ShieldCheck className="h-3.5 w-3.5" /> DESC Certified
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-label-sm font-medium bg-surface-container text-on-surface-variant">
+                        <ShieldCheck className="h-3.5 w-3.5 opacity-50" /> DESC Pending
+                      </span>
+                    )}
                     <Link
                       href={`/vendors/${selectedVendor.id}`}
                       className="inline-flex items-center gap-1 text-label-sm text-primary hover:underline"

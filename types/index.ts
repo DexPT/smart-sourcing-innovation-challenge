@@ -22,6 +22,8 @@ export type SubmissionStatus =
   | 'evaluation'
   | 'compliance_check'
   | 'approved'
+  | 'finalist'
+  | 'demo_day'
   | 'pilot'
   | 'procurement'
   | 'rejected'
@@ -143,6 +145,7 @@ export interface Vendor {
   description: string
   specializations: string[]
   certifications: string[]
+  descCertified: boolean
   completionRate: number // % of past projects completed
   averageScore: number // 0-100
   activeContracts: number

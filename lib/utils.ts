@@ -40,6 +40,8 @@ export function getSubmissionStatusConfig(status: SubmissionStatus) {
     evaluation: { label: 'Evaluation', bg: 'bg-warning-container', text: 'text-on-surface' },
     compliance_check: { label: 'Compliance Check', bg: 'bg-tertiary/10', text: 'text-tertiary' },
     approved: { label: 'Approved', bg: 'bg-secondary-container', text: 'text-secondary' },
+    finalist: { label: 'Finalist', bg: 'bg-primary', text: 'text-on-primary' },
+    demo_day: { label: 'Demo Day ★', bg: 'bg-power-gradient', text: 'text-on-primary' },
     pilot: { label: 'In Pilot', bg: 'bg-secondary/10', text: 'text-secondary' },
     procurement: { label: 'Procurement', bg: 'bg-primary/10', text: 'text-primary' },
     rejected: { label: 'Rejected', bg: 'bg-error-container', text: 'text-error' },

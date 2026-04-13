@@ -7,7 +7,7 @@ import { StatusBadge } from '@/components/ui/Badge'
 import { Progress } from '@/components/ui/Progress'
 import { vendors } from '@/data/vendors'
 import { getVendorStatusConfig, getVendorTierConfig, formatAED, formatDate } from '@/lib/utils'
-import { Building2, ChevronLeft, Star, Award, Mail, Phone, Globe, MapPin } from 'lucide-react'
+import { Building2, ChevronLeft, Award, Mail, Phone, Globe, MapPin, ShieldCheck } from 'lucide-react'
 
 export default function VendorDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -52,10 +52,19 @@ export default function VendorDetailPage() {
             <p className="text-body-md text-on-surface-variant">{vendor.legalName}</p>
             <p className="mt-0.5 text-body-sm text-on-surface-variant">{vendor.industry} · {vendor.type}</p>
           </div>
-          <div className="flex-shrink-0">
+          <div className="flex flex-col items-end gap-2 flex-shrink-0">
             <span className={`inline-flex rounded-full px-3 py-1 text-label-sm font-semibold ${tierConfig.bg} ${tierConfig.text}`}>
               {tierConfig.label} Vendor
             </span>
+            {vendor.descCertified ? (
+              <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-label-sm font-semibold bg-secondary-container text-secondary">
+                <ShieldCheck className="h-3.5 w-3.5" /> DESC Certified
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-label-sm font-medium bg-surface-container text-on-surface-variant">
+                <ShieldCheck className="h-3.5 w-3.5 opacity-40" /> DESC Pending
+              </span>
+            )}
           </div>
         </div>
 

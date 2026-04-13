@@ -11,6 +11,7 @@ import { getSubmissionStatusConfig, getCategoryLabel, getScoreColor } from '@/li
 import {
   Brain, Bot, Play, ChevronRight, Sparkles, SortDesc,
   CheckCircle2, XCircle, MessageSquare, AlertTriangle, RotateCcw, X,
+  ShieldCheck, ShieldAlert, ShieldX, Shield,
 } from 'lucide-react'
 import Link from 'next/link'
 import {
@@ -280,6 +281,209 @@ function EvaluatorActions({ submission, onClose }: { submission: Submission; onC
   )
 }
 
+// ─── DESC AI Security Policy panel ───────────────────────────────────────────
+type ControlStatus = 'pass' | 'warning' | 'fail' | 'not-assessed'
+
+function statusFromScore(score: number, thresholds: [number, number]): ControlStatus {
+  if (score >= thresholds[0]) return 'pass'
+  if (score >= thresholds[1]) return 'warning'
+  return 'fail'
+}
+
+const CONTROL_ICONS: Record<ControlStatus, React.ElementType> = {
+  pass:          CheckCircle2,
+  warning:       ShieldAlert,
+  fail:          ShieldX,
+  'not-assessed': Shield,
+}
+const CONTROL_COLORS: Record<ControlStatus, string> = {
+  pass:           'text-secondary',
+  warning:        'text-warning',
+  fail:           'text-error',
+  'not-assessed': 'text-on-surface-variant',
+}
+const CONTROL_BG: Record<ControlStatus, string> = {
+  pass:           'bg-secondary-container',
+  warning:        'bg-warning-container',
+  fail:           'bg-error-container',
+  'not-assessed': 'bg-surface-container',
+}
+const CONTROL_LABEL: Record<ControlStatus, string> = {
+  pass:           'Pass',
+  warning:        'Review Needed',
+  fail:           'Non-Compliant',
+  'not-assessed': 'Not Assessed',
+}
+
+const PHASE_STATUS_CONFIG: Record<ControlStatus, { label: string; dot: string; line: string }> = {
+  pass:           { label: 'Compliant',      dot: 'bg-secondary',          line: 'bg-secondary' },
+  warning:        { label: 'Review Needed',  dot: 'bg-warning',            line: 'bg-warning/40' },
+  fail:           { label: 'Non-Compliant',  dot: 'bg-error',              line: 'bg-error/30' },
+  'not-assessed': { label: 'Not Assessed',   dot: 'bg-outline-variant/40', line: 'bg-outline-variant/20' },
+}
+
+function DESCAISecurityPanel({ submission }: { submission: Submission }) {
+  const score = submission.aiScore!
+  const isUAE = submission.countryOfOrigin === 'UAE'
+
+  // ── Lifecycle phases ──
+  const phases: { label: string; desc: string; status: ControlStatus }[] = [
+    {
+      label: 'Design',
+      desc: 'Secure-by-design architecture, threat modelling, data classification',
+      status: statusFromScore(score.compliance, [75, 55]),
+    },
+    {
+      label: 'Develop',
+      desc: 'Secure coding practices, dependency management, adversarial robustness',
+      status: statusFromScore(score.feasibility, [75, 55]),
+    },
+    {
+      label: 'Deploy',
+      desc: 'Secure configuration, API hardening, access controls, UAE data residency',
+      status: isUAE ? statusFromScore(score.risk, [70, 50]) : 'fail',
+    },
+    {
+      label: 'Monitor',
+      desc: 'Continuous anomaly detection, hallucination monitoring, audit logging',
+      status: statusFromScore(score.overall, [75, 58]),
+    },
+    {
+      label: 'Dispose',
+      desc: 'Secure data deletion, model retirement procedures, DESC notification',
+      status: statusFromScore(score.compliance, [65, 45]),
+    },
+  ]
+
+  // ── Risk controls ──
+  const controls: { label: string; desc: string; standard: string; status: ControlStatus }[] = [
+    {
+      label: 'Data Poisoning',
+      desc: 'Training data integrity validation and supply chain verification',
+      standard: 'DESC AI Policy § 4.2',
+      status: statusFromScore(score.risk, [78, 58]),
+    },
+    {
+      label: 'Adversarial Attacks',
+      desc: 'Input validation, model robustness testing, anomaly detection',
+      standard: 'DESC AI Policy § 4.3',
+      status: statusFromScore(score.feasibility, [75, 58]),
+    },
+    {
+      label: 'Hallucination Monitoring',
+      desc: 'Output validation gates, confidence thresholds, human-in-the-loop controls',
+      standard: 'DESC AI Policy § 5.1',
+      status: statusFromScore(score.compliance, [72, 52]),
+    },
+    {
+      label: 'Secure APIs',
+      desc: 'API authentication, rate limiting, encrypted transport, DESC CSP alignment',
+      standard: 'DESC CSP § 9.1 / ISO 27001',
+      status: statusFromScore(score.compliance, [75, 55]),
+    },
+    {
+      label: 'UAE Data Residency',
+      desc: 'All data processed and stored within UAE borders per DESC cloud policy',
+      standard: 'DESC Cloud Policy / PDPL',
+      status: isUAE
+        ? statusFromScore(score.compliance, [68, 48])
+        : 'fail',
+    },
+  ]
+
+  const passCount    = controls.filter(c => c.status === 'pass').length
+  const warningCount = controls.filter(c => c.status === 'warning').length
+  const failCount    = controls.filter(c => c.status === 'fail').length
+
+  const overallStatus: ControlStatus =
+    failCount > 0    ? 'fail'
+    : warningCount > 0 ? 'warning'
+    : 'pass'
+
+  const OverallIcon = CONTROL_ICONS[overallStatus]
+
+  return (
+    <Card>
+      {/* Header */}
+      <div className="mb-5 flex items-start justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-primary/10">
+            <ShieldCheck className="h-4 w-4 text-primary" />
+          </div>
+          <div>
+            <p className="text-title-sm font-semibold text-on-surface">DESC AI Security Policy</p>
+            <p className="text-label-sm text-on-surface-variant">ISO 27001 · ISO 27017 · CSA CCM v4 · ISR V3 · DESC AI Policy</p>
+          </div>
+        </div>
+        <div className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-label-sm font-semibold ${CONTROL_BG[overallStatus]} ${CONTROL_COLORS[overallStatus]}`}>
+          <OverallIcon className="h-3.5 w-3.5" />
+          {CONTROL_LABEL[overallStatus]}
+        </div>
+      </div>
+
+      {/* AI Lifecycle phases — horizontal stepper */}
+      <div className="mb-5">
+        <p className="mb-3 text-label-sm font-semibold uppercase tracking-wider text-on-surface-variant">AI Lifecycle Compliance</p>
+        <div className="flex items-start gap-0">
+          {phases.map((phase, idx) => {
+            const cfg = PHASE_STATUS_CONFIG[phase.status]
+            return (
+              <div key={phase.label} className="flex flex-1 flex-col items-center">
+                {/* Connector + dot row */}
+                <div className="flex w-full items-center">
+                  <div className={`h-0.5 flex-1 ${idx === 0 ? 'opacity-0' : cfg.line}`} />
+                  <div className={`h-3 w-3 flex-shrink-0 rounded-full ${cfg.dot}`} />
+                  <div className={`h-0.5 flex-1 ${idx === phases.length - 1 ? 'opacity-0' : cfg.line}`} />
+                </div>
+                {/* Label */}
+                <p className="mt-1.5 text-center text-label-sm font-medium text-on-surface">{phase.label}</p>
+                <p className={`text-center text-[10px] font-medium ${CONTROL_COLORS[phase.status]}`}>{cfg.label}</p>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Risk controls checklist */}
+      <div>
+        <div className="mb-3 flex items-center justify-between">
+          <p className="text-label-sm font-semibold uppercase tracking-wider text-on-surface-variant">Risk Controls</p>
+          <div className="flex items-center gap-3 text-label-sm">
+            <span className="text-secondary font-medium">{passCount} Pass</span>
+            {warningCount > 0 && <span className="text-warning font-medium">{warningCount} Review</span>}
+            {failCount > 0 && <span className="text-error font-medium">{failCount} Fail</span>}
+          </div>
+        </div>
+        <div className="space-y-2">
+          {controls.map(ctrl => {
+            const Icon = CONTROL_ICONS[ctrl.status]
+            return (
+              <div key={ctrl.label} className="flex items-start gap-3 rounded-lg bg-surface-container-lowest p-3">
+                <Icon className={`mt-0.5 h-4 w-4 flex-shrink-0 ${CONTROL_COLORS[ctrl.status]}`} />
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="text-label-md font-medium text-on-surface">{ctrl.label}</p>
+                    <span className="text-label-sm text-on-surface-variant/60">{ctrl.standard}</span>
+                  </div>
+                  <p className="text-label-sm text-on-surface-variant">{ctrl.desc}</p>
+                </div>
+                <span className={`flex-shrink-0 rounded-full px-2 py-0.5 text-label-sm font-medium ${CONTROL_BG[ctrl.status]} ${CONTROL_COLORS[ctrl.status]}`}>
+                  {CONTROL_LABEL[ctrl.status]}
+                </span>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Footer note */}
+      <p className="mt-4 text-label-sm text-on-surface-variant/60">
+        Controls assessed automatically from AI evaluation scores. Full DESC audit requires manual verification by a certified compliance officer.
+      </p>
+    </Card>
+  )
+}
+
 // ─── Main page ────────────────────────────────────────────────────────────────
 export default function AIEvaluationPage() {
   const submissions = useAppStore(s => s.submissions)
@@ -478,6 +682,9 @@ export default function AIEvaluationPage() {
                         </Card>
                       </div>
                     </div>
+
+                    {/* DESC AI Security Policy */}
+                    <DESCAISecurityPanel submission={selected} />
 
                     {/* Evaluator actions */}
                     {can.runAIEvaluation && !isActioned && (

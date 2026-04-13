@@ -14,7 +14,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import type { SubmissionStatus, SubmissionCategory } from '@/types'
 
-const STATUS_OPTIONS: SubmissionStatus[] = ['draft', 'submitted', 'ai_review', 'evaluation', 'compliance_check', 'approved', 'pilot', 'procurement', 'rejected']
+const STATUS_OPTIONS: SubmissionStatus[] = ['draft', 'submitted', 'ai_review', 'evaluation', 'compliance_check', 'approved', 'finalist', 'demo_day', 'pilot', 'procurement', 'rejected']
 const CATEGORY_OPTIONS: SubmissionCategory[] = ['ai_ml', 'fintech', 'healthtech', 'logistics', 'sustainability', 'edtech', 'cybersecurity', 'smart_city', 'iot']
 
 export default function SubmissionsPage() {

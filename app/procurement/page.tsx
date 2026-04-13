@@ -14,7 +14,7 @@ import {
 import {
   CheckCircle2, Clock, FileText, Building2, Calendar,
   Brain, ShieldCheck, FlaskConical, Star, XCircle,
-  RotateCcw, X, AlertTriangle,
+  RotateCcw, X, AlertTriangle, ShieldAlert,
 } from 'lucide-react'
 import Link from 'next/link'
 import type { ProcurementDecision } from '@/types'
@@ -165,6 +165,19 @@ function DecisionSummary({ decision }: { decision: ProcurementDecision }) {
                   <Star className="w-3 h-3 fill-warning text-warning" />
                   <span className="text-label-sm font-medium text-on-surface">{vendor.averageScore}/100</span>
                 </div>
+              </div>
+              <div className="flex items-center gap-1.5 mb-1">
+                {vendor.descCertified ? (
+                  <>
+                    <ShieldCheck className="w-3.5 h-3.5 text-secondary flex-shrink-0" />
+                    <span className="text-label-sm font-semibold text-secondary">DESC Certified</span>
+                  </>
+                ) : (
+                  <>
+                    <ShieldAlert className="w-3.5 h-3.5 text-warning flex-shrink-0" />
+                    <span className="text-label-sm text-warning">DESC Certification Pending</span>
+                  </>
+                )}
               </div>
               <p className="text-label-sm text-on-surface-variant">
                 {vendor.activeContracts} active contract{vendor.activeContracts !== 1 ? 's' : ''} ·{' '}
