@@ -10,6 +10,8 @@ export interface RoleProfile {
   avatar: string
   initials: string
   color: string
+  name: string
+  email: string
 }
 
 // ============================================================
@@ -69,6 +71,7 @@ export interface Submission {
   tags: string[]
   source: SubmissionSource
   sourceDetail?: string
+  winner?: boolean
   aiScore?: AIScore
   complianceResult?: ComplianceResult
   pilotId?: string

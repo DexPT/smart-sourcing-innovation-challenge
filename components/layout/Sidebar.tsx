@@ -1,14 +1,13 @@
 'use client'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useRole } from '@/hooks/useRole'
 import { useAppStore } from '@/store/appStore'
-import { RoleSwitcher } from './RoleSwitcher'
 import { cn } from '@/lib/utils'
 import {
   LayoutDashboard, FileText, Brain, ShieldCheck, Building2,
-  FlaskConical, HandshakeIcon, BarChart3, ClipboardList,
-  ChevronLeft, ChevronRight, Sparkles, Settings
+  FlaskConical, HandshakeIcon, BarChart3, ClipboardList, Trophy,
+  ChevronLeft, ChevronRight, Sparkles, Settings, LogOut
 } from 'lucide-react'
 
 const iconMap: Record<string, React.ElementType> = {
@@ -21,13 +20,21 @@ const iconMap: Record<string, React.ElementType> = {
   HandshakeIcon,
   BarChart3,
   ClipboardList,
+  Trophy,
 }
 
 export function Sidebar() {
   const pathname = usePathname()
-  const { navItems } = useRole()
+  const router = useRouter()
+  const { navItems, profile } = useRole()
   const sidebarOpen = useAppStore((s) => s.sidebarOpen)
   const toggleSidebar = useAppStore((s) => s.toggleSidebar)
+  const setRole = useAppStore((s) => s.setRole)
+
+  const handleSignOut = () => {
+    setRole('admin')
+    router.push('/')
+  }
 
   return (
     <>
@@ -112,11 +119,33 @@ export function Sidebar() {
 
         <div className="p-2 border-t border-outline-variant/10">
           {sidebarOpen ? (
-            <RoleSwitcher />
-          ) : (
-            <div className="w-8 h-8 rounded-full bg-power-gradient flex items-center justify-center mx-auto cursor-pointer" onClick={toggleSidebar}>
-              <span className="text-on-primary text-label-sm font-semibold">AM</span>
+            <div className="flex items-center gap-2.5 px-2 py-2 rounded-lg">
+              <div className={`w-8 h-8 rounded-full ${profile.color} flex items-center justify-center flex-shrink-0`}>
+                <span className="text-on-primary text-label-sm font-bold">{profile.initials}</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-label-md font-semibold text-on-surface truncate">{profile.name}</p>
+                <p className="text-label-sm text-on-surface-variant truncate">{profile.email}</p>
+              </div>
+              <button
+                onClick={handleSignOut}
+                title="Sign out"
+                className="flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-on-surface-variant hover:text-error hover:bg-error-container/30 transition-colors"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+              </button>
             </div>
+          ) : (
+            <button
+              onClick={handleSignOut}
+              title="Sign out"
+              className="w-8 h-8 rounded-full flex items-center justify-center mx-auto hover:bg-error-container/30 transition-colors group"
+            >
+              <div className={`w-8 h-8 rounded-full ${profile.color} flex items-center justify-center group-hover:hidden`}>
+                <span className="text-on-primary text-label-sm font-bold">{profile.initials}</span>
+              </div>
+              <LogOut className="w-4 h-4 text-error hidden group-hover:block" />
+            </button>
           )}
         </div>
 

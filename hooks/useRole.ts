@@ -10,14 +10,18 @@ export const roleProfiles: RoleProfile[] = [
     avatar: 'A',
     initials: 'AM',
     color: 'bg-power-gradient',
+    name: 'Ahmed Al-Maktoum',
+    email: 'ahmed@chamber.ae',
   },
   {
     id: 'evaluator',
-    label: 'Evaluator',
+    label: 'Innovation Evaluator',
     description: 'Access to AI evaluation, scoring, and submission review.',
     avatar: 'E',
     initials: 'OK',
     color: 'bg-teal-gradient',
+    name: 'Omar Khalid',
+    email: 'omar@chamber.ae',
   },
   {
     id: 'compliance',
@@ -26,6 +30,8 @@ export const roleProfiles: RoleProfile[] = [
     avatar: 'C',
     initials: 'SA',
     color: 'bg-tertiary',
+    name: 'Sara Al-Ansari',
+    email: 'sara@chamber.ae',
   },
   {
     id: 'startup',
@@ -34,6 +40,8 @@ export const roleProfiles: RoleProfile[] = [
     avatar: 'S',
     initials: 'NH',
     color: 'bg-secondary',
+    name: 'Nadia Hassan',
+    email: 'nadia@nexusai.ae',
   },
 ]
 
@@ -73,6 +81,7 @@ function getNavItemsForRole(role: UserRole) {
     { id: 'procurement', label: 'Procurement', href: '/procurement', icon: 'HandshakeIcon', roles: ['admin'] as UserRole[] },
     { id: 'insights', label: 'Insights & Reports', href: '/insights', icon: 'BarChart3', roles: ['admin', 'evaluator'] as UserRole[] },
     { id: 'audit', label: 'Audit Logs', href: '/audit', icon: 'ClipboardList', roles: ['admin', 'compliance'] as UserRole[] },
+    { id: 'demo-day', label: 'Demo Day', href: '/demo-day', icon: 'Trophy', roles: ['admin', 'evaluator'] as UserRole[] },
   ]
 
   return allItems.filter((item) => item.roles.includes(role))

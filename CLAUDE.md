@@ -133,3 +133,56 @@ These items were identified after a full re-read of the original brief. They are
 - `app/vendors/page.tsx`: "DESC Approved Only" toggle button above the list; when active filters to `descCertified === true`. Each list card shows a green "DESC" badge or grey "DESC Pending" badge. Detail panel header shows the same badge at a larger size.
 - `app/vendors/[id]/page.tsx`: DESC Certified / DESC Pending badge in the header alongside the tier pill.
 - `app/procurement/page.tsx` `DecisionSummary`: Vendor Readiness quadrant now shows DESC status row with `ShieldCheck` (green, "DESC Certified") or `ShieldAlert` (amber, "DESC Certification Pending").
+
+---
+
+## Post-implementation improvements (ordered by demo impact)
+
+These gaps were identified after a full review of the implemented prototype. Do not mark an item done here until it is fully wired end-to-end.
+
+### ~~P15 — Remove RoleSwitcher / wire logout to login page~~ ✓ DONE
+`RoleSwitcher` removed from `components/layout/Sidebar.tsx`. Bottom section of sidebar replaced with a user identity card:
+- **Expanded sidebar**: avatar circle (role gradient + initials), full name, email, and a `LogOut` icon button on the right. Hovering the icon turns it red.
+- **Collapsed sidebar**: avatar circle that reveals a `LogOut` icon on hover.
+- Sign Out calls `setRole('admin')` + `router.push('/')`, returning to the login page.
+- `name` and `email` fields added to `RoleProfile` type in `types/index.ts` and populated in `hooks/useRole.ts` for all 4 roles.
+
+### ~~P16 — Demo Day page (`/demo-day`)~~ ✓ DONE
+New route `app/demo-day/page.tsx` added, visible to `admin` and `evaluator` in the sidebar (Trophy icon).
+- **Hero banner**: "Demo Day 2026", date (15 May 2026), location (Dubai Chamber HQ), stats strip (finalist count, sectors, pipeline value).
+- **Finalist scoring cards**: each `demo_day` submission shows rank badge, company, title, category, AI score, pilot indicator, estimated value. Admin sees a live range slider (0–100) per card; score circle updates in real time.
+- **Leaderboard** (right column): ranked list reactive to slider changes, with colour-coded score pills and ★ for the declared winner.
+- **Declare Winner**: button appears on the top-ranked card (or only card). Sets `winner: true` on the submission via `updateSubmission`, clears previous winner, appends a `decision` timeline event. Winner banner appears at top of page.
+- **Scoring Criteria** card: 5 weighted criteria (Innovation 25%, Viability 25%, TRL 20%, DESC Fit 20%, Presentation 10%).
+- **Empty state**: shown when no `demo_day` submissions exist, with link to Dashboard.
+- `winner?: boolean` added to `Submission` type in `types/index.ts`.
+
+### P17 — In-app notifications panel
+**Why:** Every status change (AI evaluation complete, compliance approved, procurement approved, etc.) happens silently. A real platform would surface these changes. A notification bell adds significant perceived dynamism to the demo.
+**What to build:**
+- In `store/appStore.ts`: add a `notifications: Notification[]` array and `addNotification(n)` / `markAllRead()` actions. `Notification` type: `{ id, title, body, href, timestamp, read: boolean }`.
+- Trigger `addNotification` inside existing store actions: `startAIEvaluation` (on complete), `updateComplianceResult`, `updatePilot`, `updateProcurementDecision`, `updateSubmission` (on status change to `approved`, `rejected`, `finalist`, `demo_day`).
+- In `components/layout/TopBar.tsx`: replace the static bell icon with a `NotificationBell` component — shows unread count badge, opens a dropdown panel on click, lists recent notifications with title + relative time + link, "Mark all read" button. Click-outside closes.
+
+### P18 — Richer Startup dashboard
+**Why:** The Startup role (Nadia Hassan) has the weakest dashboard of the four roles — it shows little more than submission status. For a demo where a startup founder is in the room, this is a missed opportunity.
+**What to build:**
+- In `StartupDashboard` inside `app/dashboard/page.tsx`:
+  - **Application tracker**: step-by-step progress stepper for each submission (matching the `WorkflowProgress` component in submission detail), showing current stage and estimated next step.
+  - **AI Feedback card**: if `aiScore` exists, show the score, recommendation, top strength, and top weakness — the startup's "report card".
+  - **Pending actions**: if any submission has a `comment` timeline event with "Request More Info" in the title, show a highlighted "Action Required" card prompting them to respond.
+  - **Timeline feed**: last 5 timeline events across their submissions, in chronological order.
+
+### P19 — "Request More Info" response loop
+**Why:** When an evaluator requests more information, the submission enters a limbo state. The startup has no in-platform mechanism to respond, and the evaluator has no way to see if/when the startup replied. The loop is open-ended.
+**What to build:**
+- In `app/submissions/[id]/page.tsx`: when `currentRole === 'startup'` and the latest timeline event is a `comment` type with "Request More Info" in the title, show an **"Action Required"** banner above the tabs with a textarea to submit the response.
+- Submitting the response appends a `comment` timeline event (type `comment`, actorRole `startup`) and changes submission status from `evaluation` back to `evaluation` (unchanged) — the response is visible in the timeline for the evaluator to review.
+- In `app/ai-evaluation/page.tsx`: if a submission has a startup response (detected by a `comment` timeline event with actorRole `startup` after the evaluator's request), show an "Startup Responded" banner above the `EvaluatorActions` panel.
+
+### P20 — Pilot KPI progress updates
+**Why:** Pilots are shown as "active" with KPI progress bars, but the `current` value for each KPI is static. There is no way for a pilot manager to record progress during the pilot, making the pilot management module feel read-only.
+**What to build:**
+- In `app/pilots/[id]/page.tsx`: for pilots with status `active` or `paused`, add an **"Update KPI Progress"** inline panel per KPI row — a small number input for `current` value with a "Save" button.
+- On save: call `updatePilot(id, { kpis: [...updatedKpis] })` and append a `comment` timeline event on the related submission: "KPI Updated: [metric] — [old] → [new] [unit]".
+- The `achieved` flag should auto-update when `current >= target`.
