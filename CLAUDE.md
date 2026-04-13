@@ -81,11 +81,12 @@ All metrics derived live from Zustand store via `useMemo`. Added: **Sector Innov
 ### ~~P8 — Richer Audit Log page~~ ✓ DONE
 Static audit logs merged with live timeline events from the submissions store (dynamic events detected via ID heuristic: `/^tl-ai-\d/` or `/^tl-\d{9,}$/`). Live events converted to `AuditLog` format with `deriveAction()` mapping from event type/title. New **Source** filter (All / AI System / Human). AI rows get a `bg-primary/[0.03]` tint + dedicated "AI" chip in Source column; human rows show initials avatar. Stats cards: Total Events, AI Events, Human Events, Unique Actors. Live events tagged with a "live" sub-label. IP address column removed in favour of Details column.
 
-### P9 — Individual detail routes
-Currently vendors and pilots use master-detail panels (no deep links). Add:
-- `app/vendors/[id]/page.tsx`
-- `app/pilots/[id]/page.tsx`
-- `app/compliance/[id]/page.tsx`
+### ~~P9 — Individual detail routes~~ ✓ DONE
+Three deep-link routes created, all using `useParams()` for the id:
+- `app/vendors/[id]/page.tsx` — full vendor profile (about, performance bars, registration, contact, specializations, certs, tags). Reads from static `data/vendors`. "Full details" link added to vendor panel in list page.
+- `app/pilots/[id]/page.tsx` — pilot detail (KPI tracker with progress bars, milestone timeline, budget breakdown, stakeholders, final score). Reads from Zustand store. "Details →" link added to each list card.
+- `app/compliance/[id]/page.tsx` — compliance review detail (all checks with severity/category/status, conditions, reviewer notes, officer info, check summary). Reads from Zustand store. "Details →" link added to each list card.
+All three show a "not found" state if the ID doesn't match any record.
 
 ### P10 — Polish
 - Loading skeleton components for cards and table rows (brief explicitly requires these).

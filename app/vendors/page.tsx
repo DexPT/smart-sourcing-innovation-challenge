@@ -5,8 +5,9 @@ import { StatusBadge } from '@/components/ui/Badge'
 import { Progress } from '@/components/ui/Progress'
 import { vendors } from '@/data/vendors'
 import { getVendorStatusConfig, getVendorTierConfig, formatAED } from '@/lib/utils'
-import { Building2, Search, Star, Award } from 'lucide-react'
+import { Building2, Search, Star, Award, ExternalLink } from 'lucide-react'
 import { useState } from 'react'
+import Link from 'next/link'
 
 export default function VendorsPage() {
   const [search, setSearch] = useState('')
@@ -143,12 +144,18 @@ export default function VendorsPage() {
                     </p>
                   </div>
 
-                  <div className="sm:self-start">
+                  <div className="flex flex-col items-end gap-2 sm:self-start">
                     <div
                       className={`inline-flex rounded-full px-3 py-1 text-label-sm font-semibold ${getVendorTierConfig(selectedVendor.tier).bg} ${getVendorTierConfig(selectedVendor.tier).text}`}
                     >
                       {getVendorTierConfig(selectedVendor.tier).label} Vendor
                     </div>
+                    <Link
+                      href={`/vendors/${selectedVendor.id}`}
+                      className="inline-flex items-center gap-1 text-label-sm text-primary hover:underline"
+                    >
+                      <ExternalLink className="h-3 w-3" /> Full details
+                    </Link>
                   </div>
                 </div>
 

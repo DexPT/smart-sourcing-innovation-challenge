@@ -407,7 +407,13 @@ export default function PilotsPage() {
                   />
                   <div className="mt-1.5 flex items-center justify-between gap-2">
                     <span className="text-label-sm text-on-surface-variant">{formatAED(pilot.budget)} budget</span>
-                    <span className="text-label-sm text-on-surface-variant">{formatDate(pilot.endDate)}</span>
+                    <Link
+                      href={`/pilots/${pilot.id}`}
+                      onClick={e => e.stopPropagation()}
+                      className="text-label-sm text-primary hover:underline"
+                    >
+                      Details →
+                    </Link>
                   </div>
                 </button>
               )

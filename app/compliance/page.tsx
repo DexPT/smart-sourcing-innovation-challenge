@@ -380,6 +380,15 @@ export default function CompliancePage() {
                     </div>
                     <span className="text-label-sm text-on-surface-variant">{passCount}/{comp.checks.length}</span>
                   </div>
+                  <div className="mt-1.5 flex justify-end">
+                    <Link
+                      href={`/compliance/${comp.id}`}
+                      onClick={e => e.stopPropagation()}
+                      className="text-label-sm text-primary hover:underline"
+                    >
+                      Details →
+                    </Link>
+                  </div>
                 </button>
               )
             })}
