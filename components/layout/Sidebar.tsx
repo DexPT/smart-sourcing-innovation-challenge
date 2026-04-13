@@ -121,9 +121,6 @@ export function Sidebar() {
                     {item.label}
                   </span>
                 )}
-                {isActive && sidebarOpen && (
-                  <span className="ml-auto w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />
-                )}
               </Link>
             );
           })}

@@ -95,7 +95,7 @@ All three show a "not found" state if the ID doesn't match any record.
 ### ~~P10 — Polish~~ ✓ DONE
 - **Skeleton components** (`components/ui/Skeleton.tsx`): `Skeleton` (base), `SkeletonStatCard`, `SkeletonCard`, `SkeletonListItem`, `SkeletonTableRow`, `SkeletonText`, `SkeletonChart` — use `animate-pulse` with design-system surface tokens.
 - **Global search** (`TopBar.tsx`): Input now shows a dropdown with matching submissions (→ `/submissions/[id]`) and vendors (→ `/vendors/[id]`), filtered via `useMemo`. Click-outside closes via `useRef`. Escape key clears. Clear button (×) when query is non-empty. "No results" state. Avatar links to `/settings`.
-- **`/settings` page** (`app/settings/page.tsx`): Stub with 5 sections — profile, notifications (toggles), appearance (toggles), language/region (selects), security, integrations. All toggles are local state. Settings link added to Sidebar bottom nav (visible to all roles).
+- **`/settings` page** (`app/settings/page.tsx`): Stub with 5 sections - profile, notifications, appearance, language/region, security, integrations. Notification / appearance / security preferences currently use local `Off | On` segmented controls. Settings link added to Sidebar bottom nav (visible to all roles).
 
 ---
 
@@ -141,12 +141,12 @@ These items were identified after a full re-read of the original brief. They are
 These gaps were identified after a full review of the implemented prototype. Do not mark an item done here until it is fully wired end-to-end.
 
 ### ~~P15 — Remove RoleSwitcher / wire logout to login page~~ ✓ DONE
-`RoleSwitcher` removed from `components/layout/Sidebar.tsx`. Bottom section of sidebar replaced with a user identity card:
-- **Expanded sidebar**: avatar circle (role gradient + initials), full name, email, and a `LogOut` icon button on the right. Hovering the icon turns it red.
-- **Collapsed sidebar**: avatar circle that reveals a `LogOut` icon on hover.
+### ~~P15 - Remove RoleSwitcher / wire logout to login page~~ DONE
+`RoleSwitcher` removed from `components/layout/Sidebar.tsx`.
+- **Sidebar bottom section** now shows only the `LogOut` action, aligned with the rest of the sidebar navigation in both expanded and collapsed states.
+- **Top-right user identity** in `components/layout/TopBar.tsx` shows avatar + name only, without email or a highlighted card background.
 - Sign Out calls `setRole('admin')` + `router.push('/')`, returning to the login page.
 - `name` and `email` fields added to `RoleProfile` type in `types/index.ts` and populated in `hooks/useRole.ts` for all 4 roles.
-
 ### ~~P16 — Demo Day page (`/demo-day`)~~ ✓ DONE
 New route `app/demo-day/page.tsx` added, visible to `admin` and `evaluator` in the sidebar (Trophy icon).
 - **Hero banner**: "Demo Day 2026", date (15 May 2026), location (Dubai Chamber HQ), stats strip (finalist count, sectors, pipeline value).
@@ -185,6 +185,7 @@ Real notifications are now wired end-to-end.
 - In `app/pilots/[id]/page.tsx`: for pilots with status `active` or `paused`, add an **"Update KPI Progress"** inline panel per KPI row — a small number input for `current` value with a "Save" button.
 - On save: call `updatePilot(id, { kpis: [...updatedKpis] })` and append a `comment` timeline event on the related submission: "KPI Updated: [metric] — [old] → [new] [unit]".
 - The `achieved` flag should auto-update when `current >= target`.
+
 
 
 
