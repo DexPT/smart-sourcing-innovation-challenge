@@ -22,7 +22,7 @@ No test suite is configured. There is no `.env` file — the app is fully client
 - **All state lives in `store/appStore.ts`** (Zustand). Submissions, active role, sidebar state, and filters are all stored here. Never lift state to component-level for things that span pages.
 - **Role-based access is derived, not stored.** `hooks/useRole.ts` computes a `can` permissions object and filtered `navItems` from the current role. Role is switched at runtime via the `RoleSwitcher` component — this is a prototype demo feature, not an auth system.
 - **AI evaluation is simulated** in `lib/aiEngine.ts`. Scores are deterministic (seed-based hashing from submission ID), so the same submission always produces the same scores. The `startAIEvaluation` action in the store simulates a 2.5s delay then writes the result back to the submission.
-- **Static data** in `data/` (submissions, vendors, compliance, pilots, audit, procurement) serves as the seed dataset loaded into Zustand on startup.
+- **Static data** in `data/` serves as the seed dataset. `submissions`, `complianceResults`, `pilots`, and `procurementDecisions` are loaded into Zustand on startup and are mutable during the session. `vendors` and `audit` are still read directly from `data/` as static imports (read-only).
 
 ### Layout
 
@@ -69,8 +69,8 @@ Not relevant for this project. `app/page.tsx` redirects directly to `/dashboard`
 ### ~~P4 — Compliance officer actions~~ ✓ DONE
 `complianceResults` moved from static `data/compliance.ts` into Zustand store (`useAppStore`) with `updateComplianceResult` action. `ComplianceActions` component added to `app/compliance/page.tsx` with three actions: **Approve** (direct, no input → `passed` + submission `approved`), **Conditional Approval** (multiline textarea, one condition per line → `conditional` + submission `approved`), **Block** (textarea ≥20 chars → `failed` + submission back to `evaluation`). All actions append a `compliance` timeline event. Dashboard and `submissions/[id]` updated to read compliance from store.
 
-### P5 — Procurement final-decision actions
-`app/procurement/page.tsx` needs admin actions: **Approve for procurement**, **Return for revision**, **Reject** — with the full summary panel (AI score, compliance result, pilot outcome, vendor readiness) visible before deciding.
+### ~~P5 — Procurement final-decision actions~~ ✓ DONE
+`procurementDecisions` moved into Zustand store with `updateProcurementDecision` action. `DecisionSummary` component shows 4 quadrants: AI Score, Compliance, Pilot Outcome, Vendor Readiness. `ProcurementActions` component with three actions: **Approve** (direct → `approved` + `approvedAt` timestamp), **Return for Revision** (textarea → decision back to `pending_approval`, submission back to `approved`), **Reject** (textarea ≥20 chars → decision `cancelled`, submission `rejected`). All actions append timeline events.
 
 ### ~~P6 — Pilot status-change actions~~ ✓ DONE
 `pilots` moved from static `data/pilots.ts` into Zustand store with `updatePilot` action. `PilotActions` component added to `app/pilots/page.tsx`. Status transitions: `planned→active` (Launch), `active→paused` (Pause), `paused→active` (Resume), `active/paused→completed` (opens completion panel with score slider 0-100, recommendation picker, notes textarea), `active/paused→cancelled`. Completed pilots with `proceed` recommendation show "Send to Procurement" button that moves submission to `procurement` status. All actions append timeline events to the related submission. Dashboard updated to read pilots from store.
