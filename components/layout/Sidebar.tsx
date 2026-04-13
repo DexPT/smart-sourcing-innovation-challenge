@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'
 import {
   LayoutDashboard, FileText, Brain, ShieldCheck, Building2,
   FlaskConical, HandshakeIcon, BarChart3, ClipboardList,
-  ChevronLeft, ChevronRight, Sparkles
+  ChevronLeft, ChevronRight, Sparkles, Settings
 } from 'lucide-react'
 
 const iconMap: Record<string, React.ElementType> = {
@@ -92,6 +92,23 @@ export function Sidebar() {
             )
           })}
         </nav>
+
+        <div className="px-2 pb-1 border-t border-outline-variant/10 pt-1">
+          <Link
+            href="/settings"
+            title={!sidebarOpen ? 'Settings' : undefined}
+            className={cn(
+              'flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-150',
+              pathname === '/settings'
+                ? 'bg-primary/10 text-primary'
+                : 'text-on-surface-variant hover:bg-surface-container hover:text-on-surface',
+              !sidebarOpen && 'lg:justify-center lg:px-0 lg:w-12 lg:mx-auto'
+            )}
+          >
+            <Settings className="w-[18px] h-[18px] flex-shrink-0" />
+            {sidebarOpen && <span className="text-label-md font-medium">Settings</span>}
+          </Link>
+        </div>
 
         <div className="p-2 border-t border-outline-variant/10">
           {sidebarOpen ? (

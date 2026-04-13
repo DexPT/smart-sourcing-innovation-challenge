@@ -88,7 +88,7 @@ Three deep-link routes created, all using `useParams()` for the id:
 - `app/compliance/[id]/page.tsx` — compliance review detail (all checks with severity/category/status, conditions, reviewer notes, officer info, check summary). Reads from Zustand store. "Details →" link added to each list card.
 All three show a "not found" state if the ID doesn't match any record.
 
-### P10 — Polish
-- Loading skeleton components for cards and table rows (brief explicitly requires these).
-- Global search in `TopBar` should filter submissions/vendors by name and navigate to results.
-- `/settings` stub page.
+### ~~P10 — Polish~~ ✓ DONE
+- **Skeleton components** (`components/ui/Skeleton.tsx`): `Skeleton` (base), `SkeletonStatCard`, `SkeletonCard`, `SkeletonListItem`, `SkeletonTableRow`, `SkeletonText`, `SkeletonChart` — use `animate-pulse` with design-system surface tokens.
+- **Global search** (`TopBar.tsx`): Input now shows a dropdown with matching submissions (→ `/submissions/[id]`) and vendors (→ `/vendors/[id]`), filtered via `useMemo`. Click-outside closes via `useRef`. Escape key clears. Clear button (×) when query is non-empty. "No results" state. Avatar links to `/settings`.
+- **`/settings` page** (`app/settings/page.tsx`): Stub with 5 sections — profile, notifications (toggles), appearance (toggles), language/region (selects), security, integrations. All toggles are local state. Settings link added to Sidebar bottom nav (visible to all roles).
