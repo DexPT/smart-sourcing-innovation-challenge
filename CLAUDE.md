@@ -78,8 +78,8 @@ Not relevant for this project. `app/page.tsx` redirects directly to `/dashboard`
 ### ~~P7 — Richer Insights page~~ ✓ DONE
 All metrics derived live from Zustand store via `useMemo`. Added: **Sector Innovation Heatmap** (grouped bar — submission count + avg AI score per category), **Approval Rate Funnel** (cumulative counts at each pipeline stage, step-to-step conversion %), **AI Decision Alignment** (donut — AI-aligned vs overridden vs pending, override rate %), **Pilot Conversion** (donut + proceed/modify/terminate breakdown + proceed rate %). Avg Time to AI Eval stat card computed from `aiScore.generatedAt` vs `submittedAt`. Kept Submission Activity area chart and Pipeline Value bar chart.
 
-### P8 — Richer Audit Log page
-`app/audit/page.tsx` needs: searchable table with actor, role, entity, action, timestamp columns; AI-generated events visually distinguished from human decisions; filter by actor role and entity type.
+### ~~P8 — Richer Audit Log page~~ ✓ DONE
+Static audit logs merged with live timeline events from the submissions store (dynamic events detected via ID heuristic: `/^tl-ai-\d/` or `/^tl-\d{9,}$/`). Live events converted to `AuditLog` format with `deriveAction()` mapping from event type/title. New **Source** filter (All / AI System / Human). AI rows get a `bg-primary/[0.03]` tint + dedicated "AI" chip in Source column; human rows show initials avatar. Stats cards: Total Events, AI Events, Human Events, Unique Actors. Live events tagged with a "live" sub-label. IP address column removed in favour of Details column.
 
 ### P9 — Individual detail routes
 Currently vendors and pilots use master-detail panels (no deep links). Add:
