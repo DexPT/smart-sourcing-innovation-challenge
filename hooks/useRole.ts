@@ -81,7 +81,6 @@ function getNavItemsForRole(role: UserRole) {
     { id: 'procurement', label: 'Procurement', href: '/procurement', icon: 'HandshakeIcon', roles: ['admin'] as UserRole[] },
     { id: 'insights', label: 'Insights & Reports', href: '/insights', icon: 'BarChart3', roles: ['admin', 'evaluator'] as UserRole[] },
     { id: 'audit', label: 'Audit Logs', href: '/audit', icon: 'ClipboardList', roles: ['admin', 'compliance'] as UserRole[] },
-    { id: 'demo-day', label: 'Demo Day', href: '/demo-day', icon: 'Trophy', roles: ['admin', 'evaluator'] as UserRole[] },
   ]
 
   return allItems.filter((item) => item.roles.includes(role))

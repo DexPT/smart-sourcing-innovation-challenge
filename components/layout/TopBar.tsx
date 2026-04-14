@@ -126,7 +126,7 @@ export function TopBar() {
 
         {/* Dropdown */}
         {showDropdown && (
-          <div className="absolute right-0 top-full mt-1.5 w-80 rounded-xl bg-surface-container-lowest shadow-lg border border-outline-variant/15 overflow-hidden z-50">
+          <div className="absolute right-0 top-full mt-1.5 w-80 rounded-xl bg-surface-container-lowest shadow-ambient border border-outline-variant/15 overflow-hidden z-50">
             {hasResults ? (
               <>
                 {results.submissions.length > 0 && (

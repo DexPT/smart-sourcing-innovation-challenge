@@ -36,7 +36,7 @@ function ComplianceActions({ compResult }: { compResult: ComplianceResult }) {
   const [done, setDone] = useState(false)
 
   const relatedSub = submissions.find(s => s.id === compResult.submissionId)
-  const actorName = currentRole === 'admin' ? 'Ahmed Al-Maktoum' : 'Sara Ahmed'
+  const actorName = currentRole === 'admin' ? 'Ahmed Al-Maktoum' : 'Sara Al-Ansari'
 
   if (done || !['in_progress', 'pending'].includes(compResult.status)) return null
 

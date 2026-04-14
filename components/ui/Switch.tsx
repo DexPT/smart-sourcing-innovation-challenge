@@ -57,7 +57,7 @@ export function Switch({
     >
       <span
         className={cn(
-          'pointer-events-none absolute top-0.5 h-5 w-5 rounded-full bg-surface-container-lowest shadow-sm transition-[left] duration-200',
+          'pointer-events-none absolute top-0.5 h-5 w-5 rounded-full bg-surface-container-lowest shadow-ambient-sm transition-[left] duration-200',
           isChecked ? 'left-[22px]' : 'left-0.5'
         )}
       />
