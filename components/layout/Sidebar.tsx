@@ -17,7 +17,6 @@ import {
   Trophy,
   ChevronLeft,
   ChevronRight,
-  Sparkles,
   Settings,
   LogOut,
 } from "lucide-react";
@@ -67,19 +66,16 @@ export function Sidebar() {
       >
         <div
           className={cn(
-            "flex items-center gap-3 px-4 py-4 border-b border-outline-variant/10",
+            "border-b border-outline-variant/10 px-4 py-5",
             !sidebarOpen && "lg:justify-center lg:px-0",
           )}
         >
-          <div className="w-8 h-8 rounded-lg bg-power-gradient flex items-center justify-center flex-shrink-0">
-            <Sparkles className="w-4 h-4 text-on-primary" />
-          </div>
           {sidebarOpen && (
             <div className="min-w-0">
-              <p className="font-display font-bold text-label-lg text-on-surface leading-tight">
+              <p className="font-display text-headline-sm font-semibold tracking-[-0.02em] leading-none text-on-surface">
                 Dubai Chambers
               </p>
-              <p className="text-label-sm text-on-surface-variant truncate">
+              <p className="mt-1 truncate text-[11px] font-medium uppercase tracking-[0.18em] text-on-surface-variant/80">
                 Innovation Platform
               </p>
             </div>

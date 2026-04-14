@@ -25,7 +25,7 @@ import {
 } from 'recharts'
 import { ClientOnly } from '@/components/ui/ClientOnly'
 
-// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Shared chart palette Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+// ─── Shared chart palette ───────────────────────────────────────────────────
 const CATEGORY_COLORS: Record<string, string> = {
   ai_ml: '#003d9b', logistics: '#006a6a', sustainability: '#3c4455',
   fintech: '#0052cc', cybersecurity: '#0c56d0', edtech: '#747688',
@@ -50,7 +50,7 @@ const overrideTrendData = [
   { month: 'Apr', aligned: 5, overridden: 1 },
 ]
 
-// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ FINALISTS PANEL Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+// ─── FINALISTS PANEL ────────────────────────────────────────────────────────
 const MAX_FINALISTS = 5
 
 function FinalistsPanel() {
@@ -105,7 +105,7 @@ function FinalistsPanel() {
           <Button variant="ghost" size="sm" icon={<ArrowRight />} iconPosition="right">View All</Button>
         </Link>
       }>
-        <CardTitle subtitle="Dubai Chambers Innovation Challenge Ã¢â‚¬â€ Demo Day selection">
+        <CardTitle subtitle="Dubai Chambers Innovation Challenge — Demo Day selection">
           <span className="flex items-center gap-2">
             <Trophy className="h-4 w-4 text-primary" />
             Challenge Finalists
@@ -146,7 +146,7 @@ function FinalistsPanel() {
               <div className="mb-1 flex items-center gap-1.5">
                 <Star className={`h-3.5 w-3.5 flex-shrink-0 ${sub.status === 'demo_day' ? 'text-on-primary' : 'text-primary'}`} />
                 <span className={`text-label-sm font-semibold ${sub.status === 'demo_day' ? 'text-on-primary' : 'text-primary'}`}>
-                  {sub.status === 'demo_day' ? 'Demo Day Ã¢Ëœâ€¦' : 'Finalist'}
+                  {sub.status === 'demo_day' ? 'Demo Day ★' : 'Finalist'}
                 </span>
               </div>
               <p className={`text-label-md font-semibold truncate ${sub.status === 'demo_day' ? 'text-on-primary' : 'text-on-surface'}`}>
@@ -217,7 +217,7 @@ function FinalistsPanel() {
   )
 }
 
-// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ ADMIN DASHBOARD Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+// ─── ADMIN DASHBOARD ────────────────────────────────────────────────────────
 function AdminDashboard() {
   const submissions = useAppStore(s => s.submissions)
   const complianceResults = useAppStore(s => s.complianceResults)
@@ -415,7 +415,7 @@ function AdminDashboard() {
   )
 }
 
-// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ EVALUATOR DASHBOARD Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+// ─── EVALUATOR DASHBOARD ─────────────────────────────────────────────────────
 function EvaluatorDashboard() {
   const submissions = useAppStore(s => s.submissions)
   const runningAIEvaluation = useAppStore(s => s.runningAIEvaluation)
@@ -592,7 +592,7 @@ function EvaluatorDashboard() {
   )
 }
 
-// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ COMPLIANCE DASHBOARD Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+// ─── COMPLIANCE DASHBOARD ────────────────────────────────────────────────────
 function ComplianceDashboard() {
   const submissions = useAppStore(s => s.submissions)
   const complianceResults = useAppStore(s => s.complianceResults)
@@ -644,7 +644,7 @@ function ComplianceDashboard() {
           {pendingValidation.length === 0 ? (
             <Card className="text-center py-8">
               <CheckCircle2 className="w-10 h-10 text-secondary mx-auto mb-2" />
-              <p className="text-body-md text-on-surface-variant">All clear Ã¢â‚¬â€ no pending validations</p>
+              <p className="text-body-md text-on-surface-variant">All clear — no pending validations</p>
             </Card>
           ) : (
             pendingValidation.map(sub => {
@@ -742,7 +742,7 @@ function ComplianceDashboard() {
                     <AlertTriangle className="w-4 h-4 text-error flex-shrink-0" />
                     <div className="flex-1 min-w-0">
                       <p className="text-label-md font-medium text-on-surface">{vendor.name}</p>
-                      <p className="text-label-sm text-on-surface-variant capitalize">{vendor.status} Ã¢â‚¬â€ requires review</p>
+                      <p className="text-label-sm text-on-surface-variant capitalize">{vendor.status} — requires review</p>
                     </div>
                     <span className="badge bg-error-container text-error capitalize">{vendor.status}</span>
                   </div>
@@ -773,7 +773,7 @@ function ComplianceDashboard() {
                       <p className="text-title-sm text-on-surface">{sub?.title ?? comp.submissionId}</p>
                       {comp.conditions?.map((cond, i) => (
                         <p key={i} className="text-body-sm text-on-surface-variant mt-1 flex gap-1.5">
-                          <span className="text-warning mt-0.5">Ã‚Â·</span>{cond}
+                          <span className="text-warning mt-0.5">·</span>{cond}
                         </p>
                       ))}
                     </div>
@@ -788,7 +788,7 @@ function ComplianceDashboard() {
   )
 }
 
-// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ STARTUP DASHBOARD Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+// ─── STARTUP DASHBOARD ────────────────────────────────────────────────────────
 // In demo mode, the startup user "owns" these two submissions
 const MY_SUBMISSION_IDS = ['sub-006', 'sub-008']
 const STARTUP_WORKFLOW_STEPS = ['submitted', 'ai_review', 'evaluation', 'compliance_check', 'approved', 'pilot', 'procurement']
