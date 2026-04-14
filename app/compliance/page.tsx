@@ -6,6 +6,7 @@ import { StatusBadge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { useAppStore } from '@/store/appStore'
 import { useRole } from '@/hooks/useRole'
+import { useTranslation } from '@/hooks/useTranslation'
 import { getComplianceStatusConfig } from '@/lib/utils'
 import {
   AlertTriangle, CheckCircle2, Clock, XCircle,
@@ -29,6 +30,7 @@ function ComplianceActions({ compResult }: { compResult: ComplianceResult }) {
   const updateSubmission = useAppStore(s => s.updateSubmission)
   const submissions = useAppStore(s => s.submissions)
   const { currentRole } = useRole()
+  const { t } = useTranslation()
 
   const [panel, setPanel] = useState<ActivePanel>(null)
   const [conditions, setConditions] = useState('')
@@ -132,7 +134,7 @@ function ComplianceActions({ compResult }: { compResult: ComplianceResult }) {
   return (
     <Card>
       <div className="flex items-center justify-between mb-4">
-        <CardTitle subtitle="Record your compliance decision">Officer Decision</CardTitle>
+        <CardTitle subtitle={t.compliance.officerDecisionDesc}>{t.compliance.officerDecision}</CardTitle>
         {panel && (
           <button onClick={() => setPanel(null)} className="text-on-surface-variant hover:text-on-surface transition-colors">
             <X className="w-4 h-4" />
@@ -143,9 +145,9 @@ function ComplianceActions({ compResult }: { compResult: ComplianceResult }) {
       {/* Check summary */}
       <div className="grid grid-cols-3 gap-2 mb-4">
         {[
-          { label: 'Passed', count: compResult.checks.filter(c => c.status === 'pass').length, color: 'text-secondary', bg: 'bg-secondary-container/50' },
-          { label: 'Warnings', count: compResult.checks.filter(c => c.status === 'warning').length, color: 'text-warning', bg: 'bg-warning-container/50' },
-          { label: 'Failed', count: compResult.checks.filter(c => c.status === 'fail').length, color: 'text-error', bg: 'bg-error-container/50' },
+          { label: t.compliance.passed, count: compResult.checks.filter(c => c.status === 'pass').length, color: 'text-secondary', bg: 'bg-secondary-container/50' },
+          { label: t.compliance.warnings, count: compResult.checks.filter(c => c.status === 'warning').length, color: 'text-warning', bg: 'bg-warning-container/50' },
+          { label: t.compliance.failed, count: compResult.checks.filter(c => c.status === 'fail').length, color: 'text-error', bg: 'bg-error-container/50' },
         ].map(item => (
           <div key={item.label} className={`${item.bg} rounded-lg p-2 text-center`}>
             <p className={`font-display text-headline-sm font-bold ${item.color}`}>{item.count}</p>
@@ -165,8 +167,8 @@ function ComplianceActions({ compResult }: { compResult: ComplianceResult }) {
               <ShieldCheck className="w-4 h-4 text-on-secondary" />
             </div>
             <div>
-              <p className="text-label-md font-semibold text-secondary">Approve</p>
-              <p className="text-label-sm text-on-surface-variant">All checks pass — advance to approved</p>
+              <p className="text-label-md font-semibold text-secondary">{t.compliance.approveBtn}</p>
+              <p className="text-label-sm text-on-surface-variant">{t.compliance.approveDesc}</p>
             </div>
           </button>
 
@@ -178,8 +180,8 @@ function ComplianceActions({ compResult }: { compResult: ComplianceResult }) {
               <ShieldAlert className="w-4 h-4 text-warning" />
             </div>
             <div>
-              <p className="text-label-md font-semibold text-warning">Conditional Approval</p>
-              <p className="text-label-sm text-on-surface-variant">Approve with outstanding requirements</p>
+              <p className="text-label-md font-semibold text-warning">{t.compliance.conditional}</p>
+              <p className="text-label-sm text-on-surface-variant">{t.compliance.conditionalDesc}</p>
             </div>
           </button>
 
@@ -191,8 +193,8 @@ function ComplianceActions({ compResult }: { compResult: ComplianceResult }) {
               <ShieldX className="w-4 h-4 text-error" />
             </div>
             <div>
-              <p className="text-label-md font-semibold text-error">Block</p>
-              <p className="text-label-sm text-on-surface-variant">Reject — return to evaluation queue</p>
+              <p className="text-label-md font-semibold text-error">{t.compliance.blockBtn}</p>
+              <p className="text-label-sm text-on-surface-variant">{t.compliance.blockDesc}</p>
             </div>
           </button>
         </div>
@@ -209,7 +211,7 @@ function ComplianceActions({ compResult }: { compResult: ComplianceResult }) {
           </div>
           <div>
             <label className="text-label-md font-semibold text-on-surface block mb-1.5">
-              Conditions <span className="text-error">*</span>
+              {t.compliance.conditions} <span className="text-error">*</span>
             </label>
             <textarea
               value={conditions}
@@ -228,7 +230,7 @@ function ComplianceActions({ compResult }: { compResult: ComplianceResult }) {
               icon={<ShieldAlert />}
               className="flex-1"
             >
-              Grant Conditional Approval
+              {t.compliance.grantConditional}
             </Button>
             <Button variant="secondary" onClick={() => setPanel(null)}>Cancel</Button>
           </div>
@@ -246,7 +248,7 @@ function ComplianceActions({ compResult }: { compResult: ComplianceResult }) {
           </div>
           <div>
             <label className="text-label-md font-semibold text-on-surface block mb-1.5">
-              Blocking reason <span className="text-error">*</span>
+              {t.compliance.blockingReason} <span className="text-error">*</span>
             </label>
             <textarea
               value={blockReason}
@@ -266,7 +268,7 @@ function ComplianceActions({ compResult }: { compResult: ComplianceResult }) {
               icon={<ShieldX />}
               className="flex-1"
             >
-              Block Submission
+              {t.compliance.blockSubmission}
             </Button>
             <Button variant="secondary" onClick={() => setPanel(null)}>Cancel</Button>
           </div>
@@ -281,6 +283,7 @@ export default function CompliancePage() {
   const submissions = useAppStore(s => s.submissions)
   const complianceResults = useAppStore(s => s.complianceResults)
   const { can } = useRole()
+  const { t } = useTranslation()
 
   const [selectedId, setSelectedId] = useState<string>(complianceResults[0]?.id ?? '')
 
@@ -307,19 +310,19 @@ export default function CompliancePage() {
         {/* KPIs */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           <Card>
-            <p className="text-label-sm uppercase tracking-wider text-on-surface-variant">Reviews</p>
+            <p className="text-label-sm uppercase tracking-wider text-on-surface-variant">{t.compliance.reviews}</p>
             <p className="mt-1 font-display text-display-sm font-bold text-on-surface">{stats.total}</p>
           </Card>
           <Card className="border-l-4 border-l-secondary">
-            <p className="text-label-sm uppercase tracking-wider text-secondary">Passed</p>
+            <p className="text-label-sm uppercase tracking-wider text-secondary">{t.compliance.passed}</p>
             <p className="mt-1 font-display text-display-sm font-bold text-secondary">{stats.passed}</p>
           </Card>
           <Card className="border-l-4 border-l-warning">
-            <p className="text-label-sm uppercase tracking-wider text-on-surface">In Progress</p>
+            <p className="text-label-sm uppercase tracking-wider text-on-surface">{t.compliance.inProgress}</p>
             <p className="mt-1 font-display text-display-sm font-bold text-on-surface">{stats.inProgress}</p>
           </Card>
           <Card>
-            <p className="text-label-sm uppercase tracking-wider text-on-surface-variant">Check Pass Rate</p>
+            <p className="text-label-sm uppercase tracking-wider text-on-surface-variant">{t.compliance.checkPassRate}</p>
             <p className="mt-1 font-display text-display-sm font-bold text-on-surface">
               {stats.allChecks > 0 ? Math.round((stats.passedChecks / stats.allChecks) * 100) : 0}%
             </p>
@@ -329,14 +332,14 @@ export default function CompliancePage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* List */}
           <div className="space-y-3">
-            <h2 className="text-title-md font-semibold text-on-surface">Compliance Reviews</h2>
+            <h2 className="text-title-md font-semibold text-on-surface">{t.compliance.reviews}</h2>
 
             {/* Pending with no result — newly arrived */}
             {pendingNoResult.map(sub => (
               <div key={sub.id} className="rounded-lg border border-warning/20 bg-warning-container/30 p-3">
                 <div className="mb-1 flex items-center gap-2">
                   <Clock className="h-4 w-4 text-warning" />
-                  <span className="badge bg-warning-container text-on-surface">Awaiting Review</span>
+                  <span className="badge bg-warning-container text-on-surface">{t.compliance.awaitingReview}</span>
                 </div>
                 <p className="text-title-sm text-on-surface">{sub.title}</p>
                 <p className="text-label-sm text-on-surface-variant">{sub.company}</p>
@@ -451,8 +454,8 @@ export default function CompliancePage() {
                     <div className="flex items-center gap-3">
                       <ShieldCheck className="w-5 h-5 text-secondary flex-shrink-0" />
                       <div>
-                        <p className="text-label-md font-semibold text-secondary">Compliance Approved</p>
-                        <p className="text-body-sm text-on-surface-variant">All checks passed. Submission has been advanced.</p>
+                        <p className="text-label-md font-semibold text-secondary">{t.compliance.approvedMsg}</p>
+                        <p className="text-body-sm text-on-surface-variant">{t.compliance.approvedDesc}</p>
                       </div>
                     </div>
                   </Card>
@@ -462,8 +465,8 @@ export default function CompliancePage() {
                     <div className="flex items-center gap-3 mb-3">
                       <ShieldAlert className="w-5 h-5 text-warning flex-shrink-0" />
                       <div>
-                        <p className="text-label-md font-semibold text-warning">Conditional Approval</p>
-                        <p className="text-body-sm text-on-surface-variant">Submission advanced with outstanding conditions.</p>
+                        <p className="text-label-md font-semibold text-warning">{t.compliance.conditionalMsg}</p>
+                        <p className="text-body-sm text-on-surface-variant">{t.compliance.conditionalApproved}</p>
                       </div>
                     </div>
                     {selected.conditions && selected.conditions.length > 0 && (
@@ -483,8 +486,8 @@ export default function CompliancePage() {
                     <div className="flex items-center gap-3">
                       <ShieldX className="w-5 h-5 text-error flex-shrink-0" />
                       <div>
-                        <p className="text-label-md font-semibold text-error">Submission Blocked</p>
-                        <p className="text-body-sm text-on-surface-variant">Returned to evaluation queue.</p>
+                        <p className="text-label-md font-semibold text-error">{t.compliance.blockedMsg}</p>
+                        <p className="text-body-sm text-on-surface-variant">{t.compliance.blockedDesc}</p>
                       </div>
                     </div>
                   </Card>
@@ -542,7 +545,7 @@ export default function CompliancePage() {
             ) : (
               <Card className="py-16 text-center">
                 <ShieldCheck className="w-12 h-12 text-on-surface-variant/30 mx-auto mb-3" />
-                <p className="text-body-md text-on-surface-variant">Select a review to see the details</p>
+                <p className="text-body-md text-on-surface-variant">{t.compliance.selectReview}</p>
               </Card>
             )}
           </div>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=Cairo:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -70,6 +70,17 @@
     background: rgba(247, 250, 252, 0.8);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
+  }
+
+  /* Arabic language — Cairo font + RTL base adjustments */
+  .lang-ar body,
+  .lang-ar .font-sans,
+  .lang-ar .font-display,
+  .lang-ar input,
+  .lang-ar textarea,
+  .lang-ar button,
+  .lang-ar select {
+    font-family: 'Cairo', sans-serif;
   }
 
   /* Data table row hover */

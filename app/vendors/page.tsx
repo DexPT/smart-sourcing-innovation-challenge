@@ -5,11 +5,13 @@ import { StatusBadge } from '@/components/ui/Badge'
 import { Progress } from '@/components/ui/Progress'
 import { vendors } from '@/data/vendors'
 import { getVendorStatusConfig, getVendorTierConfig, formatAED } from '@/lib/utils'
+import { useTranslation } from '@/hooks/useTranslation'
 import { Building2, Search, Star, Award, ExternalLink, ShieldCheck } from 'lucide-react'
 import { useState } from 'react'
 import Link from 'next/link'
 
 export default function VendorsPage() {
+  const { t } = useTranslation()
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
   const [tierFilter, setTierFilter] = useState('')
@@ -41,19 +43,19 @@ export default function VendorsPage() {
       <div className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           <Card>
-            <p className="text-label-sm text-on-surface-variant">Total Vendors</p>
+            <p className="text-label-sm text-on-surface-variant">{t.vendors.totalVendors}</p>
             <p className="mt-1 font-display text-display-sm font-bold text-on-surface">{stats.total}</p>
           </Card>
           <Card>
-            <p className="text-label-sm uppercase text-secondary">Active</p>
+            <p className="text-label-sm uppercase text-secondary">{t.vendors.active}</p>
             <p className="mt-1 font-display text-display-sm font-bold text-secondary">{stats.active}</p>
           </Card>
           <Card>
-            <p className="text-label-sm uppercase text-primary">Preferred Tier</p>
+            <p className="text-label-sm uppercase text-primary">{t.vendors.preferredTier}</p>
             <p className="mt-1 font-display text-display-sm font-bold text-primary">{stats.preferred}</p>
           </Card>
           <Card gradient>
-            <p className="text-label-sm uppercase text-on-primary/70">Total Contract Value</p>
+            <p className="text-label-sm uppercase text-on-primary/70">{t.vendors.totalValue}</p>
             <p className="mt-1 font-display text-display-sm font-bold text-on-primary">{formatAED(stats.totalValue)}</p>
           </Card>
         </div>
@@ -65,7 +67,7 @@ export default function VendorsPage() {
               <input
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                placeholder="Search vendors..."
+                placeholder={t.vendors.searchPlaceholder}
                 className="w-full rounded-lg border border-outline-variant/20 bg-surface-container-lowest py-2.5 pl-9 pr-4 text-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
             </div>
@@ -76,7 +78,7 @@ export default function VendorsPage() {
                 onChange={e => setStatusFilter(e.target.value)}
                 className="w-full rounded-lg border border-outline-variant/20 bg-surface-container-lowest px-3 py-2.5 text-label-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20"
               >
-                <option value="">All Status</option>
+                <option value="">{t.vendors.allStatus}</option>
                 <option value="active">Active</option>
                 <option value="pending">Pending</option>
                 <option value="suspended">Suspended</option>
@@ -86,7 +88,7 @@ export default function VendorsPage() {
                 onChange={e => setTierFilter(e.target.value)}
                 className="w-full rounded-lg border border-outline-variant/20 bg-surface-container-lowest px-3 py-2.5 text-label-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20"
               >
-                <option value="">All Tiers</option>
+                <option value="">{t.vendors.allTiers}</option>
                 <option value="preferred">Preferred</option>
                 <option value="approved">Approved</option>
                 <option value="provisional">Provisional</option>
@@ -102,7 +104,7 @@ export default function VendorsPage() {
               }`}
             >
               <ShieldCheck className={`w-4 h-4 flex-shrink-0 ${descOnly ? 'text-secondary' : 'text-on-surface-variant'}`} />
-              DESC Approved Only
+              {t.vendors.descApprovedOnly}
               {descOnly && (
                 <span className="ml-auto text-label-xs bg-secondary text-on-secondary rounded-full px-1.5 py-0.5">
                   {filtered.length}
@@ -139,7 +141,7 @@ export default function VendorsPage() {
                           <ShieldCheck className="h-3 w-3" /> DESC
                         </span>
                       ) : (
-                        <span className="badge bg-surface-container text-on-surface-variant text-label-xs">DESC Pending</span>
+                        <span className="badge bg-surface-container text-on-surface-variant text-label-xs">{t.vendors.descPending}</span>
                       )}
                       <div className="ml-auto flex items-center gap-1">
                         <Star className="h-3 w-3 fill-warning text-warning" />
@@ -178,28 +180,28 @@ export default function VendorsPage() {
                     </div>
                     {selectedVendor.descCertified ? (
                       <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-label-sm font-semibold bg-secondary-container text-secondary">
-                        <ShieldCheck className="h-3.5 w-3.5" /> DESC Certified
+                        <ShieldCheck className="h-3.5 w-3.5" /> {t.vendors.descCertified}
                       </span>
                     ) : (
                       <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-label-sm font-medium bg-surface-container text-on-surface-variant">
-                        <ShieldCheck className="h-3.5 w-3.5 opacity-50" /> DESC Pending
+                        <ShieldCheck className="h-3.5 w-3.5 opacity-50" /> {t.vendors.descPending}
                       </span>
                     )}
                     <Link
                       href={`/vendors/${selectedVendor.id}`}
                       className="inline-flex items-center gap-1 text-label-sm text-primary hover:underline"
                     >
-                      <ExternalLink className="h-3 w-3" /> Full details
+                      <ExternalLink className="h-3 w-3" /> {t.vendors.fullDetails}
                     </Link>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
                   {[
-                    { label: 'Avg Score', value: `${selectedVendor.averageScore}/100`, color: 'text-secondary' },
-                    { label: 'Completion Rate', value: `${selectedVendor.completionRate}%`, color: 'text-secondary' },
-                    { label: 'Active Contracts', value: selectedVendor.activeContracts, color: 'text-primary' },
-                    { label: 'Total Value', value: formatAED(selectedVendor.totalValue), color: 'text-on-surface' },
+                    { label: t.vendors.avgScore, value: `${selectedVendor.averageScore}/100`, color: 'text-secondary' },
+                    { label: t.vendors.completionRate, value: `${selectedVendor.completionRate}%`, color: 'text-secondary' },
+                    { label: t.vendors.activeContracts, value: selectedVendor.activeContracts, color: 'text-primary' },
+                    { label: t.vendors.totalValue, value: formatAED(selectedVendor.totalValue), color: 'text-on-surface' },
                   ].map(({ label, value, color }) => (
                     <Card key={label} padding="sm">
                       <p className="text-label-sm text-on-surface-variant">{label}</p>
@@ -209,21 +211,21 @@ export default function VendorsPage() {
                 </div>
 
                 <Card>
-                  <CardTitle className="mb-3">About</CardTitle>
+                  <CardTitle className="mb-3">{t.vendors.about}</CardTitle>
                   <p className="text-body-md leading-relaxed text-on-surface-variant">{selectedVendor.description}</p>
                 </Card>
 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
                   <Card>
-                    <CardTitle className="mb-3">Registration Details</CardTitle>
+                    <CardTitle className="mb-3">{t.vendors.registration}</CardTitle>
                     <div className="space-y-2">
                       {[
-                        { label: 'Country', value: selectedVendor.country },
-                        { label: 'Emirate', value: selectedVendor.emirate ?? 'N/A' },
-                        { label: 'License No.', value: selectedVendor.licenseNumber ?? 'N/A' },
-                        { label: 'VAT No.', value: selectedVendor.vatNumber ?? 'N/A' },
-                        { label: 'Type', value: selectedVendor.type },
-                        { label: 'Registered', value: new Date(selectedVendor.registeredAt).toLocaleDateString('en-GB') },
+                        { label: t.vendors.country, value: selectedVendor.country },
+                        { label: t.vendors.emirate, value: selectedVendor.emirate ?? 'N/A' },
+                        { label: t.vendors.licenseNo, value: selectedVendor.licenseNumber ?? 'N/A' },
+                        { label: t.vendors.vatNo, value: selectedVendor.vatNumber ?? 'N/A' },
+                        { label: t.vendors.type, value: selectedVendor.type },
+                        { label: t.vendors.registered, value: new Date(selectedVendor.registeredAt).toLocaleDateString('en-GB') },
                       ].map(({ label, value }) => (
                         <div
                           key={label}
@@ -237,7 +239,7 @@ export default function VendorsPage() {
                   </Card>
 
                   <Card>
-                    <CardTitle className="mb-3">Specializations & Certifications</CardTitle>
+                    <CardTitle className="mb-3">{t.vendors.specializations}</CardTitle>
                     <div className="mb-3">
                       <p className="mb-2 text-label-sm uppercase tracking-wider text-on-surface-variant">Specializations</p>
                       <div className="flex flex-wrap gap-1.5">
@@ -263,7 +265,7 @@ export default function VendorsPage() {
                 </div>
 
                 <Card>
-                  <CardTitle className="mb-3">Performance Metrics</CardTitle>
+                  <CardTitle className="mb-3">{t.vendors.performance}</CardTitle>
                   <div className="space-y-3">
                     <Progress value={selectedVendor.averageScore} label="Average Score" showLabel size="md" />
                     <Progress value={selectedVendor.completionRate} label="Project Completion Rate" showLabel size="md" barClassName="bg-secondary" />

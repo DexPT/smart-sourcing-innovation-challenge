@@ -2,6 +2,7 @@
 import { AppShell } from '@/components/layout/AppShell'
 import { Card, CardTitle } from '@/components/ui/Card'
 import { useRole } from '@/hooks/useRole'
+import { useAppStore } from '@/store/appStore'
 import { Bell, Moon, Globe, Shield, Plug } from 'lucide-react'
 import { useState } from 'react'
 
@@ -63,6 +64,8 @@ function Section({ icon: Icon, title, children }: { icon: React.ElementType; tit
 
 export default function SettingsPage() {
   const { profile, currentRole } = useRole()
+  const language = useAppStore((s) => s.language)
+  const setLanguage = useAppStore((s) => s.setLanguage)
 
   return (
     <AppShell>
@@ -119,11 +122,18 @@ export default function SettingsPage() {
         </Section>
 
         {/* Language & Region */}
-        <Section icon={Globe} title="Language & Region">
-          <SettingRow label="Language">
-            <select className="rounded-lg border border-outline-variant/20 bg-surface-container-lowest px-3 py-1.5 text-label-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20">
-              <option>English</option>
-              <option>العربية</option>
+        <Section icon={Globe} title={language === 'ar' ? 'اللغة والمنطقة' : 'Language & Region'}>
+          <SettingRow
+            label={language === 'ar' ? 'اللغة' : 'Language'}
+            description={language === 'ar' ? 'تغيير لغة الواجهة' : 'Change the interface language'}
+          >
+            <select
+              value={language}
+              onChange={e => setLanguage(e.target.value as 'en' | 'ar')}
+              className="rounded-lg border border-outline-variant/20 bg-surface-container-lowest px-3 py-1.5 text-label-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20"
+            >
+              <option value="en">English</option>
+              <option value="ar">العربية</option>
             </select>
           </SettingRow>
           <SettingRow label="Currency display">

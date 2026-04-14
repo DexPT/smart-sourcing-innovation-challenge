@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAppStore } from '@/store/appStore'
+import { useTranslation } from '@/hooks/useTranslation'
 import {
   ShieldCheck,
   ArrowRight,
@@ -65,27 +66,16 @@ const PERSONAS = [
 type Phase = 'select' | 'otp'
 type Persona = (typeof PERSONAS)[0]
 
-const FEATURE_STRIP = [
-  {
-    icon: Brain,
-    label: 'AI-Powered Evaluation',
-    sub: 'Automated scoring and risk assessment',
-  },
-  {
-    icon: Shield,
-    label: 'DESC Compliance',
-    sub: 'UAE AI security policy aligned',
-  },
-  {
-    icon: Users,
-    label: 'Multi-Role Workflows',
-    sub: 'Evaluators, compliance, startups, and admin',
-  },
-]
-
 export default function LoginPage() {
   const router = useRouter()
   const setRole = useAppStore((s) => s.setRole)
+  const { t } = useTranslation()
+
+  const FEATURE_STRIP = [
+    { icon: Brain,  label: t.login.feature1Title, sub: t.login.feature1Desc },
+    { icon: Shield, label: t.login.feature2Title, sub: t.login.feature2Desc },
+    { icon: Users,  label: t.login.feature3Title, sub: t.login.feature3Desc },
+  ]
 
   const [phase, setPhase] = useState<Phase>('select')
   const [selected, setSelected] = useState<Persona | null>(null)
@@ -170,24 +160,21 @@ export default function LoginPage() {
             </div>
             <div>
               <p className="text-label-sm font-semibold uppercase tracking-wider text-white/60">
-                Dubai Chambers
+                {t.brand.name}
               </p>
-              <p className="text-label-md font-bold text-white">Innovation Platform</p>
+              <p className="text-label-md font-bold text-white">{t.brand.platform}</p>
             </div>
           </div>
 
           <div className="flex flex-1 flex-col justify-center py-8 lg:py-0">
             <p className="mb-3 text-label-sm font-semibold uppercase tracking-[0.22em] text-white/55">
-              Demo Access
+              {t.login.demoAccess}
             </p>
             <h1 className="mb-3 font-display text-display-sm lg:text-display-md font-bold leading-tight text-white">
-              Smart Sourcing
-              <br />
-              Innovation Hub
+              {t.login.tagline}
             </h1>
             <p className="max-w-sm text-body-md leading-relaxed text-white">
-              AI-powered startup evaluation and procurement platform for Dubai Chambers
-              innovation programmes.
+              {t.login.subtitle}
             </p>
 
             <div className="mt-6 space-y-2.5">
@@ -205,7 +192,7 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <p className="text-label-sm text-white/60">© 2026 Dubai Chambers · Prototype Demo</p>
+          <p className="text-label-sm text-white/60">{t.login.footer}</p>
         </section>
 
         <section className="flex items-center justify-center bg-surface-container-low p-6 lg:p-7 xl:p-8">
@@ -214,13 +201,13 @@ export default function LoginPage() {
               <div className="animate-fade-in">
                 <div className="mb-6 max-w-xl">
                   <p className="mb-2 text-label-sm font-semibold uppercase tracking-[0.22em] text-primary">
-                    Sign In
+                    {t.login.demoAccess}
                   </p>
                   <h2 className="mb-2 font-display text-display-sm text-on-surface">
-                    Select your profile
+                    {t.login.selectProfile}
                   </h2>
                   <p className="text-body-md leading-relaxed text-on-surface-variant">
-                    Choose a demo user to explore their personalised view of the platform.
+                    {t.login.chooseDemo}
                   </p>
                 </div>
 
@@ -271,7 +258,7 @@ export default function LoginPage() {
                   onClick={handleBack}
                   className="mb-6 flex items-center gap-1 text-label-md text-on-surface-variant transition-colors hover:text-on-surface"
                 >
-                  <ChevronLeft className="h-4 w-4" /> Back
+                  <ChevronLeft className="h-4 w-4" /> {t.common.back}
                 </button>
 
                 <div className="rounded-[28px] bg-surface p-5 sm:p-6">
@@ -295,11 +282,11 @@ export default function LoginPage() {
                     <div className="mb-1 flex items-center gap-2">
                       <ShieldCheck className="h-4 w-4 text-primary" />
                       <p className="text-title-sm font-semibold text-on-surface">
-                        Two-factor authentication
+                        {t.login.twoFactor}
                       </p>
                     </div>
                     <p className="text-body-sm text-on-surface-variant">
-                      Enter the 6-digit verification code sent to your registered device.
+                      {t.login.enterCode}
                     </p>
                   </div>
 
@@ -336,14 +323,14 @@ export default function LoginPage() {
 
                   <div className="mb-2 h-5">
                     {hasError && (
-                      <p className="text-label-sm text-error">Incorrect code. Please try again.</p>
+                      <p className="text-label-sm text-error">{t.login.incorrect}</p>
                     )}
                   </div>
 
                   <div className="mb-4 flex items-center gap-2 rounded-lg border border-primary/10 bg-primary/[0.06] px-3 py-2.5">
                     <Sparkles className="h-3.5 w-3.5 flex-shrink-0 text-primary" />
                     <p className="text-label-sm text-on-surface-variant">
-                      Demo code:{' '}
+                      {t.login.demoCode}{' '}
                       <span className="font-mono font-bold tracking-[0.2em] text-primary">
                         {selected.code}
                       </span>
@@ -364,10 +351,10 @@ export default function LoginPage() {
                     {success ? (
                       <>
                         <CheckCircle2 className="h-4 w-4" />
-                        Verified - Redirecting...
+                        {t.login.verified}
                       </>
                     ) : (
-                      'Verify & Sign In'
+                      t.login.verify
                     )}
                   </button>
                 </div>

@@ -18,8 +18,8 @@ export function AppShell({ children }: AppShellProps) {
       <main
         className={cn(
           'pt-14 min-h-screen transition-all duration-300',
-          'pl-0 lg:pl-16',
-          sidebarOpen && 'lg:pl-64'
+          'pl-0 lg:pl-16 rtl:pl-0 rtl:pr-0 rtl:lg:pr-16',
+          sidebarOpen && 'lg:pl-64 rtl:lg:pl-0 rtl:lg:pr-64'
         )}
       >
         <div className="p-4 sm:p-5 lg:p-6 animate-fade-in">

@@ -172,19 +172,41 @@ Real notifications are now wired end-to-end.
 - **Timeline feed:** a new "Recent Activity" panel aggregates the latest 5 timeline events across the startup user's submissions in reverse chronological order.
 - Removed static placeholder startup cards in favour of live submission-driven summaries and status messaging.
 
-### P19 — "Request More Info" response loop
-**Why:** When an evaluator requests more information, the submission enters a limbo state. The startup has no in-platform mechanism to respond, and the evaluator has no way to see if/when the startup replied. The loop is open-ended.
-**What to build:**
-- In `app/submissions/[id]/page.tsx`: when `currentRole === 'startup'` and the latest timeline event is a `comment` type with "Request More Info" in the title, show an **"Action Required"** banner above the tabs with a textarea to submit the response.
-- Submitting the response appends a `comment` timeline event (type `comment`, actorRole `startup`) and changes submission status from `evaluation` back to `evaluation` (unchanged) — the response is visible in the timeline for the evaluator to review.
-- In `app/ai-evaluation/page.tsx`: if a submission has a startup response (detected by a `comment` timeline event with actorRole `startup` after the evaluator's request), show an "Startup Responded" banner above the `EvaluatorActions` panel.
+### ~~P19 — "Request More Info" response loop~~ ✓ DONE
+- In `app/submissions/[id]/page.tsx`: when `currentRole === 'startup'` and there is an unanswered "Additional Information Requested" comment event, an **"Action Required"** banner appears above the tabs with the evaluator's request text and a textarea. Submitting appends a `comment` timeline event (`actorRole: 'startup'`, `actorName` from profile). Confirmation banner shown after submit.
+- In `app/ai-evaluation/page.tsx`: a **"Startup Responded"** banner appears above `EvaluatorActions` when the selected submission has a startup `comment` event after the evaluator's request. Shows the response text and date.
 
 ### P20 — Pilot KPI progress updates
-**Why:** Pilots are shown as "active" with KPI progress bars, but the `current` value for each KPI is static. There is no way for a pilot manager to record progress during the pilot, making the pilot management module feel read-only.
-**What to build:**
-- In `app/pilots/[id]/page.tsx`: for pilots with status `active` or `paused`, add an **"Update KPI Progress"** inline panel per KPI row — a small number input for `current` value with a "Save" button.
-- On save: call `updatePilot(id, { kpis: [...updatedKpis] })` and append a `comment` timeline event on the related submission: "KPI Updated: [metric] — [old] → [new] [unit]".
-- The `achieved` flag should auto-update when `current >= target`.
+**Decision:** Not implemented — low demo impact. The pilot module already has full status transitions (launch/pause/resume/complete/cancel). Static KPI values in seed data are sufficiently realistic for demo purposes.
+
+---
+
+## Polish & fixes applied
+
+- **Encoding fix (`app/dashboard/page.tsx`):** triple-encoded UTF-8 corruption fixed across 346 occurrences — `─` (box drawing), `—` (em dash), `★` (star), `·` (middle dot).
+- **Wrong persona name (`app/compliance/page.tsx:39`):** `'Sara Ahmed'` → `'Sara Al-Ansari'` in compliance action actor name.
+- **Shadow tokens (`components/layout/NotificationBell.tsx`, `TopBar.tsx`, `components/ui/Switch.tsx`):** `shadow-lg` / `shadow-sm` replaced with design-system tokens `shadow-ambient` / `shadow-ambient-sm`.
+- **Demo Day removed from sidebar:** `/demo-day` route still exists and is reachable via the Finalists panel on the Admin dashboard, but the nav item has been removed from `hooks/useRole.ts`.
+
+## Arabic / EN localisation (partial — demo-ready)
+
+Partial Arabic translation implemented for demo impact. English remains the default.
+
+**Files added:**
+- `lib/i18n.ts` — translation dictionaries for `en` and `ar` (brand, nav, topbar page titles/subtitles, status labels, common buttons, search strings).
+- `hooks/useTranslation.ts` — `useTranslation()` hook returning `{ t, language, isRTL }`.
+- `components/layout/LangEffect.tsx` — client component that sets `document.documentElement.lang`, `dir`, and `.lang-ar` class on language change.
+
+**Files modified:**
+- `store/appStore.ts` — `language: 'en' | 'ar'` state + `setLanguage()` action.
+- `app/layout.tsx` — Cairo font added (Google Fonts), `LangEffect` mounted in body.
+- `app/globals.css` — `.lang-ar` rule applies Cairo font to all text elements; Cairo imported.
+- `components/layout/TopBar.tsx` — EN | عربي segmented toggle in header; page titles, search placeholder, dropdown labels all translated; search icon/clear button positions flip for RTL.
+- `components/layout/Sidebar.tsx` — brand name/tagline translated; nav labels translated via `navTranslationKey` map; sidebar position flips to `right-0` in RTL; collapse chevron direction flips.
+- `components/layout/AppShell.tsx` — `pl-*` padding flips to `pr-*` in RTL via `rtl:` Tailwind variants.
+
+**What is translated:** branding, all navigation items, all TopBar page titles + subtitles, search UI, sign out.
+**What is NOT translated:** page body content, forms, data fields, action panels — English only. Sufficient for demo impression.
 
 
 

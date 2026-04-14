@@ -59,6 +59,10 @@ interface AppState {
   toggleSidebar: () => void
   globalSearchQuery: string
   setGlobalSearch: (q: string) => void
+
+  // Language
+  language: 'en' | 'ar'
+  setLanguage: (lang: 'en' | 'ar') => void
 }
 
 const defaultFilters: FilterState = {
@@ -299,6 +303,9 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   globalSearchQuery: '',
   setGlobalSearch: (q) => set({ globalSearchQuery: q }),
+
+  language: 'en',
+  setLanguage: (lang) => set({ language: lang }),
 }))
 
 function getSubmissionStatusNotificationTitle(status: SubmissionStatus): string {

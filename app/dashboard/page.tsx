@@ -24,6 +24,7 @@ import {
   PieChart, Pie, Cell, BarChart, Bar,
 } from 'recharts'
 import { ClientOnly } from '@/components/ui/ClientOnly'
+import { useTranslation } from '@/hooks/useTranslation'
 
 // ─── Shared chart palette ───────────────────────────────────────────────────
 const CATEGORY_COLORS: Record<string, string> = {
@@ -56,6 +57,7 @@ const MAX_FINALISTS = 5
 function FinalistsPanel() {
   const submissions   = useAppStore(s => s.submissions)
   const updateSubmission = useAppStore(s => s.updateSubmission)
+  const { t } = useTranslation()
 
   const finalists = submissions.filter(s => ['finalist', 'demo_day'].includes(s.status))
   const eligible  = submissions.filter(s => s.status === 'approved')
@@ -102,13 +104,13 @@ function FinalistsPanel() {
     <Card>
       <CardHeader actions={
         <Link href="/submissions?status=finalist">
-          <Button variant="ghost" size="sm" icon={<ArrowRight />} iconPosition="right">View All</Button>
+          <Button variant="ghost" size="sm" icon={<ArrowRight />} iconPosition="right">{t.dashboard.viewAll}</Button>
         </Link>
       }>
-        <CardTitle subtitle="Dubai Chambers Innovation Challenge — Demo Day selection">
+        <CardTitle subtitle={t.dashboard.finalistsSubtitle}>
           <span className="flex items-center gap-2">
             <Trophy className="h-4 w-4 text-primary" />
-            Challenge Finalists
+            {t.dashboard.finalists}
           </span>
         </CardTitle>
       </CardHeader>
@@ -128,10 +130,10 @@ function FinalistsPanel() {
           ))}
         </div>
         <p className="text-label-sm text-on-surface-variant">
-          <span className="font-semibold text-on-surface">{finalists.length}</span> / {MAX_FINALISTS} finalists selected
+          <span className="font-semibold text-on-surface">{finalists.length}</span> / {MAX_FINALISTS} {t.dashboard.finalistsSelected}
         </p>
         {isFull && (
-          <span className="badge bg-secondary-container text-secondary text-label-sm">Slots full</span>
+          <span className="badge bg-secondary-container text-secondary text-label-sm">{t.dashboard.slotsFull}</span>
         )}
       </div>
 
@@ -146,7 +148,7 @@ function FinalistsPanel() {
               <div className="mb-1 flex items-center gap-1.5">
                 <Star className={`h-3.5 w-3.5 flex-shrink-0 ${sub.status === 'demo_day' ? 'text-on-primary' : 'text-primary'}`} />
                 <span className={`text-label-sm font-semibold ${sub.status === 'demo_day' ? 'text-on-primary' : 'text-primary'}`}>
-                  {sub.status === 'demo_day' ? 'Demo Day ★' : 'Finalist'}
+                  {sub.status === 'demo_day' ? t.dashboard.demoDay : t.dashboard.finalist}
                 </span>
               </div>
               <p className={`text-label-md font-semibold truncate ${sub.status === 'demo_day' ? 'text-on-primary' : 'text-on-surface'}`}>
@@ -165,7 +167,7 @@ function FinalistsPanel() {
                   onClick={() => confirmDemoDay(sub.id)}
                   className="mt-2 w-full rounded-md bg-primary/10 px-2 py-1 text-label-sm font-medium text-primary hover:bg-primary/20 transition-colors text-center"
                 >
-                  Confirm for Demo Day
+                  {t.dashboard.confirmDemoDay}
                 </button>
               )}
             </div>
@@ -177,7 +179,7 @@ function FinalistsPanel() {
       {eligible.length > 0 && !isFull && (
         <div>
           <p className="mb-2 text-label-sm font-semibold uppercase tracking-wider text-on-surface-variant">
-            Eligible for Finalist Selection ({eligible.length} approved)
+            {t.dashboard.eligibleFinalists} ({eligible.length} {t.status.approved})
           </p>
           <div className="space-y-2">
             {eligible.slice(0, 4).map(sub => (
@@ -195,7 +197,7 @@ function FinalistsPanel() {
                   onClick={() => markFinalist(sub.id)}
                   className="flex-shrink-0 rounded-md bg-primary/10 px-3 py-1.5 text-label-sm font-semibold text-primary hover:bg-primary/20 transition-colors"
                 >
-                  Select
+                  {t.dashboard.selectFinalist}
                 </button>
               </div>
             ))}
@@ -222,6 +224,7 @@ function AdminDashboard() {
   const submissions = useAppStore(s => s.submissions)
   const complianceResults = useAppStore(s => s.complianceResults)
   const pilots = useAppStore(s => s.pilots)
+  const { t } = useTranslation()
 
   const total = submissions.length
   const approved = submissions.filter(s => ['approved', 'pilot', 'procurement'].includes(s.status)).length
@@ -255,16 +258,16 @@ function AdminDashboard() {
     <div className="space-y-6">
       {/* KPI Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-        <StatCard label="Total Submissions" value={total} change={23} trend="up" icon={<FileText />} accent="primary" />
-        <StatCard label="Pipeline Value" value={formatAED(totalValue)} change={18} trend="up" icon={<TrendingUp />} accent="secondary" gradient />
+        <StatCard label={t.dashboard.totalSubmissions} value={total} change={23} trend="up" icon={<FileText />} accent="primary" />
+        <StatCard label={t.dashboard.pipelineValue} value={formatAED(totalValue)} change={18} trend="up" icon={<TrendingUp />} accent="secondary" gradient />
         <StatCard label="Approval Rate" value={`${approvalRate}%`} change={4} trend="up" icon={<CheckCircle2 />} accent="primary" />
-        <StatCard label="Active Pilots" value={inPilot} change={0} trend="flat" icon={<FlaskConical />} accent="secondary" />
+        <StatCard label={t.dashboard.activePilots} value={inPilot} change={0} trend="flat" icon={<FlaskConical />} accent="secondary" />
       </div>
 
       {/* Secondary metrics */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {[
-          { label: 'Avg AI Score', value: `${avgScore}/100`, sub: '+5 vs last month', color: 'text-primary' },
+          { label: t.dashboard.avgAIScore, value: `${avgScore}/100`, sub: '+5 vs last month', color: 'text-primary' },
           { label: 'Pilot Conversion', value: `${pilotConversion}%`, sub: 'From approved to pilot', color: 'text-secondary' },
           { label: 'Compliance Health', value: `${complianceHealth}%`, sub: `${compliancePassed}/${complianceResults.length} reviews passed`, color: 'text-secondary' },
           { label: 'Time to Evaluate', value: '3.2 days', sub: 'Avg AI + human review', color: 'text-on-surface' },
@@ -286,7 +289,7 @@ function AdminDashboard() {
           <Card>
             <CardHeader actions={
               <Link href="/submissions">
-                <Button variant="ghost" size="sm" icon={<ArrowRight />} iconPosition="right">View All</Button>
+                <Button variant="ghost" size="sm" icon={<ArrowRight />} iconPosition="right">{t.dashboard.viewAll}</Button>
               </Link>
             }>
               <CardTitle subtitle="Monthly submission and approval trends">Submission Pipeline</CardTitle>
@@ -393,7 +396,7 @@ function AdminDashboard() {
                 <Button variant="ghost" size="sm" icon={<ArrowRight />} iconPosition="right">All</Button>
               </Link>
             }>
-              <CardTitle subtitle="Most recently updated">Recent Activity</CardTitle>
+              <CardTitle subtitle="Most recently updated">{t.dashboard.recentActivity}</CardTitle>
             </CardHeader>
             <div className="space-y-0">
               {recentSubmissions.map((sub, idx) => (
@@ -420,6 +423,7 @@ function EvaluatorDashboard() {
   const submissions = useAppStore(s => s.submissions)
   const runningAIEvaluation = useAppStore(s => s.runningAIEvaluation)
   const startAIEvaluation = useAppStore(s => s.startAIEvaluation)
+  const { t } = useTranslation()
 
   const pendingAI = submissions.filter(s => s.status === 'submitted')
   const inEvaluation = submissions.filter(s => s.status === 'evaluation')
@@ -454,10 +458,10 @@ function EvaluatorDashboard() {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-        <StatCard label="Awaiting AI Review" value={pendingAI.length} change={0} trend="flat" icon={<Bot />} accent="primary" />
-        <StatCard label="In Human Evaluation" value={inEvaluation.length} change={0} trend="flat" icon={<Users />} accent="secondary" />
-        <StatCard label="Avg AI Score" value={`${avgScore}/100`} change={5} trend="up" icon={<Brain />} accent="primary" />
-        <StatCard label="AI Recommended" value={recommended} change={2} trend="up" icon={<CheckCircle2 />} accent="secondary" gradient />
+        <StatCard label={t.aiEvaluation.pending} value={pendingAI.length} change={0} trend="flat" icon={<Bot />} accent="primary" />
+        <StatCard label={t.dashboard.pendingReview} value={inEvaluation.length} change={0} trend="flat" icon={<Users />} accent="secondary" />
+        <StatCard label={t.dashboard.avgAIScore} value={`${avgScore}/100`} change={5} trend="up" icon={<Brain />} accent="primary" />
+        <StatCard label={t.aiEvaluation.recommended} value={recommended} change={2} trend="up" icon={<CheckCircle2 />} accent="secondary" gradient />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -596,6 +600,7 @@ function EvaluatorDashboard() {
 function ComplianceDashboard() {
   const submissions = useAppStore(s => s.submissions)
   const complianceResults = useAppStore(s => s.complianceResults)
+  const { t } = useTranslation()
 
   const pendingValidation = submissions.filter(s => s.status === 'compliance_check')
   const blockedItems = complianceResults.filter(c => c.status === 'failed')
@@ -624,9 +629,9 @@ function ComplianceDashboard() {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-        <StatCard label="Pending Validation" value={pendingValidation.length} change={0} trend="flat" icon={<Clock />} accent="primary" />
-        <StatCard label="Passed Reviews" value={passed.length} change={1} trend="up" icon={<CheckCircle2 />} accent="secondary" gradient />
-        <StatCard label="In Progress" value={inProgress.length} change={0} trend="flat" icon={<CircleDot />} accent="primary" />
+        <StatCard label={t.dashboard.pendingReview} value={pendingValidation.length} change={0} trend="flat" icon={<Clock />} accent="primary" />
+        <StatCard label={t.compliance.passed} value={passed.length} change={1} trend="up" icon={<CheckCircle2 />} accent="secondary" gradient />
+        <StatCard label={t.compliance.inProgress} value={inProgress.length} change={0} trend="flat" icon={<CircleDot />} accent="primary" />
         <StatCard label="Vendor Alerts" value={suspendedVendors.length + pendingVendors.length} change={0} trend="flat" icon={<AlertTriangle />} accent="secondary" />
       </div>
 
@@ -644,7 +649,7 @@ function ComplianceDashboard() {
           {pendingValidation.length === 0 ? (
             <Card className="text-center py-8">
               <CheckCircle2 className="w-10 h-10 text-secondary mx-auto mb-2" />
-              <p className="text-body-md text-on-surface-variant">All clear — no pending validations</p>
+              <p className="text-body-md text-on-surface-variant">{t.dashboard.allClear}</p>
             </Card>
           ) : (
             pendingValidation.map(sub => {
@@ -839,6 +844,7 @@ function StartupWorkflow({ currentStatus }: { currentStatus: string }) {
 function StartupDashboard() {
   const submissions = useAppStore(s => s.submissions)
   const { profile } = useRole()
+  const { t } = useTranslation()
 
   const mySubmissions = submissions.filter(s => MY_SUBMISSION_IDS.includes(s.id))
   const total = mySubmissions.length
@@ -915,9 +921,9 @@ function StartupDashboard() {
       </Card>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <StatCard label="My Submissions" value={total} change={0} trend="flat" icon={<FileText />} accent="primary" />
-        <StatCard label="Pending Review" value={pending + inReview} change={0} trend="up" icon={<Clock />} accent="primary" />
-        <StatCard label="Advanced Stage" value={advanced} change={0} trend="up" icon={<TrendingUp />} accent="secondary" gradient />
+        <StatCard label={t.dashboard.totalSubmissions} value={total} change={0} trend="flat" icon={<FileText />} accent="primary" />
+        <StatCard label={t.dashboard.pendingReview} value={pending + inReview} change={0} trend="up" icon={<Clock />} accent="primary" />
+        <StatCard label={t.status.approved} value={advanced} change={0} trend="up" icon={<TrendingUp />} accent="secondary" gradient />
       </div>
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
@@ -1082,7 +1088,7 @@ function StartupDashboard() {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary/10">
                 <BarChart3 className="h-4 w-4 text-secondary" />
               </div>
-              <p className="text-title-sm text-on-surface">Recent Activity</p>
+              <p className="text-title-sm text-on-surface">{t.dashboard.recentActivity}</p>
             </div>
 
             {recentTimeline.length > 0 ? (

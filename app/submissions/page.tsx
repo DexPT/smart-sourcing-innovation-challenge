@@ -5,6 +5,7 @@ import { StatusBadge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { useAppStore } from '@/store/appStore'
 import { useRole } from '@/hooks/useRole'
+import { useTranslation } from '@/hooks/useTranslation'
 import {
   formatAED, formatRelativeTime,
   getSubmissionStatusConfig, getCategoryLabel, getSourceConfig, truncate
@@ -21,6 +22,7 @@ const SOURCE_OPTIONS: SubmissionSource[] = ['direct', 'referral', 'event', 'part
 export default function SubmissionsPage() {
   const submissions = useAppStore((s) => s.submissions)
   const { currentRole, can } = useRole()
+  const { t } = useTranslation()
   const [search, setSearch] = useState('')
   const [selectedStatus, setSelectedStatus] = useState<string>('')
   const [selectedCategory, setSelectedCategory] = useState<string>('')
@@ -46,7 +48,7 @@ export default function SubmissionsPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant" />
             <input
               type="text"
-              placeholder="Search by title or company..."
+              placeholder={t.submissions.searchPlaceholder}
               value={search}
               onChange={e => setSearch(e.target.value)}
               className="w-full min-h-10 pl-9 pr-4 py-2.5 bg-surface-container-lowest rounded-lg text-body-md text-on-surface placeholder:text-on-surface-variant/50 border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/20 transition-all"
@@ -59,7 +61,7 @@ export default function SubmissionsPage() {
               onChange={e => setSelectedStatus(e.target.value)}
               className="min-h-10 px-3 py-2.5 bg-surface-container-lowest rounded-lg text-body-md text-on-surface border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/20"
             >
-              <option value="">All Statuses</option>
+              <option value="">{t.submissions.allStatuses}</option>
               {STATUS_OPTIONS.map(s => (
                 <option key={s} value={s}>{getSubmissionStatusConfig(s).label}</option>
               ))}
@@ -70,7 +72,7 @@ export default function SubmissionsPage() {
               onChange={e => setSelectedCategory(e.target.value)}
               className="min-h-10 px-3 py-2.5 bg-surface-container-lowest rounded-lg text-body-md text-on-surface border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/20"
             >
-              <option value="">All Categories</option>
+              <option value="">{t.submissions.allCategories}</option>
               {CATEGORY_OPTIONS.map(c => (
                 <option key={c} value={c}>{getCategoryLabel(c)}</option>
               ))}
@@ -81,7 +83,7 @@ export default function SubmissionsPage() {
               onChange={e => setSelectedSource(e.target.value)}
               className="min-h-10 px-3 py-2.5 bg-surface-container-lowest rounded-lg text-body-md text-on-surface border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/20"
             >
-              <option value="">All Sources</option>
+              <option value="">{t.submissions.allSources}</option>
               {SOURCE_OPTIONS.map(s => (
                 <option key={s} value={s}>{getSourceConfig(s).label}</option>
               ))}
@@ -89,14 +91,14 @@ export default function SubmissionsPage() {
 
             {can.createSubmission && (
               <Link href="/submissions/new" className="block">
-                <Button icon={<Plus />} className="w-full lg:w-auto">New Submission</Button>
+                <Button icon={<Plus />} className="w-full lg:w-auto">{t.submissions.newSubmission}</Button>
               </Link>
             )}
           </div>
         </div>
 
         <p className="text-label-md text-on-surface-variant">
-          Showing <span className="font-semibold text-on-surface">{filtered.length}</span> submissions
+          {t.common.showing} <span className="font-semibold text-on-surface">{filtered.length}</span> {t.submissions.submissionsLabel}
         </p>
 
         <Card padding="none">
@@ -104,13 +106,13 @@ export default function SubmissionsPage() {
             <table className="w-full min-w-[720px]">
               <thead>
                 <tr className="bg-surface-container-low">
-                  <th className="text-left text-label-sm text-on-surface-variant font-medium px-4 py-3 uppercase tracking-wider">Submission</th>
-                  <th className="text-left text-label-sm text-on-surface-variant font-medium px-4 py-3 uppercase tracking-wider hidden md:table-cell">Category</th>
-                  <th className="text-left text-label-sm text-on-surface-variant font-medium px-4 py-3 uppercase tracking-wider hidden lg:table-cell">Value</th>
-                  <th className="text-left text-label-sm text-on-surface-variant font-medium px-4 py-3 uppercase tracking-wider hidden xl:table-cell">Source</th>
-                  <th className="text-left text-label-sm text-on-surface-variant font-medium px-4 py-3 uppercase tracking-wider">Status</th>
-                  <th className="text-left text-label-sm text-on-surface-variant font-medium px-4 py-3 uppercase tracking-wider hidden lg:table-cell">AI Score</th>
-                  <th className="text-left text-label-sm text-on-surface-variant font-medium px-4 py-3 uppercase tracking-wider hidden xl:table-cell">Updated</th>
+                  <th className="text-left text-label-sm text-on-surface-variant font-medium px-4 py-3 uppercase tracking-wider">{t.submissions.colCompany}</th>
+                  <th className="text-left text-label-sm text-on-surface-variant font-medium px-4 py-3 uppercase tracking-wider hidden md:table-cell">{t.submissions.colCategory}</th>
+                  <th className="text-left text-label-sm text-on-surface-variant font-medium px-4 py-3 uppercase tracking-wider hidden lg:table-cell">{t.submissions.colValue}</th>
+                  <th className="text-left text-label-sm text-on-surface-variant font-medium px-4 py-3 uppercase tracking-wider hidden xl:table-cell">{t.submissions.colSource}</th>
+                  <th className="text-left text-label-sm text-on-surface-variant font-medium px-4 py-3 uppercase tracking-wider">{t.submissions.colStatus}</th>
+                  <th className="text-left text-label-sm text-on-surface-variant font-medium px-4 py-3 uppercase tracking-wider hidden lg:table-cell">{t.submissions.colAIScore}</th>
+                  <th className="text-left text-label-sm text-on-surface-variant font-medium px-4 py-3 uppercase tracking-wider hidden xl:table-cell">{t.submissions.colUpdated}</th>
                   <th className="px-4 py-3"></th>
                 </tr>
               </thead>
@@ -160,7 +162,7 @@ export default function SubmissionsPage() {
                             <span className="text-label-sm text-on-surface-variant">/100</span>
                           </div>
                         ) : (
-                          <span className="text-label-sm text-on-surface-variant/50">Pending</span>
+                          <span className="text-label-sm text-on-surface-variant/50">{t.aiEvaluation.pending}</span>
                         )}
                       </td>
                       <td className="px-4 py-3 hidden xl:table-cell">
@@ -168,7 +170,7 @@ export default function SubmissionsPage() {
                       </td>
                       <td className="px-4 py-3">
                         <Link href={`/submissions/${sub.id}`}>
-                          <Button variant="ghost" size="sm" icon={<ChevronRight />} iconPosition="right">View</Button>
+                          <Button variant="ghost" size="sm" icon={<ChevronRight />} iconPosition="right">{t.submissions.colView}</Button>
                         </Link>
                       </td>
                     </tr>
@@ -177,7 +179,7 @@ export default function SubmissionsPage() {
                 {filtered.length === 0 && (
                   <tr>
                     <td colSpan={8} className="px-4 py-12 text-center text-on-surface-variant text-body-md">
-                      No submissions found matching your filters.
+                      {t.submissions.noResults}
                     </td>
                   </tr>
                 )}

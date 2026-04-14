@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button'
 import { Progress } from '@/components/ui/Progress'
 import { useAppStore } from '@/store/appStore'
 import { useRole } from '@/hooks/useRole'
+import { useTranslation } from '@/hooks/useTranslation'
 import { getPilotStatusConfig, formatAED, formatDate } from '@/lib/utils'
 import {
   CheckCircle2, Clock, AlertTriangle, ChevronRight,
@@ -116,16 +117,18 @@ function PilotActions({ pilot }: { pilot: Pilot }) {
     })
   }
 
+  const { t } = useTranslation()
+
   const recOptions: { value: Pilot['recommendation']; label: string; sub: string; color: string; border: string }[] = [
-    { value: 'proceed', label: 'Proceed to Procurement', sub: 'Pilot successful — advance', color: 'text-secondary', border: 'border-secondary' },
-    { value: 'modify', label: 'Modify & Extend', sub: 'Needs adjustment before proceeding', color: 'text-warning', border: 'border-warning' },
-    { value: 'terminate', label: 'Terminate', sub: 'Pilot did not meet objectives', color: 'text-error', border: 'border-error' },
+    { value: 'proceed', label: t.pilots.proceed, sub: t.pilots.proceedDesc, color: 'text-secondary', border: 'border-secondary' },
+    { value: 'modify', label: t.pilots.modify, sub: t.pilots.modifyDesc, color: 'text-warning', border: 'border-warning' },
+    { value: 'terminate', label: t.pilots.terminate, sub: t.pilots.terminateDesc, color: 'text-error', border: 'border-error' },
   ]
 
   return (
     <Card>
       <div className="flex items-center justify-between mb-4">
-        <CardTitle subtitle="Manage this pilot program">Pilot Actions</CardTitle>
+        <CardTitle subtitle={t.pilots.pilotActionsDesc}>{t.pilots.pilotActions}</CardTitle>
         {panel && (
           <button onClick={() => setPanel(null)} className="text-on-surface-variant hover:text-on-surface">
             <X className="w-4 h-4" />
@@ -145,8 +148,8 @@ function PilotActions({ pilot }: { pilot: Pilot }) {
                 <Play className="w-4 h-4 text-on-secondary" />
               </div>
               <div>
-                <p className="text-label-md font-semibold text-secondary">Launch Pilot</p>
-                <p className="text-label-sm text-on-surface-variant">Move to active execution</p>
+                <p className="text-label-md font-semibold text-secondary">{t.pilots.launch}</p>
+                <p className="text-label-sm text-on-surface-variant">{t.pilots.launchDesc}</p>
               </div>
             </button>
           )}
@@ -161,8 +164,8 @@ function PilotActions({ pilot }: { pilot: Pilot }) {
                   <Trophy className="w-4 h-4 text-on-primary" />
                 </div>
                 <div>
-                  <p className="text-label-md font-semibold text-primary">Mark as Completed</p>
-                  <p className="text-label-sm text-on-surface-variant">Record final score and recommendation</p>
+                  <p className="text-label-md font-semibold text-primary">{t.pilots.markCompleted}</p>
+                  <p className="text-label-sm text-on-surface-variant">{t.pilots.markCompletedDesc}</p>
                 </div>
               </button>
 
@@ -174,8 +177,8 @@ function PilotActions({ pilot }: { pilot: Pilot }) {
                   <Pause className="w-4 h-4 text-warning" />
                 </div>
                 <div>
-                  <p className="text-label-md font-semibold text-warning">Pause Pilot</p>
-                  <p className="text-label-sm text-on-surface-variant">Temporarily halt execution</p>
+                  <p className="text-label-md font-semibold text-warning">{t.pilots.pause}</p>
+                  <p className="text-label-sm text-on-surface-variant">{t.pilots.pauseDesc}</p>
                 </div>
               </button>
             </>
@@ -191,8 +194,8 @@ function PilotActions({ pilot }: { pilot: Pilot }) {
                   <RotateCcw className="w-4 h-4 text-on-secondary" />
                 </div>
                 <div>
-                  <p className="text-label-md font-semibold text-secondary">Resume Pilot</p>
-                  <p className="text-label-sm text-on-surface-variant">Return to active execution</p>
+                  <p className="text-label-md font-semibold text-secondary">{t.pilots.resume}</p>
+                  <p className="text-label-sm text-on-surface-variant">{t.pilots.resumeDesc}</p>
                 </div>
               </button>
 
@@ -204,8 +207,8 @@ function PilotActions({ pilot }: { pilot: Pilot }) {
                   <Trophy className="w-4 h-4 text-on-primary" />
                 </div>
                 <div>
-                  <p className="text-label-md font-semibold text-primary">Mark as Completed</p>
-                  <p className="text-label-sm text-on-surface-variant">Record final score and recommendation</p>
+                  <p className="text-label-md font-semibold text-primary">{t.pilots.markCompleted}</p>
+                  <p className="text-label-sm text-on-surface-variant">{t.pilots.markCompletedDesc}</p>
                 </div>
               </button>
             </>
@@ -220,8 +223,8 @@ function PilotActions({ pilot }: { pilot: Pilot }) {
                 <ArrowRight className="w-4 h-4 text-on-primary" />
               </div>
               <div>
-                <p className="text-label-md font-semibold text-on-primary">Send to Procurement</p>
-                <p className="text-label-sm text-on-primary/70">Advance to procurement committee</p>
+                <p className="text-label-md font-semibold text-on-primary">{t.pilots.sendProcurement}</p>
+                <p className="text-label-sm text-on-primary/70">{t.pilots.sendProcurementDesc}</p>
               </div>
             </button>
           )}
@@ -229,7 +232,7 @@ function PilotActions({ pilot }: { pilot: Pilot }) {
           {pilot.status === 'completed' && relatedSub?.status === 'procurement' && (
             <div className="flex items-center gap-2 p-3 bg-secondary-container/40 rounded-lg">
               <CheckCircle2 className="w-4 h-4 text-secondary flex-shrink-0" />
-              <p className="text-label-sm text-secondary font-medium">Submitted to procurement committee</p>
+              <p className="text-label-sm text-secondary font-medium">{t.pilots.submittedProcurement}</p>
             </div>
           )}
 
@@ -242,8 +245,8 @@ function PilotActions({ pilot }: { pilot: Pilot }) {
                 <XCircle className="w-4 h-4 text-error" />
               </div>
               <div>
-                <p className="text-label-md font-semibold text-error">Cancel Pilot</p>
-                <p className="text-label-sm text-on-surface-variant">Terminate this pilot program</p>
+                <p className="text-label-md font-semibold text-error">{t.pilots.cancel}</p>
+                <p className="text-label-sm text-on-surface-variant">{t.pilots.cancelDesc}</p>
               </div>
             </button>
           )}
@@ -251,7 +254,7 @@ function PilotActions({ pilot }: { pilot: Pilot }) {
           {['cancelled', 'completed'].includes(pilot.status) && pilot.recommendation !== 'proceed' && (
             <div className="flex items-center gap-2 p-3 bg-surface-container rounded-lg">
               <CheckCircle2 className="w-4 h-4 text-on-surface-variant flex-shrink-0" />
-              <p className="text-label-sm text-on-surface-variant">This pilot has been closed.</p>
+              <p className="text-label-sm text-on-surface-variant">{t.pilots.closed}</p>
             </div>
           )}
         </div>
