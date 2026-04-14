@@ -11,7 +11,7 @@ import { getSubmissionStatusConfig, getCategoryLabel, getScoreColor } from '@/li
 import {
   Brain, Bot, Play, ChevronRight, Sparkles, SortDesc,
   CheckCircle2, XCircle, MessageSquare, AlertTriangle, RotateCcw, X,
-  ShieldCheck, ShieldAlert, ShieldX, Shield,
+  ShieldCheck, ShieldAlert, ShieldX, Shield, Reply,
 } from 'lucide-react'
 import Link from 'next/link'
 import {
@@ -525,6 +525,19 @@ export default function AIEvaluationPage() {
   // Check if selected submission has been actioned (status changed away from evaluation)
   const isActioned = selected && !['submitted', 'ai_review', 'evaluation'].includes(selected.status)
 
+  // P19 — detect startup response to an evaluator info request
+  const startupResponse = selected ? (() => {
+    const events = selected.timeline
+    const lastRequestIdx = [...events].reverse().findIndex(
+      e => e.type === 'comment' && e.title === 'Additional Information Requested'
+    )
+    if (lastRequestIdx === -1) return null
+    const absoluteIdx = events.length - 1 - lastRequestIdx
+    return events.slice(absoluteIdx + 1).find(
+      e => e.type === 'comment' && e.actorRole === 'startup'
+    ) ?? null
+  })() : null
+
   return (
     <AppShell>
       <div className="space-y-6">
@@ -685,6 +698,27 @@ export default function AIEvaluationPage() {
 
                     {/* DESC AI Security Policy */}
                     <DESCAISecurityPanel submission={selected} />
+
+                    {/* P19 — Startup Responded banner */}
+                    {startupResponse && can.runAIEvaluation && !isActioned && (
+                      <div className="rounded-xl border border-primary/20 bg-primary/[0.04] p-4 flex items-start gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <Reply className="w-4 h-4 text-primary" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-label-md font-semibold text-primary">Startup Responded</p>
+                          <p className="text-body-sm text-on-surface-variant mt-0.5">
+                            {startupResponse.actorName} has provided the requested information.
+                          </p>
+                          <div className="mt-2 p-3 bg-surface-container-lowest rounded-lg">
+                            <p className="text-body-sm text-on-surface">{startupResponse.description}</p>
+                            <p className="text-label-sm text-on-surface-variant/60 mt-1">
+                              {new Date(startupResponse.timestamp).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
                     {/* Evaluator actions */}
                     {can.runAIEvaluation && !isActioned && (

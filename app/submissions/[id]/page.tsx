@@ -16,10 +16,11 @@ import {
 import {
   ArrowLeft, Bot, ShieldCheck, CheckCircle2, XCircle,
   Users, Globe, Tag, FileText, ChevronRight, FlaskConical,
-  HandshakeIcon, AlertTriangle, Clock, Download, Play
+  HandshakeIcon, AlertTriangle, Clock, Download, Play,
+  MessageSquare, Send
 } from 'lucide-react'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 
 // Workflow steps
 const WORKFLOW_STEPS = ['submitted', 'ai_review', 'evaluation', 'compliance_check', 'approved', 'pilot', 'procurement']
@@ -60,12 +61,49 @@ export default function SubmissionDetailPage() {
   const updateSubmission = useAppStore((s) => s.updateSubmission)
   const runningAIEvaluation = useAppStore((s) => s.runningAIEvaluation)
   const startAIEvaluation = useAppStore((s) => s.startAIEvaluation)
-  const { currentRole, can } = useRole()
+  const { currentRole, can, profile } = useRole()
   const [activeTab, setActiveTab] = useState<'overview' | 'ai' | 'compliance' | 'timeline'>('overview')
+  const [responseText, setResponseText] = useState('')
+  const [responseSubmitted, setResponseSubmitted] = useState(false)
 
   const submission = submissions.find(s => s.id === id)
   const complianceResults = useAppStore(s => s.complianceResults)
   const compliance = submission ? complianceResults.find(c => c.submissionId === submission.id) : null
+
+  // P19 — detect unanswered "Request More Info" for startup role
+  const pendingInfoRequest = useMemo(() => {
+    if (!submission || currentRole !== 'startup') return null
+    const events = submission.timeline
+    const lastRequestIdx = [...events].reverse().findIndex(
+      e => e.type === 'comment' && e.title === 'Additional Information Requested'
+    )
+    if (lastRequestIdx === -1) return null
+    const absoluteIdx = events.length - 1 - lastRequestIdx
+    const hasStartupReply = events.slice(absoluteIdx + 1).some(
+      e => e.type === 'comment' && e.actorRole === 'startup'
+    )
+    return hasStartupReply ? null : events[absoluteIdx]
+  }, [submission, currentRole])
+
+  const handleSubmitResponse = () => {
+    if (!responseText.trim() || !submission) return
+    updateSubmission(submission.id, {
+      timeline: [
+        ...submission.timeline,
+        {
+          id: `tl-${Date.now()}`,
+          timestamp: new Date().toISOString(),
+          title: 'Response Provided',
+          description: responseText.trim(),
+          actorName: profile.name,
+          actorRole: 'startup' as const,
+          type: 'comment' as const,
+        },
+      ],
+    })
+    setResponseText('')
+    setResponseSubmitted(true)
+  }
 
   if (!submission) {
     return (
@@ -193,6 +231,55 @@ export default function SubmissionDetailPage() {
         {/* AI Thinking Banner */}
         {isRunningAI && (
           <AIThinkingState label="AI Engine is evaluating this submission across 6 dimensions..." />
+        )}
+
+        {/* P19 — Action Required banner (startup only, unanswered info request) */}
+        {pendingInfoRequest && !responseSubmitted && (
+          <div className="rounded-xl border border-warning/30 bg-warning-container/40 p-4 space-y-3">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-lg bg-warning/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <AlertTriangle className="w-4 h-4 text-warning" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-label-md font-semibold text-on-surface">Action Required — Information Requested</p>
+                <p className="text-body-sm text-on-surface-variant mt-0.5">
+                  The evaluator has requested additional information from you.
+                </p>
+                <div className="mt-2 p-3 bg-surface-container-lowest rounded-lg">
+                  <p className="text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">Evaluator's request</p>
+                  <p className="text-body-sm text-on-surface">{pendingInfoRequest.description}</p>
+                  <p className="text-label-sm text-on-surface-variant/60 mt-1">{new Date(pendingInfoRequest.timestamp).toLocaleDateString()}</p>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-2 pl-11">
+              <textarea
+                value={responseText}
+                onChange={e => setResponseText(e.target.value)}
+                rows={4}
+                placeholder="Type your response here. Provide the requested information as clearly as possible..."
+                className="input-field resize-none text-body-sm w-full"
+              />
+              <Button
+                onClick={handleSubmitResponse}
+                disabled={!responseText.trim()}
+                icon={<Send />}
+              >
+                Submit Response
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* P19 — Response submitted confirmation */}
+        {responseSubmitted && (
+          <div className="rounded-xl border border-secondary/30 bg-secondary-container/40 p-4 flex items-center gap-3">
+            <CheckCircle2 className="w-5 h-5 text-secondary flex-shrink-0" />
+            <div>
+              <p className="text-label-md font-semibold text-secondary">Response submitted</p>
+              <p className="text-body-sm text-on-surface-variant">Your response has been sent to the evaluator and recorded in the timeline.</p>
+            </div>
+          </div>
         )}
 
         {/* Tabs */}
