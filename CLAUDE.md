@@ -205,8 +205,16 @@ Partial Arabic translation implemented for demo impact. English remains the defa
 - `components/layout/Sidebar.tsx` — brand name/tagline translated; nav labels translated via `navTranslationKey` map; sidebar position flips to `right-0` in RTL; collapse chevron direction flips.
 - `components/layout/AppShell.tsx` — `pl-*` padding flips to `pr-*` in RTL via `rtl:` Tailwind variants.
 
-**What is translated:** branding, all navigation items, all TopBar page titles + subtitles, search UI, sign out.
-**What is NOT translated:** page body content, forms, data fields, action panels — English only. Sufficient for demo impression.
+**What is translated:** branding, all navigation items, all TopBar page titles + subtitles, search UI, sign out, plus the pages below.
+**What is NOT translated:** `submissions/new`, `ai-evaluation`, `insights`, `audit`, `settings` body content — English only. Sufficient for demo impression.
+
+**Page-level translations applied (partial, highest-impact strings):**
+- `app/page.tsx` — all login page strings (tagline, feature strip, OTP flow, error/success messages).
+- `app/submissions/page.tsx` — search placeholder, filter dropdowns, table headers, empty state, "New Submission" button.
+- `app/dashboard/page.tsx` — all four dashboards: KPI stat card labels, Finalists panel (title, slot counter, action buttons), Recent Activity header.
+- `app/compliance/page.tsx` — KPI cards, officer decision panel (Approve / Conditional / Block), outcome banners, check summary labels, list heading.
+- `app/vendors/page.tsx` — KPI cards, search/filter controls, DESC badges, detail panel (About, Registration, Specializations, Performance).
+- `app/pilots/page.tsx` — PilotActions panel (Launch, Pause, Resume, Complete, Cancel, Send to Procurement) and their descriptions; KPI card labels.
 
 
 
